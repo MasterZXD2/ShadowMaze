@@ -8,24 +8,33 @@ namespace ShadowMaze.CutSceneSystem
     public class CutScene : MonoBehaviour
     {
         [SerializeField] private bool loop = false;
+        [SerializeField] private float speed = 1f;
         [SerializeField] private VideoPlayer videoPlayer;
 
-        private bool isPlayed = false;
+        private bool isPlaying = false;
         private bool isPaused = false;
 
-        public Action onClipEnd; // เรียก callback เมื่อคลิปจบ
+        private Action onClipEnd;
+        private Action onClipStart;
+
+        public bool IsPlaying => isPlaying;
+        public bool IsPaused => isPaused;
+
         private void Awake()
         {
             if (!videoPlayer) videoPlayer = GetComponent<VideoPlayer>();
             videoPlayer.isLooping = loop;
+            videoPlayer.playbackSpeed = speed;
+            videoPlayer.started += OnVideoStart;
             videoPlayer.loopPointReached += OnVideoEnd;
         }
 
         public void Play()
         {
-            if (isPlayed && !isPaused) return;
+            if (isPlaying && !isPaused) return;
 
-            isPlayed = true;
+            isPaused = false;
+            isPlaying = true;
             videoPlayer.Play();
         }
 
@@ -34,29 +43,21 @@ namespace ShadowMaze.CutSceneSystem
             if (!videoPlayer.isPlaying) return;
 
             isPaused = true;
+            isPlaying = false;
             videoPlayer.Pause();
         }
 
         public void TogglePause()
         {
             if (videoPlayer == null) return;
-
-            if (videoPlayer.isPlaying)
-            {
-                videoPlayer.Pause();
-                isPaused = true;
-            }
-            else
-            {
-                videoPlayer.Play();
-                isPaused = false;
-            }
+            if (isPlaying) Pause();
+            else Play();
         }
 
         public void Stop()
         {
             videoPlayer.Stop();
-            isPlayed = false;
+            isPlaying = false;
             isPaused = false;
         }
 
@@ -85,16 +86,32 @@ namespace ShadowMaze.CutSceneSystem
             }
         }
 
-        public void OnLoop(bool l)
+        public void SetLoop(bool l)
         {
+            loop = l;
             videoPlayer.isLooping = l;
         }
+
+        public void SetSpeed(float s)
+        {
+            speed = s;
+            videoPlayer.playbackSpeed = s;
+        }
+        public void SetVideoCamera(Camera camera)
+        {
+            if (videoPlayer == null) return;
+            videoPlayer.renderMode = VideoRenderMode.CameraNearPlane;
+            videoPlayer.targetCamera = camera;
+        }
+        public void SetVideoStart(Action func) => onClipStart = func;
+        public void SetVideoEnd(Action func) => onClipEnd = func;
+        private void OnVideoStart(VideoPlayer vp) => onClipStart?.Invoke();
 
         private void OnVideoEnd(VideoPlayer vp)
         {
             if (!loop)
             {
-                isPlayed = false;
+                isPlaying = false;
                 isPaused = false;
             }
 
@@ -103,6 +120,7 @@ namespace ShadowMaze.CutSceneSystem
 
         private void OnDestroy()
         {
+            videoPlayer.started -= OnVideoStart;
             videoPlayer.loopPointReached -= OnVideoEnd;
         }
     }

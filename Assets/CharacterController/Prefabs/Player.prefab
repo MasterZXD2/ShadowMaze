@@ -634,6 +634,7 @@ MonoBehaviour:
   _playerStats: {fileID: 261899133957030099}
   _playerUI: {fileID: 1159779941681302058}
   _playerGameObject: {fileID: 4782946692791266990}
+  cs: {fileID: 0}
   FirstCam: {fileID: 4593611722645905123}
   ThirdCam: {fileID: 2558328244929255874}
   Drag: 15
@@ -653,9 +654,10 @@ MonoBehaviour:
   LookSenseH: 0.1
   LookSenseV: 0.1
   LookLimitV: 70
+  CameraMode: 1
   _groundLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
 --- !u!114 &9004511922639230726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -789,7 +791,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerModel
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 2493749424672573430, guid: 1ab7cc7c639876b44bf84ae84ba68620, type: 3}
+      propertyPath: _playerController
+      value: 
+      objectReference: {fileID: 2674317561704720980}
+    - target: {fileID: 2493749424672573430, guid: 1ab7cc7c639876b44bf84ae84ba68620, type: 3}
+      propertyPath: _playerLocomotionInput
+      value: 
+      objectReference: {fileID: 9004511922639230726}
+    m_RemovedComponents:
+    - {fileID: 5723094963432648069, guid: 1ab7cc7c639876b44bf84ae84ba68620, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

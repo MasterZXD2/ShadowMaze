@@ -1,3 +1,4 @@
+using ShadowMaze.CutSceneSystem;
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -7,7 +8,12 @@ using static UnityEditor.PlayerSettings;
 namespace ShadowMaze.MyCharacterController
 {
     #region Enum
-
+    public enum CamMode
+    {
+        None = 0,
+        FirstPerson,
+        ThirdPerson
+    }
     #endregion
 
     [DefaultExecutionOrder(-1)]
@@ -26,6 +32,9 @@ namespace ShadowMaze.MyCharacterController
         [SerializeField] private PlayerStats _playerStats;
         [SerializeField] private PlayerUI _playerUI;
         [SerializeField] private GameObject _playerGameObject;
+
+        //test
+        public CutScene cs;
 
         [Space(10)]
         [Header("Camera Obj")]
@@ -76,6 +85,8 @@ namespace ShadowMaze.MyCharacterController
         public float LookSenseV = 0.1f;
         public float LookLimitV = 89f;
 
+        [field: SerializeField] private CamMode CameraMode = CamMode.FirstPerson;
+
         [Space(10)]
         [Header("Environment Details")]
         [SerializeField] private LayerMask _groundLayers;
@@ -117,12 +128,19 @@ namespace ShadowMaze.MyCharacterController
 
         private void Start()
         {
+            CameraMode = CamMode.FirstPerson;
+            SetCam();
+            cs.SetVideoStart(() => {
+                Debug.Log("START");
+            });
+            cs.SetVideoEnd(() => {
+                Debug.Log("END");
+            });
         }
 
         private void Update()
         {
             if (s || astop) return;
-
             _playerGameObject.transform.position = transform.position;
             MovementState();
             VerticalMovement();
@@ -138,6 +156,14 @@ namespace ShadowMaze.MyCharacterController
             JumpPressed = false;
             RotationCamera();
         }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+            Vector3 pos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+            Gizmos.DrawWireSphere(pos, _characterController.radius);
+        }
+
         #endregion
 
         #region Movement Function
@@ -239,7 +265,7 @@ namespace ShadowMaze.MyCharacterController
             float rotationTolerance = 90f;
             bool isIdling = _playerState.CurrPlayerMovementState == PlayerMovementState.Idling;
             IsRotatingToTarget = _rotatingToTargetTimer > 0f;
-            if (!isIdling){ RotatePlayerToTar(); }
+            if (!isIdling || CameraMode == CamMode.FirstPerson){ RotatePlayerToTar(); }
             else if (Mathf.Abs(RotationMismatch) > rotationTolerance || IsRotatingToTarget) { UpdateIdleRotation(rotationTolerance); }
             _plrCamera.transform.rotation = Quaternion.Euler(_camRotation.y, _camRotation.x, 0f);
 
@@ -334,6 +360,10 @@ namespace ShadowMaze.MyCharacterController
         public void Stop()
         {
             s = true;
+
+            CameraMode = CamMode.None;
+            SetCam();
+
             gameObject.SetActive(false);
         }
 
@@ -347,6 +377,8 @@ namespace ShadowMaze.MyCharacterController
             replay();
             _playerUI.restart();
             _playerStats.restart();
+            CameraMode = CamMode.FirstPerson;
+            SetCam();
         }
 
         private void die()
@@ -360,6 +392,8 @@ namespace ShadowMaze.MyCharacterController
             _playerKeyBoardInput.enabled = false;
             _playerUI.die();
             _playerStats.die();
+            CameraMode = CamMode.ThirdPerson;
+            SetCam();
         }
 
         #region KeyBoard Function
@@ -410,6 +444,58 @@ namespace ShadowMaze.MyCharacterController
             } else
             {
                 SprintToggledOn = !holdToSpring && SprintToggledOn;
+            }
+        }
+
+        public void ChangeCam()
+        {
+            CameraMode = (CameraMode == CamMode.FirstPerson) ? CamMode.ThirdPerson : CamMode.FirstPerson;
+            SetCam();
+        }
+
+        private void SetCam()
+        {
+            if (CameraMode == CamMode.FirstPerson)
+            {
+                _plrCamera = FirstCam.GetComponent<Camera>();
+                FirstCam.tag = "MainCamera";
+                ThirdCam.tag = "Untagged";
+                SetAllCamComponents(true);
+            }
+            else if (CameraMode == CamMode.ThirdPerson)
+            {
+                _plrCamera = ThirdCam.GetComponent<Camera>();
+                FirstCam.tag = "Untagged";
+                ThirdCam.tag = "MainCamera";
+                SetAllCamComponents(false);
+            } else if (CameraMode == CamMode.None)
+            {
+                _plrCamera = null;
+                FirstCam.tag = "Untagged";
+                ThirdCam.tag = "Untagged";
+                foreach (var comp in FirstCam.GetComponents<Behaviour>())
+                {
+                    comp.enabled = false;
+                }
+
+                foreach (var comp in ThirdCam.GetComponents<Behaviour>())
+                {
+                    comp.enabled = false;
+                }
+            }
+            cs.SetVideoCamera(_plrCamera);
+        }
+
+        private void SetAllCamComponents(bool b)
+        {
+            foreach (var comp in FirstCam.GetComponents<Behaviour>())
+            {
+                comp.enabled = b;
+            }
+
+            foreach (var comp in ThirdCam.GetComponents<Behaviour>())
+            {
+                comp.enabled = !b;
             }
         }
 

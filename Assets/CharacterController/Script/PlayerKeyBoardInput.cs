@@ -45,12 +45,14 @@ namespace ShadowMaze.MyCharacterController
 
         public void OnTestPP(InputAction.CallbackContext context)
         {
-            
+            if (!context.started) return;
+            _plrController.cs.TogglePause();
         }
 
         public void OnTestSkip(InputAction.CallbackContext context)
         {
-            
+            if (!context.started) return;
+            _plrController.cs.Skip();
         }
     }
 
