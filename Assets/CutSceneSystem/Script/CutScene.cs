@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http;
 using UnityEngine;
 using UnityEngine.Video;
 
@@ -7,8 +8,12 @@ namespace ShadowMaze.CutSceneSystem
     [RequireComponent(typeof(VideoPlayer))]
     public class CutScene : MonoBehaviour
     {
-        [SerializeField] private bool loop = false;
-        [SerializeField] private float speed = 1f;
+        #region Class Veriables
+        [Header("Playback Settings")]
+        [SerializeField] private bool _loop = false;
+        [SerializeField] private float _speed = 1f;
+
+        [Header("References")]
         [SerializeField] private VideoPlayer videoPlayer;
 
         private bool isPlaying = false;
@@ -16,22 +21,57 @@ namespace ShadowMaze.CutSceneSystem
 
         private Action onClipEnd;
         private Action onClipStart;
+        private Action onClipPrepared;
 
+        public bool IsPrepared => videoPlayer.isPrepared;
         public bool IsPlaying => isPlaying;
         public bool IsPaused => isPaused;
+        #endregion
 
+        #region Normal Function
         private void Awake()
         {
             if (!videoPlayer) videoPlayer = GetComponent<VideoPlayer>();
-            videoPlayer.isLooping = loop;
-            videoPlayer.playbackSpeed = speed;
+            
+            videoPlayer.playOnAwake = false;
+            videoPlayer.isLooping = _loop;
+            videoPlayer.playbackSpeed = _speed;
+
             videoPlayer.started += OnVideoStart;
             videoPlayer.loopPointReached += OnVideoEnd;
+            videoPlayer.prepareCompleted += OnVideoPrepared;
+            videoPlayer.errorReceived += OnVideoError;
+        }
+
+        private void OnDestroy()
+        {
+            videoPlayer.started -= OnVideoStart;
+            videoPlayer.loopPointReached -= OnVideoEnd;
+            videoPlayer.prepareCompleted -= OnVideoPrepared;
+            videoPlayer.errorReceived -= OnVideoError;
+        }
+        #endregion
+
+        #region Control Functions
+        public void Prepare()
+        {
+            if (!videoPlayer.clip)
+            {
+                Debug.LogWarning("No video clip to prepare.");
+                return;
+            }
+
+            videoPlayer.Prepare();
         }
 
         public void Play()
         {
             if (isPlaying && !isPaused) return;
+            if (!videoPlayer.clip)
+            {
+                Debug.LogWarning("VideoPlayer has no clip assigned!");
+                return;
+            }
 
             isPaused = false;
             isPlaying = true;
@@ -40,7 +80,7 @@ namespace ShadowMaze.CutSceneSystem
 
         public void Pause()
         {
-            if (!videoPlayer.isPlaying) return;
+            if (videoPlayer == null || !videoPlayer.isPlaying) return;
 
             isPaused = true;
             isPlaying = false;
@@ -74,10 +114,11 @@ namespace ShadowMaze.CutSceneSystem
 
         public void Skip()
         {
-            if (videoPlayer == null) return;
+            if (videoPlayer == null || !videoPlayer.canSetTime) return;
 
-            // ข้ามไปจบเลย
-            videoPlayer.time = videoPlayer.length - 0.1f;
+            double skipTime = videoPlayer.length > 0 ? videoPlayer.length - 0.1f : videoPlayer.frameCount / videoPlayer.frameRate - 0.1f;
+
+            videoPlayer.time = skipTime;
 
             // ถ้าไม่เล่นอยู่ให้เริ่มเล่นเพื่อให้ถึงจุดจบแล้ว Trigger 'onClipEnd'
             if (!videoPlayer.isPlaying)
@@ -85,16 +126,18 @@ namespace ShadowMaze.CutSceneSystem
                 videoPlayer.Play();
             }
         }
+        #endregion
 
+        #region Set Veriables
         public void SetLoop(bool l)
         {
-            loop = l;
+            _loop = l;
             videoPlayer.isLooping = l;
         }
 
         public void SetSpeed(float s)
         {
-            speed = s;
+            _speed = s;
             videoPlayer.playbackSpeed = s;
         }
         public void SetVideoCamera(Camera camera)
@@ -103,13 +146,17 @@ namespace ShadowMaze.CutSceneSystem
             videoPlayer.renderMode = VideoRenderMode.CameraNearPlane;
             videoPlayer.targetCamera = camera;
         }
-        public void SetVideoStart(Action func) => onClipStart = func;
-        public void SetVideoEnd(Action func) => onClipEnd = func;
+        public void SetVideoStart(Action func) { if (func != null) onClipStart = func; }
+        public void SetVideoEnd(Action func) { if (func != null) onClipEnd = func; }
+        public void SetVideoPrepared(Action func) { if (func != null) onClipPrepared = func; }
+        #endregion
+
+        #region Event Callback
         private void OnVideoStart(VideoPlayer vp) => onClipStart?.Invoke();
 
         private void OnVideoEnd(VideoPlayer vp)
         {
-            if (!loop)
+            if (!_loop)
             {
                 isPlaying = false;
                 isPaused = false;
@@ -117,11 +164,9 @@ namespace ShadowMaze.CutSceneSystem
 
             onClipEnd?.Invoke();
         }
+        private void OnVideoPrepared(VideoPlayer vp) => onClipPrepared?.Invoke();
 
-        private void OnDestroy()
-        {
-            videoPlayer.started -= OnVideoStart;
-            videoPlayer.loopPointReached -= OnVideoEnd;
-        }
+        private void OnVideoError(VideoPlayer vp,string msg) => Debug.LogError($"Video Error: {msg}");
+        #endregion
     }
 }
