@@ -135,6 +135,7 @@ namespace ShadowMaze.MyCharacterController
             });
             cs.SetVideoEnd(() => {
                 Debug.Log("END");
+                cs.Stop();
             });
         }
 
