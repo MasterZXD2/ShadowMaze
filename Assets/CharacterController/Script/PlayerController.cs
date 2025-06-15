@@ -28,6 +28,7 @@ namespace ShadowMaze.MyCharacterController
         [SerializeField] private CharacterController _characterController;
         [SerializeField] private PlayerLocomotionInput _playerLocomotionInput;
         [SerializeField] private PlayerKeyBoardInput _playerKeyBoardInput;
+        [SerializeField] private PlayerLight _playerLight;
         [SerializeField] private PlayerState _playerState;
         [SerializeField] private PlayerStats _playerStats;
         [SerializeField] private PlayerUI _playerUI;
@@ -85,16 +86,37 @@ namespace ShadowMaze.MyCharacterController
         public float LookSenseV = 0.1f;
         public float LookLimitV = 89f;
 
+        [SerializeField] private float cameraFollowSpeed = 5f;
+
         [field: SerializeField] private CamMode CameraMode = CamMode.FirstPerson;
+
+        [Space(10)]
+        [Header("FOV Settings")]
+        [SerializeField] private float normalFOV = 65f;
+        [SerializeField] private float runFOV = 80f;
+        [SerializeField] private float fovTransitionSpeed = 4f;
+
+        [Header("HeadBob Settings")]
+        [SerializeField] private Transform cameraHolder;
+        [SerializeField, Range(0, 0.01f)] private float amountHeadBob = 0.002f;
+        [SerializeField, Range(0, 30f)] private float frequencyHeadBob = 10f;
+        [SerializeField, Range(0, 100f)] private float smoothHeadBob = 10f;
 
         [Space(10)]
         [Header("Environment Details")]
         [SerializeField] private LayerMask _groundLayers;
 
+        [Space(10)]
+        [Header("FlashLight")]
+        [SerializeField] private float flashLightTurnSpeed = 20f;
+
         private Camera _plrCamera;
 
         private Vector2 _camRotation = Vector2.zero;
         private Vector2 _plrTarRotation = Vector2.zero;
+
+        private Quaternion _flashLightTargetRot;
+        private Quaternion _cameraTargetRot;
 
         private bool _jumpedLastFrame = false;
         private bool _isRotatingClockwise = false;
@@ -103,12 +125,14 @@ namespace ShadowMaze.MyCharacterController
         private float _anitBump;
         private float _stepOffset;
 
+        private float _toggleSpeed = 3f;
+        private Vector3 _startPos;
+
         private bool _leftClick = false;
         private bool _rightClick = false;
 
         public bool _isDead { get; private set; } = false;
         private bool s = false;
-
         private bool astop = false;
 
         private PlayerMovementState _lastMovementState = PlayerMovementState.Falling;
@@ -130,6 +154,8 @@ namespace ShadowMaze.MyCharacterController
         {
             CameraMode = CamMode.FirstPerson;
             SetCam();
+            _plrCamera.fieldOfView = normalFOV;
+            _startPos = cameraHolder.localPosition;
             cs.SetVideoStart(() => {
                 Debug.Log("START");
             });
@@ -146,7 +172,7 @@ namespace ShadowMaze.MyCharacterController
             MovementState();
             VerticalMovement();
             LateralMovement();
-
+            StopHeadBob();
             if (_isDead) return;
             _playerGameObject.transform.rotation = transform.rotation;
         }
@@ -234,12 +260,15 @@ namespace ShadowMaze.MyCharacterController
             //Add drag to player
             Vector3 currDrag = newVelo.normalized * DragMagnitude * Time.deltaTime;
             newVelo = (newVelo.magnitude > DragMagnitude * Time.deltaTime) ? newVelo - currDrag : Vector3.zero;
-
             //Move charactor
             newVelo = Vector3.ClampMagnitude(new Vector3(newVelo.x, 0f, newVelo.z), Speed);
             newVelo.y += _verticalVelo;
             newVelo = !isGrounded ? SteepWalls(newVelo) : newVelo;
             _characterController.Move(newVelo * Time.deltaTime);
+
+            HandleFOV();
+
+            if ((_playerState.CurrPlayerMovementState == PlayerMovementState.Walking || _playerState.CurrPlayerMovementState == PlayerMovementState.Running) && _characterController.isGrounded) StartHeadBob();
         }
 
         private Vector3 SteepWalls(Vector3 velo)
@@ -255,11 +284,32 @@ namespace ShadowMaze.MyCharacterController
 
             return velo;
         }
+        #endregion
 
+        #region Camera Function
         private void RotationCamera()
         {
             _camRotation.x += LookSenseH * _playerLocomotionInput.LookInput.x;
             _camRotation.y = Mathf.Clamp(_camRotation.y - LookSenseV * _playerLocomotionInput.LookInput.y, -LookLimitV, LookLimitV);
+
+            // Step 2: คำนวณเป้าหมายทิศทางจาก LookInput
+            Quaternion flashlightYaw = Quaternion.Euler(_camRotation.y , _camRotation.x, 0f); // yaw only
+            _flashLightTargetRot = flashlightYaw;
+
+            // Step 3: Flashlight หันทันที (หรือเร็วมาก)
+            _playerLight.FlashLight.transform.rotation = Quaternion.Lerp(
+                _playerLight.FlashLight.transform.rotation,
+                _flashLightTargetRot,
+                Time.deltaTime * flashLightTurnSpeed
+            );
+
+            // Step 4: Camera ตาม Flashlight ทีหลัง
+            _cameraTargetRot = Quaternion.Euler(_camRotation.y, _flashLightTargetRot.eulerAngles.y, 0f);
+            _plrCamera.transform.rotation = Quaternion.Lerp(
+                _plrCamera.transform.rotation,
+                _cameraTargetRot,
+                Time.deltaTime * cameraFollowSpeed
+            );
 
             _plrTarRotation.x += transform.eulerAngles.x + LookSenseH * _playerLocomotionInput.LookInput.x;
 
@@ -268,7 +318,7 @@ namespace ShadowMaze.MyCharacterController
             IsRotatingToTarget = _rotatingToTargetTimer > 0f;
             if (!isIdling || CameraMode == CamMode.FirstPerson){ RotatePlayerToTar(); }
             else if (Mathf.Abs(RotationMismatch) > rotationTolerance || IsRotatingToTarget) { UpdateIdleRotation(rotationTolerance); }
-            _plrCamera.transform.rotation = Quaternion.Euler(_camRotation.y, _camRotation.x, 0f);
+            //_plrCamera.transform.rotation = Quaternion.Euler(_camRotation.y, _camRotation.x, 0f);
 
             // Get angle between camera and player
             Vector3 camForwardProjectXZ = new Vector3(_plrCamera.transform.forward.x,0f,_plrCamera.transform.forward.z).normalized;
@@ -309,6 +359,28 @@ namespace ShadowMaze.MyCharacterController
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotationX, PlayerModelRotationSpeed * Time.deltaTime);
         }
 
+        private void HandleFOV()
+        {
+            float targetFOV = (_playerState.CurrPlayerMovementState == PlayerMovementState.Running) ? runFOV : normalFOV;
+            _plrCamera.fieldOfView = Mathf.Lerp(_plrCamera.fieldOfView, targetFOV, fovTransitionSpeed * Time.deltaTime);
+        }
+
+        private void StartHeadBob()
+        {
+            Vector3 pos = Vector3.zero;
+            pos.y += Mathf.Lerp(pos.y, Mathf.Sin(Time.time * frequencyHeadBob) * amountHeadBob * 1.4f,smoothHeadBob * Time.deltaTime);
+            pos.x += Mathf.Lerp(pos.x, Mathf.Cos(Time.time * frequencyHeadBob / 2f) * amountHeadBob * 1.6f, smoothHeadBob * Time.deltaTime);
+            cameraHolder.localPosition += pos;
+        }
+
+        private void StopHeadBob()
+        {
+            if (cameraHolder.localPosition == _startPos) return;
+            cameraHolder.localPosition = Vector3.Lerp(cameraHolder.localPosition,_startPos,Time.deltaTime);
+        }
+        #endregion
+
+        #region Check Function
         private bool IsMovinglaterally()
         {
             Vector3 lateralVelo = new Vector3(_characterController.velocity.x, 0f, _characterController.velocity.z);
@@ -339,6 +411,7 @@ namespace ShadowMaze.MyCharacterController
         }
         #endregion
 
+        #region Control Functions
         public void pause()
         {
             astop = true;
@@ -351,13 +424,6 @@ namespace ShadowMaze.MyCharacterController
             _playerKeyBoardInput.enabled = true;
         }
 
-        public void takeDamage(float damage)
-        {
-            if (_isDead) return;
-            _playerStats.Health -= damage;
-            //Debug.Log(Health);
-            if (_playerStats.Health <= 0) die();
-        }
         public void Stop()
         {
             s = true;
@@ -396,6 +462,15 @@ namespace ShadowMaze.MyCharacterController
             CameraMode = CamMode.ThirdPerson;
             SetCam();
         }
+
+        public void takeDamage(float damage)
+        {
+            if (_isDead) return;
+            _playerStats.Health -= damage;
+            //Debug.Log(Health);
+            if (_playerStats.Health <= 0) die();
+        }
+        #endregion
 
         #region KeyBoard Function
         /*public void OnKey(KeyBoardClass kb)

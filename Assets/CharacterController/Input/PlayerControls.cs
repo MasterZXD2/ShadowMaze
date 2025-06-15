@@ -280,6 +280,15 @@ namespace ShadowMaze.MyCharacterController
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FlashLight"",
+                    ""type"": ""Button"",
+                    ""id"": ""69a9f593-4202-4761-8f8d-bc50d70170d3"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -326,6 +335,17 @@ namespace ShadowMaze.MyCharacterController
                     ""action"": ""TestSkip"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f7eceb49-e5f4-43f8-9d6a-20e0411daab2"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FlashLight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -345,6 +365,7 @@ namespace ShadowMaze.MyCharacterController
             m_PlayerKeyBoardMap_Run = m_PlayerKeyBoardMap.FindAction("Run", throwIfNotFound: true);
             m_PlayerKeyBoardMap_TestPP = m_PlayerKeyBoardMap.FindAction("TestPP", throwIfNotFound: true);
             m_PlayerKeyBoardMap_TestSkip = m_PlayerKeyBoardMap.FindAction("TestSkip", throwIfNotFound: true);
+            m_PlayerKeyBoardMap_FlashLight = m_PlayerKeyBoardMap.FindAction("FlashLight", throwIfNotFound: true);
         }
 
         ~@PlayerControls()
@@ -570,6 +591,7 @@ namespace ShadowMaze.MyCharacterController
         private readonly InputAction m_PlayerKeyBoardMap_Run;
         private readonly InputAction m_PlayerKeyBoardMap_TestPP;
         private readonly InputAction m_PlayerKeyBoardMap_TestSkip;
+        private readonly InputAction m_PlayerKeyBoardMap_FlashLight;
         /// <summary>
         /// Provides access to input actions defined in input action map "PlayerKeyBoardMap".
         /// </summary>
@@ -597,6 +619,10 @@ namespace ShadowMaze.MyCharacterController
             /// Provides access to the underlying input action "PlayerKeyBoardMap/TestSkip".
             /// </summary>
             public InputAction @TestSkip => m_Wrapper.m_PlayerKeyBoardMap_TestSkip;
+            /// <summary>
+            /// Provides access to the underlying input action "PlayerKeyBoardMap/FlashLight".
+            /// </summary>
+            public InputAction @FlashLight => m_Wrapper.m_PlayerKeyBoardMap_FlashLight;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -635,6 +661,9 @@ namespace ShadowMaze.MyCharacterController
                 @TestSkip.started += instance.OnTestSkip;
                 @TestSkip.performed += instance.OnTestSkip;
                 @TestSkip.canceled += instance.OnTestSkip;
+                @FlashLight.started += instance.OnFlashLight;
+                @FlashLight.performed += instance.OnFlashLight;
+                @FlashLight.canceled += instance.OnFlashLight;
             }
 
             /// <summary>
@@ -658,6 +687,9 @@ namespace ShadowMaze.MyCharacterController
                 @TestSkip.started -= instance.OnTestSkip;
                 @TestSkip.performed -= instance.OnTestSkip;
                 @TestSkip.canceled -= instance.OnTestSkip;
+                @FlashLight.started -= instance.OnFlashLight;
+                @FlashLight.performed -= instance.OnFlashLight;
+                @FlashLight.canceled -= instance.OnFlashLight;
             }
 
             /// <summary>
@@ -769,6 +801,13 @@ namespace ShadowMaze.MyCharacterController
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnTestSkip(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "FlashLight" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnFlashLight(InputAction.CallbackContext context);
         }
     }
 }

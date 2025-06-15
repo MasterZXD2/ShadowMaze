@@ -6,6 +6,7 @@ namespace ShadowMaze.MyCharacterController
     public class PlayerKeyBoardInput : MonoBehaviour, PlayerControls.IPlayerKeyBoardMapActions
     {
         [SerializeField] private PlayerController _plrController;
+        [SerializeField] private PlayerLight _light;
 
         private void OnEnable()
         {
@@ -45,14 +46,17 @@ namespace ShadowMaze.MyCharacterController
 
         public void OnTestPP(InputAction.CallbackContext context)
         {
-            if (!context.started) return;
-            _plrController.cs.TogglePause();
+            if (context.started) _plrController.cs.TogglePause();
         }
 
         public void OnTestSkip(InputAction.CallbackContext context)
         {
-            if (!context.started) return;
-            _plrController.cs.Skip();
+            if (context.started) _plrController.cs.Skip();
+        }
+
+        public void OnFlashLight(InputAction.CallbackContext context) 
+        { 
+            if (context.started) _light.Toggle(); 
         }
     }
 
