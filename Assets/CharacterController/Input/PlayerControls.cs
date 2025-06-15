@@ -289,6 +289,15 @@ namespace MovementGame.MyCharacterController
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""f1128a53-45e4-46e0-b3bd-50f8f1a9126f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -346,6 +355,17 @@ namespace MovementGame.MyCharacterController
                     ""action"": ""FlashLight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""39c5f8d8-ddf1-4d05-9130-10b595d4f84b"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -366,6 +386,7 @@ namespace MovementGame.MyCharacterController
             m_PlayerKeyBoardMap_TestPP = m_PlayerKeyBoardMap.FindAction("TestPP", throwIfNotFound: true);
             m_PlayerKeyBoardMap_TestSkip = m_PlayerKeyBoardMap.FindAction("TestSkip", throwIfNotFound: true);
             m_PlayerKeyBoardMap_FlashLight = m_PlayerKeyBoardMap.FindAction("FlashLight", throwIfNotFound: true);
+            m_PlayerKeyBoardMap_Interact = m_PlayerKeyBoardMap.FindAction("Interact", throwIfNotFound: true);
         }
 
         ~@PlayerControls()
@@ -592,6 +613,7 @@ namespace MovementGame.MyCharacterController
         private readonly InputAction m_PlayerKeyBoardMap_TestPP;
         private readonly InputAction m_PlayerKeyBoardMap_TestSkip;
         private readonly InputAction m_PlayerKeyBoardMap_FlashLight;
+        private readonly InputAction m_PlayerKeyBoardMap_Interact;
         /// <summary>
         /// Provides access to input actions defined in input action map "PlayerKeyBoardMap".
         /// </summary>
@@ -623,6 +645,10 @@ namespace MovementGame.MyCharacterController
             /// Provides access to the underlying input action "PlayerKeyBoardMap/FlashLight".
             /// </summary>
             public InputAction @FlashLight => m_Wrapper.m_PlayerKeyBoardMap_FlashLight;
+            /// <summary>
+            /// Provides access to the underlying input action "PlayerKeyBoardMap/Interact".
+            /// </summary>
+            public InputAction @Interact => m_Wrapper.m_PlayerKeyBoardMap_Interact;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -664,6 +690,9 @@ namespace MovementGame.MyCharacterController
                 @FlashLight.started += instance.OnFlashLight;
                 @FlashLight.performed += instance.OnFlashLight;
                 @FlashLight.canceled += instance.OnFlashLight;
+                @Interact.started += instance.OnInteract;
+                @Interact.performed += instance.OnInteract;
+                @Interact.canceled += instance.OnInteract;
             }
 
             /// <summary>
@@ -690,6 +719,9 @@ namespace MovementGame.MyCharacterController
                 @FlashLight.started -= instance.OnFlashLight;
                 @FlashLight.performed -= instance.OnFlashLight;
                 @FlashLight.canceled -= instance.OnFlashLight;
+                @Interact.started -= instance.OnInteract;
+                @Interact.performed -= instance.OnInteract;
+                @Interact.canceled -= instance.OnInteract;
             }
 
             /// <summary>
@@ -808,6 +840,13 @@ namespace MovementGame.MyCharacterController
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnFlashLight(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Interact" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnInteract(InputAction.CallbackContext context);
         }
     }
 }

@@ -1,17 +1,27 @@
+using ShadowMaze.MyCharacterController;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerLight : MonoBehaviour
 {
-    public GameObject FlashLight;
-
-    private Light _light;
-    private bool _flashLightOn = false;
-
+    [SerializeField] private PlayerStats _playerStats;
+    [SerializeField] private float reducedBattery = 1;
     [SerializeField] private string[] targetTags;
     [SerializeField] private LayerMask targetLayerMask;
     [SerializeField] private LayerMask occlusionLayerMask;
     [SerializeField] private float OnOffSpeed = 2f;
+
+    [SerializeField] private float flickerSpeed = 5f;             // ความเร็วในการกระพริบเมื่อแบตใกล้หมด
+    [SerializeField] private float baseFlickerSpeed = 1f;         // ความเร็วปกติในการสั่น
+    [SerializeField] private float minIntensity = 0.6f;           // ค่าต่ำสุดของการสว่าง
+    [SerializeField] private float maxIntensity = 1f;             // ค่าสูงสุดของการสว่าง
+    [SerializeField] private float lowBatteryThreshold = 20f;    // แบตเตอรี่ที่ต่ำกว่าถือว่าใกล้หมด (20%)
+
+    public GameObject FlashLight;
+
+    private Light _light;
+    private bool _flashLightOn = false;
+    private float _flickerTimer;
 
     private void Awake()
     {
@@ -22,14 +32,41 @@ public class PlayerLight : MonoBehaviour
     private void Update()
     {
         if (!_light) return;
+        if (_playerStats.Battery <= 0f) {
+            if (_light.intensity != 0) _light.intensity = Mathf.MoveTowards(_light.intensity, 0f, OnOffSpeed * Time.deltaTime);
+            else _flashLightOn = false;
+        }
 
-        float targetIntensity = _flashLightOn ? 1f : 0f;
-        _light.intensity = Mathf.MoveTowards(_light.intensity, targetIntensity, OnOffSpeed * Time.deltaTime);
+        if (_flashLightOn) _playerStats.Battery = Mathf.Max(0f, _playerStats.Battery - reducedBattery * Time.deltaTime);
+
+        float targetIntensity = 0f;
+        if (_flashLightOn)
+        {
+            float batteryPercent = _playerStats.Battery;
+            float flickerSpeedNow = batteryPercent < lowBatteryThreshold ? flickerSpeed : baseFlickerSpeed;
+
+            _flickerTimer += Time.deltaTime * flickerSpeedNow;
+            float flicker = Mathf.PingPong(_flickerTimer, 1f);
+            targetIntensity = Mathf.Lerp(minIntensity, maxIntensity, flicker);
+        }
+
+        if (_playerStats.Battery > 0f) _light.intensity = targetIntensity;
+    }
+    public void On()
+    {
+        if (_playerStats.Battery > 0f)
+        {
+            _flashLightOn = true;
+            _flickerTimer = 0f;
+        }
     }
 
-    public void On() => _flashLightOn = true;
     public void Off() => _flashLightOn = false;
-    public void Toggle() => _flashLightOn = !_flashLightOn;
+    public void Toggle()
+    {
+        if (_flashLightOn) Off();
+        else On();
+    }
 
     public List<GameObject> GetObjectsInFlashlightCone()
     {

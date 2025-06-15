@@ -11,20 +11,27 @@ namespace ShadowMaze.MyCharacterController
     {
         [SerializeField] private PlayerController _playerController;
 
-        public float Health = 100.0f;
-        public float MaxHealth = 100.0f;
+        public float DeHealth;
+        public float Health = 100f;
+        public float MaxHealth = 100f;
+        public float DeBattery;
+        public float Battery = 100f;
+        public float MaxBattery = 100f;
 
         public bool isDie;
 
         private void Start()
         {
-
+            DeHealth = Health;
+            DeBattery = Battery;
         }
 
         public void die()
         {
-            Health = 100.0f;
-            MaxHealth = Health;
+            Health = DeHealth;
+            MaxHealth = DeHealth;
+            Battery = DeBattery;
+            MaxBattery = DeBattery;
             isDie = true;
         }
 

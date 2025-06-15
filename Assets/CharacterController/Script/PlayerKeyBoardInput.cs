@@ -8,6 +8,13 @@ namespace ShadowMaze.MyCharacterController
         [SerializeField] private PlayerController _plrController;
         [SerializeField] private PlayerLight _light;
 
+        public bool interact { get; private set; } = false;
+
+        private void LateUpdate()
+        {
+            interact = false;
+        }
+
         private void OnEnable()
         {
             if (PlayerInputManager.instance?.PlayerControls == null)
@@ -57,6 +64,11 @@ namespace ShadowMaze.MyCharacterController
         public void OnFlashLight(InputAction.CallbackContext context) 
         { 
             if (context.started) _light.Toggle(); 
+        }
+
+        public void OnInteract(InputAction.CallbackContext context)
+        {
+            if (context.started) interact = true;
         }
     }
 

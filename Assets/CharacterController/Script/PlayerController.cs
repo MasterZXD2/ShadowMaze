@@ -1,4 +1,5 @@
 using ShadowMaze.CutSceneSystem;
+using ShadowMaze.InteractSystem;
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -17,7 +18,7 @@ namespace ShadowMaze.MyCharacterController
     #endregion
 
     [DefaultExecutionOrder(-1)]
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : Singleton<PlayerController>
     {
         #region Class Veriables
         [Header("Player Config")]
@@ -30,10 +31,10 @@ namespace ShadowMaze.MyCharacterController
         [SerializeField] private PlayerKeyBoardInput _playerKeyBoardInput;
         [SerializeField] private PlayerLight _playerLight;
         [SerializeField] private PlayerState _playerState;
-        [SerializeField] private PlayerStats _playerStats;
+        public PlayerStats _playerStats;
         [SerializeField] private PlayerUI _playerUI;
         [SerializeField] private GameObject _playerGameObject;
-
+        public PlayerInteract _playerInteract;
         //test
         public CutScene cs;
 
@@ -145,7 +146,7 @@ namespace ShadowMaze.MyCharacterController
             if (_playerLocomotionInput == null) _playerLocomotionInput = GetComponent<PlayerLocomotionInput>();
             if (_playerState == null) _playerState = GetComponent<PlayerState>();
             if (_characterController == null) _characterController = GetComponent<CharacterController>();
-
+            
             _anitBump = RunSpeed;
             _stepOffset = _characterController.stepOffset;
         }
