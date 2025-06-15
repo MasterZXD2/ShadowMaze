@@ -6,6 +6,10 @@ TagManager:
   tags:
   - ShadowObject
   - Memory
+  - Door Exit
+  - Door Memory
+  - Boss Map
+  - Trap
   layers:
   - Default
   - TransparentFX
