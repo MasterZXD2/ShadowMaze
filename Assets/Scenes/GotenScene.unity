@@ -337,8 +337,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 82991397}
     - target: {fileID: 2385353096068005018, guid: 17135688c901ddd408690eb9c659466a, type: 3}
+      propertyPath: maxIntensity
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2385353096068005018, guid: 17135688c901ddd408690eb9c659466a, type: 3}
       propertyPath: minIntensity
-      value: 0.5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2385353096068005018, guid: 17135688c901ddd408690eb9c659466a, type: 3}
       propertyPath: lowBatteryThreshold
@@ -360,6 +364,10 @@ PrefabInstance:
       propertyPath: _playerInteract
       value: 
       objectReference: {fileID: 82991406}
+    - target: {fileID: 2674317561704720980, guid: 17135688c901ddd408690eb9c659466a, type: 3}
+      propertyPath: _groundLayers.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5317513966196724232, guid: 17135688c901ddd408690eb9c659466a, type: 3}
       propertyPath: m_Name
       value: Player
@@ -403,6 +411,18 @@ PrefabInstance:
     - target: {fileID: 6635458295494745941, guid: 17135688c901ddd408690eb9c659466a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9112876086682037302, guid: 17135688c901ddd408690eb9c659466a, type: 3}
+      propertyPath: m_Range
+      value: 12.352173
+      objectReference: {fileID: 0}
+    - target: {fileID: 9112876086682037302, guid: 17135688c901ddd408690eb9c659466a, type: 3}
+      propertyPath: m_SpotAngle
+      value: 111.73497
+      objectReference: {fileID: 0}
+    - target: {fileID: 9112876086682037302, guid: 17135688c901ddd408690eb9c659466a, type: 3}
+      propertyPath: m_InnerSpotAngle
+      value: 73.99095
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -36298,7 +36318,7 @@ Transform:
   m_GameObject: {fileID: 840500497}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1192.25, y: 1.348, z: -1051.69}
+  m_LocalPosition: {x: 1192.25, y: 1.348, z: -1051.55}
   m_LocalScale: {x: 0.2, y: 0.57336, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -105414,7 +105434,7 @@ Transform:
   m_GameObject: {fileID: 1334205430}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1192.25, y: 1.348, z: -1050.02}
+  m_LocalPosition: {x: 1193.9, y: 1.348, z: -1049.04}
   m_LocalScale: {x: 0.2, y: 0.57336, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
