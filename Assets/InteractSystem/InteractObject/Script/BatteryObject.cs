@@ -7,7 +7,10 @@ namespace ShadowMaze.InteractSystem
     {
         public override void Interact()
         {
-            PlayerController.Instance._playerStats.Battery += 25;
+            PlayerController.Instance._playerStats.Battery = Mathf.Min(
+                PlayerController.Instance._playerStats.MaxBattery, 
+                PlayerController.Instance._playerStats.Battery + 25
+                );
             Destroy(gameObject);
         }
     }

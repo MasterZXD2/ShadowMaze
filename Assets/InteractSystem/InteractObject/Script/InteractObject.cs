@@ -16,16 +16,15 @@ namespace ShadowMaze.InteractSystem
         {
             currUI = Instantiate(UI, transform);
             currUI.transform.localPosition = Vector3.zero;
+            
+            Vector3 scale = currUI.transform.localScale;
+            scale.x = 1 + (1 - transform.localScale.x);
+            currUI.transform.localScale = scale;
 
             Canvas canvas = currUI.GetComponentInChildren<Canvas>();
 
-            Vector3 uiOffset = -transform.forward * ((transform.localScale.z / 2f) + 0.5f);
+            Vector3 uiOffset = -transform.forward * ((transform.localScale.z / 2f) + 0.35f);
             canvas.transform.position = transform.position + uiOffset;
-
-            if (Physics.Raycast(transform.position, uiOffset.normalized, out RaycastHit hit, uiOffset.magnitude, ~0))
-            {
-                canvas.transform.position = hit.point + hit.normal * 0.01f;
-            }
 
             currUI.SetActive(false);
         }
