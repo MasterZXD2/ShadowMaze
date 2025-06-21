@@ -45,9 +45,9 @@ Light:
   m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 0
-  m_Range: 9.829224
-  m_SpotAngle: 81.85993
-  m_InnerSpotAngle: 49.20759
+  m_Range: 18
+  m_SpotAngle: 111.73497
+  m_InnerSpotAngle: 73.99095
   m_CookieSize: 10
   m_Shadows:
     m_Type: 2
@@ -720,6 +720,7 @@ GameObject:
   - component: {fileID: 1159779941681302058}
   - component: {fileID: 261899133957030099}
   - component: {fileID: 2385353096068005018}
+  - component: {fileID: 5599670264407384861}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -790,6 +791,7 @@ MonoBehaviour:
   _playerStats: {fileID: 261899133957030099}
   _playerUI: {fileID: 1159779941681302058}
   _playerGameObject: {fileID: 4782946692791266990}
+  _playerInteract: {fileID: 5599670264407384861}
   cs: {fileID: 0}
   FirstCam: {fileID: 4593611722645905123}
   ThirdCam: {fileID: 2558328244929255874}
@@ -815,8 +817,10 @@ MonoBehaviour:
   normalFOV: 65
   runFOV: 80
   fovTransitionSpeed: 4
-  bobSpeed: 1
-  bobAmount: 0.05
+  cameraHolder: {fileID: 8355330131040135230}
+  amountHeadBob: 0.01
+  frequencyHeadBob: 10
+  smoothHeadBob: 10
   _groundLayers:
     serializedVersion: 2
     m_Bits: 64
@@ -887,6 +891,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerStats: {fileID: 261899133957030099}
+  BBLerpSpeed: 0.05
 --- !u!114 &261899133957030099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -900,8 +905,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerController: {fileID: 2674317561704720980}
+  DeHealth: 0
   Health: 100
   MaxHealth: 100
+  DeBattery: 0
+  Battery: 100
+  MaxBattery: 100
   isDie: 0
 --- !u!114 &2385353096068005018
 MonoBehaviour:
@@ -915,7 +924,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bed7f48f51aa037488c8843158a310c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FlashLight: {fileID: 2022027908763691823}
+  _playerStats: {fileID: 261899133957030099}
+  reducedBattery: 1
   targetTags:
   - Untagged
   targetLayerMask:
@@ -925,6 +935,25 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   OnOffSpeed: 2
+  flickerSpeed: 5
+  baseFlickerSpeed: 1
+  minIntensity: 1.5
+  maxIntensity: 2
+  lowBatteryThreshold: 20
+  FlashLight: {fileID: 2022027908763691823}
+--- !u!114 &5599670264407384861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5317513966196724232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42624f7c30e6e3c41bbd5f4b794da847, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerKeyBoardInput: {fileID: 1627595484241856121}
 --- !u!1001 &6547423345825553117
 PrefabInstance:
   m_ObjectHideFlags: 0

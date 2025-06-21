@@ -53,12 +53,12 @@ namespace ShadowMaze.MyCharacterController
 
         public void OnTestPP(InputAction.CallbackContext context)
         {
-            if (context.started) _plrController.cs.TogglePause();
+            //if (context.started) _plrController.cs.TogglePause();
         }
 
         public void OnTestSkip(InputAction.CallbackContext context)
         {
-            if (context.started) _plrController.cs.Skip();
+            //if (context.started) _plrController.cs.Skip();
         }
 
         public void OnFlashLight(InputAction.CallbackContext context) 

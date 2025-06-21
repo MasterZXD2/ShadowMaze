@@ -35,8 +35,6 @@ namespace ShadowMaze.MyCharacterController
         [SerializeField] private PlayerUI _playerUI;
         [SerializeField] private GameObject _playerGameObject;
         public PlayerInteract _playerInteract;
-        //test
-        public CutScene cs;
 
         [Space(10)]
         [Header("Camera Obj")]
@@ -157,13 +155,6 @@ namespace ShadowMaze.MyCharacterController
             SetCam();
             _plrCamera.fieldOfView = normalFOV;
             _startPos = cameraHolder.localPosition;
-            cs.SetVideoStart(() => {
-                Debug.Log("START");
-            });
-            cs.SetVideoEnd(() => {
-                Debug.Log("END");
-                cs.Stop();
-            });
         }
 
         private void Update()
@@ -560,7 +551,6 @@ namespace ShadowMaze.MyCharacterController
                     comp.enabled = false;
                 }
             }
-            cs.SetVideoCamera(_plrCamera);
         }
 
         private void SetAllCamComponents(bool b)
