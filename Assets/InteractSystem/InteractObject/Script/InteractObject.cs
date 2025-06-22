@@ -35,6 +35,7 @@ namespace ShadowMaze.InteractSystem
             if (!player || !player._playerInteract) return;
 
             float sqrDist = (player.transform.position - transform.position).sqrMagnitude;
+
             if (sqrDist < range * range)
             {
                 if (!_playerIsInRange && !player._playerInteract._interactObject)

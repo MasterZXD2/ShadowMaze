@@ -60,12 +60,25 @@ namespace ShadowMaze.CutSceneSystem
                 bool isFinished = false;
                 CutScene current = cutSceneList[_currCutScene];
 
+                if (current == null)
+                {
+                    Debug.LogWarning("Cutscene is missing or clip is null. Skipping...");
+                    _currCutScene++;
+                    continue;
+                }
+
+                current.Stop();
+                current.Prepare();
+
                 current.SetVideoCamera(_camera);
+
                 skipBU.onClick.RemoveAllListeners();
                 skipBU.onClick.AddListener(() => {
                     current.Skip();
                 });
+
                 current.SetVideoEnd(() => {
+                    current.Stop();
                     isFinished = true;
                 });
 
@@ -75,6 +88,7 @@ namespace ShadowMaze.CutSceneSystem
 
                 _currCutScene++;
             }
+
             skipBU.onClick.RemoveAllListeners();
 
             Cam.tag = "Untagged";
@@ -86,6 +100,7 @@ namespace ShadowMaze.CutSceneSystem
             _playerIN = Instantiate(_player);
             _playerIN.transform.position = _spawnPoint.transform.position;
         }
+
 
     }
 

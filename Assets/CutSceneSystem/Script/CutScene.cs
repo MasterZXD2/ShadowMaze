@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Net.Http;
 using UnityEngine;
 using UnityEngine.Video;
@@ -120,12 +121,29 @@ namespace ShadowMaze.CutSceneSystem
 
             videoPlayer.time = skipTime;
 
-            // ถ้าไม่เล่นอยู่ให้เริ่มเล่นเพื่อให้ถึงจุดจบแล้ว Trigger 'onClipEnd'
             if (!videoPlayer.isPlaying)
             {
                 videoPlayer.Play();
             }
+
+            // ใช้ Coroutine เพื่อตรวจ frame สุดท้ายแทน loopPointReached
+            StartCoroutine(WaitUntilVideoEnds());
         }
+
+        private IEnumerator WaitUntilVideoEnds()
+        {
+            // รอจนกระทั่งถึงจุดสิ้นสุด
+            while (videoPlayer.isPlaying && videoPlayer.time < videoPlayer.length - 0.05f)
+            {
+                yield return null;
+            }
+
+            isPlaying = false;
+            isPaused = false;
+
+            onClipEnd?.Invoke();
+        }
+
         #endregion
 
         #region Set Veriables
