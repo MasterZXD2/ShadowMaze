@@ -29,7 +29,7 @@ namespace ShadowMaze.InteractSystem
             currUI.SetActive(false);
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             var player = PlayerController.Instance;
             if (!player || !player._playerInteract) return;
@@ -63,7 +63,7 @@ namespace ShadowMaze.InteractSystem
 
         private void OnDrawGizmos()
         {
-            Gizmos.color = Color.azure;
+            Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, range);
         }
     }

@@ -137,6 +137,15 @@ namespace ShadowMaze.MyCharacterController
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""LookPos"",
+                    ""type"": ""Value"",
+                    ""id"": ""5672c286-6c72-4f3a-b5cf-42a62276fe64"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -236,6 +245,17 @@ namespace ShadowMaze.MyCharacterController
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ScrollMouse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""62381c91-4286-401a-9952-32b8d7c344db"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LookPos"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -379,6 +399,7 @@ namespace ShadowMaze.MyCharacterController
             m_PlayerLocomotionMap_LeftClick = m_PlayerLocomotionMap.FindAction("LeftClick", throwIfNotFound: true);
             m_PlayerLocomotionMap_RightClick = m_PlayerLocomotionMap.FindAction("RightClick", throwIfNotFound: true);
             m_PlayerLocomotionMap_ScrollMouse = m_PlayerLocomotionMap.FindAction("ScrollMouse", throwIfNotFound: true);
+            m_PlayerLocomotionMap_LookPos = m_PlayerLocomotionMap.FindAction("LookPos", throwIfNotFound: true);
             // PlayerKeyBoardMap
             m_PlayerKeyBoardMap = asset.FindActionMap("PlayerKeyBoardMap", throwIfNotFound: true);
             m_PlayerKeyBoardMap_Jump = m_PlayerKeyBoardMap.FindAction("Jump", throwIfNotFound: true);
@@ -473,6 +494,7 @@ namespace ShadowMaze.MyCharacterController
         private readonly InputAction m_PlayerLocomotionMap_LeftClick;
         private readonly InputAction m_PlayerLocomotionMap_RightClick;
         private readonly InputAction m_PlayerLocomotionMap_ScrollMouse;
+        private readonly InputAction m_PlayerLocomotionMap_LookPos;
         /// <summary>
         /// Provides access to input actions defined in input action map "PlayerLocomotionMap".
         /// </summary>
@@ -504,6 +526,10 @@ namespace ShadowMaze.MyCharacterController
             /// Provides access to the underlying input action "PlayerLocomotionMap/ScrollMouse".
             /// </summary>
             public InputAction @ScrollMouse => m_Wrapper.m_PlayerLocomotionMap_ScrollMouse;
+            /// <summary>
+            /// Provides access to the underlying input action "PlayerLocomotionMap/LookPos".
+            /// </summary>
+            public InputAction @LookPos => m_Wrapper.m_PlayerLocomotionMap_LookPos;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -545,6 +571,9 @@ namespace ShadowMaze.MyCharacterController
                 @ScrollMouse.started += instance.OnScrollMouse;
                 @ScrollMouse.performed += instance.OnScrollMouse;
                 @ScrollMouse.canceled += instance.OnScrollMouse;
+                @LookPos.started += instance.OnLookPos;
+                @LookPos.performed += instance.OnLookPos;
+                @LookPos.canceled += instance.OnLookPos;
             }
 
             /// <summary>
@@ -571,6 +600,9 @@ namespace ShadowMaze.MyCharacterController
                 @ScrollMouse.started -= instance.OnScrollMouse;
                 @ScrollMouse.performed -= instance.OnScrollMouse;
                 @ScrollMouse.canceled -= instance.OnScrollMouse;
+                @LookPos.started -= instance.OnLookPos;
+                @LookPos.performed -= instance.OnLookPos;
+                @LookPos.canceled -= instance.OnLookPos;
             }
 
             /// <summary>
@@ -797,6 +829,13 @@ namespace ShadowMaze.MyCharacterController
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnScrollMouse(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "LookPos" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnLookPos(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "PlayerKeyBoardMap" which allows adding and removing callbacks.

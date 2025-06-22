@@ -27,7 +27,7 @@ namespace ShadowMaze.MyCharacterController
         [Header("Player Components")]
 
         [SerializeField] private CharacterController _characterController;
-        [SerializeField] private PlayerLocomotionInput _playerLocomotionInput;
+        public PlayerLocomotionInput _playerLocomotionInput { get; private set; }
         [SerializeField] private PlayerKeyBoardInput _playerKeyBoardInput;
         [SerializeField] private PlayerLight _playerLight;
         [SerializeField] private PlayerState _playerState;
@@ -109,7 +109,7 @@ namespace ShadowMaze.MyCharacterController
         [Header("FlashLight")]
         [SerializeField] private float flashLightTurnSpeed = 20f;
 
-        private Camera _plrCamera;
+        public Camera _plrCamera { get; private set; }
 
         private Vector2 _camRotation = Vector2.zero;
         private Vector2 _plrTarRotation = Vector2.zero;

@@ -13,6 +13,8 @@ namespace ShadowMaze.MyCharacterController
         //public Dictionary<string, KeyBoardClass> keyBoardMap { get; private set; } = new Dictionary<string, KeyBoardClass>();
         public Vector2 ScrollInput { get; private set; }
 
+        public Vector2 LookPosInput { get; private set; }
+
         public bool LeftClick { get; private set; }
         public bool RightClick { get; private set; }
 
@@ -84,6 +86,11 @@ namespace ShadowMaze.MyCharacterController
             if (!context.performed) return;
             Vector2 scrollInput = context.ReadValue<Vector2>();
             ScrollInput = scrollInput.normalized * _objScrollSpeed;
+        }
+
+        public void OnLookPos(InputAction.CallbackContext context)
+        {
+            LookPosInput = context.ReadValue<Vector2>();
         }
 
         /*public void OnKeyBoard(InputAction.CallbackContext context)

@@ -40,6 +40,15 @@ namespace ShadowMaze.CutSceneSystem
             playBU.onClick.AddListener(OnPlayCutscene);
         }
 
+        private void Start()
+        {
+            foreach (CutScene cutScene in cutSceneList)
+            {
+                cutScene.Prepare();
+                cutScene.Stop();
+            }
+        }
+
         private void OnPlayCutscene()
         {
             if (hasStarted) return;
@@ -66,9 +75,6 @@ namespace ShadowMaze.CutSceneSystem
                     _currCutScene++;
                     continue;
                 }
-
-                current.Stop();
-                current.Prepare();
 
                 current.SetVideoCamera(_camera);
 
