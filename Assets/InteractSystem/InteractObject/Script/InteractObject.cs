@@ -12,7 +12,7 @@ namespace ShadowMaze.InteractSystem
         private GameObject currUI;
         private bool _playerIsInRange = false;
 
-        private void Start()
+        protected virtual void Start()
         {
             currUI = Instantiate(UI, transform);
             currUI.transform.localPosition = Vector3.zero;
@@ -61,7 +61,7 @@ namespace ShadowMaze.InteractSystem
             Debug.Log($"Interact: {name}");
         }
 
-        private void OnDrawGizmos()
+        protected virtual void OnDrawGizmos()
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, range);

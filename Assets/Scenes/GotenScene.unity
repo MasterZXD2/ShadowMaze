@@ -36948,6 +36948,7 @@ GameObject:
   - component: {fileID: 980288098}
   - component: {fileID: 980288097}
   - component: {fileID: 980288096}
+  - component: {fileID: 980288100}
   - component: {fileID: 980288095}
   m_Layer: 0
   m_Name: Cube (5)
@@ -36970,9 +36971,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UI: {fileID: 2724836644241498865, guid: 9583650b2d952354e9e74d474754854a, type: 3}
   range: 2
+  _rb: {fileID: 0}
+  interactLayerName: PlrInteractObject
+  raycastMask:
+    serializedVersion: 2
+    m_Bits: 65
   _groundLayers:
     serializedVersion: 2
     m_Bits: 64
+  offset: {x: 0, y: 0, z: 0}
+  height: 1.2
+  far: 1.5
+  Gravity: 10
 --- !u!65 &980288096
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -37056,12 +37066,39 @@ Transform:
   m_GameObject: {fileID: 980288094}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1177.4, y: 1.68, z: -1045.56}
+  m_LocalPosition: {x: 1177.4, y: 4.42, z: -1045.56}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &980288100
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980288094}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1041140806
 GameObject:
   m_ObjectHideFlags: 0
