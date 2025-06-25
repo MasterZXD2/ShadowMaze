@@ -1,10 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
-<<<<<<< Updated upstream
 --- !u!114 &-2348143379023532179
-=======
---- !u!114 &-4548826021943995926
->>>>>>> Stashed changes
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -30,13 +26,9 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _EMISSION
-<<<<<<< Updated upstream
   - _GLOSSINESS_FROM_BASE_ALPHA
   - _NORMALMAP
   - _SPECULAR_COLOR
-=======
-  - _NORMALMAP
->>>>>>> Stashed changes
   m_InvalidKeywords: []
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 0

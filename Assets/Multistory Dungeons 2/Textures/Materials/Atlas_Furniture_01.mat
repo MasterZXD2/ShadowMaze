@@ -13,13 +13,9 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _EMISSION
-<<<<<<< Updated upstream
   - _GLOSSINESS_FROM_BASE_ALPHA
   - _NORMALMAP
   - _SPECGLOSSMAP
-=======
-  - _NORMALMAP
->>>>>>> Stashed changes
   m_InvalidKeywords: []
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
@@ -130,11 +126,7 @@ Material:
     - _SpecColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
-<<<<<<< Updated upstream
 --- !u!114 &4197113152640278706
-=======
---- !u!114 &645197883476022316
->>>>>>> Stashed changes
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
