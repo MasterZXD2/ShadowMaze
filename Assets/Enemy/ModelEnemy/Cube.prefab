@@ -132,7 +132,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -151,7 +151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UI: {fileID: 2724836644241498865, guid: 9583650b2d952354e9e74d474754854a, type: 3}
   range: 5
-  _rb: {fileID: -491730070044792249}
+  _rb: {fileID: 0}
   interactLayerName: PlrInteractObject
   raycastMask:
     serializedVersion: 2

@@ -269,7 +269,7 @@ MonoBehaviour:
   cubeFormPrefab: {fileID: 7677901736339717805, guid: bbf19f84d2f00774d908cf5cf93551c1, type: 3}
   groundLayer:
     serializedVersion: 2
-    m_Bits: 65
+    m_Bits: 4294967295
 --- !u!136 &669160038 stripped
 CapsuleCollider:
   m_CorrespondingSourceObject: {fileID: 8096307595361965781, guid: fdb8e110d987e5d4787d979ffa580df5, type: 3}
