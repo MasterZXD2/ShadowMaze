@@ -377,7 +377,7 @@ public class EnemyAI : MonoBehaviour
             Debug.LogError($"Enemy '{gameObject.name}' could NOT find ground to respawn on! Spawning at last known position ({spawnPosition}). This might lead to falling through the map. Check groundLayer and environment.");
         }
 
-        // ตั้งค่าตำแหน่งของ EnemyAI GameObject (แคปซูล) ไปยังตำแหน่งที่คำนวณได้
+        // ตั้งค่าตำแหน่งของ EnemyAI GameObject (แคป) ไปยังตำแหน่งที่คำนวณได้
         transform.position = spawnPosition;
         // อาจจะรีเซ็ต Rotation ด้วย ถ้าต้องการ
         // transform.rotation = Quaternion.identity; 
