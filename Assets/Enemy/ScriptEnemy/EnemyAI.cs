@@ -296,7 +296,7 @@ public class EnemyAI : MonoBehaviour
         {
             rb.isKinematic = true;
             rb.useGravity = false;
-            rb.velocity = Vector3.zero; // หยุดการเคลื่อนที่ที่เหลืออยู่
+            rb.linearVelocity = Vector3.zero; // หยุดการเคลื่อนที่ที่เหลืออยู่
             rb.angularVelocity = Vector3.zero; // หยุดการหมุนที่เหลืออยู่
         }
         if (navMeshAgent != null && navMeshAgent.enabled)
