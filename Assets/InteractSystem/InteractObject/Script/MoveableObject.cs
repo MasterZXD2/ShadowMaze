@@ -1,6 +1,6 @@
 using ShadowMaze.MyCharacterController;
 using UnityEngine;
-using UnityEngine.Video; // อาจจะไม่จำเป็น ถ้าไม่ได้ใช้ VideoPlayer
+// using UnityEngine.Video; // ลบถ้าไม่ได้ใช้
 
 namespace ShadowMaze.InteractSystem
 {
@@ -10,8 +10,7 @@ namespace ShadowMaze.InteractSystem
         [SerializeField] private Rigidbody _rb;
 
         [field: SerializeField] private string interactLayerName = "PlrInteractObject";
-        [field: SerializeField] private LayerMask raycastMask; // สำหรับ Raycast
-        [field: SerializeField] private LayerMask _groundLayers; // อาจจะซ้ำกับ groundLayer ใน EnemyAI ถ้าใช้ Layer เดียวกัน
+        [field: SerializeField] private LayerMask raycastMask;
 
         [SerializeField] private Vector3 offset = Vector3.zero;
         [SerializeField] private float height;
@@ -20,10 +19,7 @@ namespace ShadowMaze.InteractSystem
         private int interactLayer;
         private int _normalLayer;
 
-        public float Gravity = 10f; // ดูเหมือนไม่ได้ใช้
-        private float _verticalVelo = 0f; // ดูเหมือนไม่ได้ใช้
-
-        // *** เพิ่ม Public Method เพื่อตรวจสอบสถานะการหยิบ ***
+        // ตัวแปรที่ใช้สำหรับ EnemyAI เพื่อตรวจสอบสถานะการหยิบ
         public bool IsPicked()
         {
             return pick;
@@ -34,33 +30,50 @@ namespace ShadowMaze.InteractSystem
             base.Start();
             interactLayer = LayerMask.NameToLayer(interactLayerName);
             _normalLayer = gameObject.layer;
-        }
 
-        protected override void Update()
-        {
-            base.Update();
-            if (pick) MoveSelectObj();
+            if (_rb == null)
+            {
+                _rb = GetComponent<Rigidbody>();
+                if (_rb == null)
+                {
+                    Debug.LogError($"MoveableObject on {gameObject.name}: Rigidbody not assigned and not found on this GameObject. Physics movement will not work.");
+                }
+            }
         }
 
         private void FixedUpdate()
         {
             if (!_rb) return;
+
             if (pick)
             {
-                _rb.isKinematic = true;
-                _rb.useGravity = false;
-                // *** ถ้ากล่องนี้มี Parent เป็น EnemyAI เราไม่ต้องการให้ MoveableObject เปลี่ยน Parent อีก ***
-                // *** เพราะ EnemyAI จะเป็นตัว Parent ที่เราต้องการให้ตามกล่อง ***
-                // *** ดังนัน้ ตรงนี้ไม่ต้อง SetParent อีก (หรือถ้าเคยมีก็เอาออก) ***
+                // *** สำคัญ: ทำให้ Rigidbody เป็น Kinematic และปิด Gravity ทันทีเมื่อถูกหยิบ ***
+                // ตั้งค่าเหล่านี้เพื่อให้ Rigidbody ถูกควบคุมด้วยมือได้อย่างราบรื่น
+                if (!_rb.isKinematic) _rb.isKinematic = true;
+                if (_rb.useGravity) _rb.useGravity = false;
+
+                // *** ตั้ง Parent เป็น Player's objectHolder เมื่อถูกหยิบ ***
+                // ต้องแน่ใจว่า PlayerController.Instance.objectHolder มีอยู่จริง
+                if (PlayerController.Instance != null && PlayerController.Instance.objectHolder != null && transform.parent != PlayerController.Instance.objectHolder)
+                {
+                    transform.SetParent(PlayerController.Instance.objectHolder);
+                    _rb.collisionDetectionMode = CollisionDetectionMode.Discrete; // อาจช่วยลดปัญหา collision ขณะถือ
+                }
+
+                // เรียก MoveSelectObj() เพื่อคำนวณและตั้งค่าตำแหน่ง
+                MoveSelectObj();
             }
             else
             {
-                _rb.isKinematic = false;
-                _rb.useGravity = true;
-                // *** ถ้ากล่องนี้ถูกปล่อยออกจากมือผู้เล่น ให้มันไม่มี Parent (กลับไปที่โลก) ***
-                if (transform.parent != null && transform.parent.GetComponent<PlayerController>() != null)
+                // *** สำคัญ: คืนค่า Rigidbody ปกติเมื่อปล่อย ***
+                if (_rb.isKinematic) _rb.isKinematic = false;
+                if (!_rb.useGravity) _rb.useGravity = true;
+                _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic; // กลับไปใช้โหมดปกติเพื่อการชนที่ดีขึ้น
+
+                // *** Unparent จาก Player เมื่อถูกปล่อย ***
+                if (transform.parent != null && transform.parent.GetComponent<PlayerController>() != null) // ตรวจสอบว่า Parent คือ Player (หรือ objectHolder)
                 {
-                    transform.parent = null;
+                    transform.parent = null; // Unparent ออกจาก Player
                 }
             }
         }
@@ -71,54 +84,48 @@ namespace ShadowMaze.InteractSystem
             if (pick)
             {
                 gameObject.layer = interactLayer;
-                // *** เมื่อหยิบ ให้กล่องเป็นลูกของ Player Controller/Camera ***
-                // *** แต่ถ้า EnemyAI เป็น Parent ของกล่อง เราจะต้องจัดการตรงนี้ให้ดี ***
-                // *** เนื่องจาก EnemyAI ได้ SetParent กล่องให้เป็นลูกของตัวเองแล้ว ***
-                // *** โค้ดใน MoveSelectObj จะเป็นการย้ายตำแหน่งเท่านั้น ไม่ได้เปลี่ยน Parent ใน FixedUpdate แล้ว ***
+                // Debug.Log($"MoveableObject {gameObject.name} picked. Layer set to {LayerMask.LayerToName(interactLayer)}");
+                // การ SetParent จะเกิดขึ้นใน FixedUpdate()
             }
             else
             {
                 gameObject.layer = _normalLayer;
+                // Debug.Log($"MoveableObject {gameObject.name} dropped. Layer set to {LayerMask.LayerToName(_normalLayer)}");
+                // การ Unparent จะเกิดขึ้นใน FixedUpdate()
             }
         }
 
         public void MoveSelectObj()
         {
+            if (PlayerController.Instance == null)
+            {
+                Debug.LogWarning("PlayerController.Instance is null in MoveableObject.MoveSelectObj(). Cannot move object.");
+                return;
+            }
+
             Transform player = PlayerController.Instance.transform;
 
+            // คำนวณตำแหน่งเป้าหมายตาม Player และ offset/height/far
             Vector3 desiredPos = (player.position + player.forward * far + Vector3.up * height) + offset;
-            Vector3 origin = player.position + Vector3.up * height;
-            Vector3 direction = desiredPos - origin;
-            float maxDistance = Vector3.Distance(origin, desiredPos);
 
-            if (Physics.Raycast(origin, direction.normalized, out RaycastHit hit, Mathf.Infinity, raycastMask))
+            // ใช้ตำแหน่งของ objectHolder ของ Player เป็นจุดเริ่มต้น Raycast เพื่อความแม่นยำสูงสุด
+            Vector3 raycastOrigin = PlayerController.Instance.objectHolder != null ? PlayerController.Instance.objectHolder.position : player.position + Vector3.up * height;
+            Vector3 direction = desiredPos - raycastOrigin;
+            float maxDistance = Vector3.Distance(raycastOrigin, desiredPos);
+
+            RaycastHit hit;
+            if (Physics.Raycast(raycastOrigin, direction.normalized, out hit, maxDistance, raycastMask, QueryTriggerInteraction.Ignore))
             {
-                float dist = Vector3.Distance(origin, hit.point);
-                Vector3 basePos = dist > maxDistance
-                    ? origin + direction.normalized * maxDistance : hit.point;
-
-                Vector3 fPos = basePos + hit.normal * 0.1f;
-                // *** ใช้ MovePosition สำหรับ Rigidbody เพื่อการเคลื่อนที่ที่ถูกต้องกับ Physics ***
-                if (_rb != null)
-                {
-                    _rb.MovePosition(fPos);
-                }
-                else
-                {
-                    transform.position = fPos;
-                }
+                // ถ้าชนกับสิ่งกีดขวาง ให้วางวัตถุที่จุดชน แต่ดันออกมาเล็กน้อยเพื่อป้องกันการซ้อนทับ
+                Vector3 fPos = hit.point + hit.normal * 0.05f;
+                _rb.position = fPos;
             }
             else
             {
-                if (_rb != null)
-                {
-                    _rb.MovePosition(desiredPos);
-                }
-                else
-                {
-                    transform.position = desiredPos;
-                }
+                // ถ้าไม่ชน ให้วางวัตถุที่ตำแหน่งเป้าหมาย
+                _rb.position = desiredPos;
             }
+            _rb.rotation = Quaternion.LookRotation(player.forward); // ทำให้กล่องหันหน้าตาม Player ด้วย
         }
     }
 }
