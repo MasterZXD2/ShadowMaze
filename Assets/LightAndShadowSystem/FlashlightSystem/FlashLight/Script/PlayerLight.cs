@@ -1,3 +1,4 @@
+using ShadowMaze.EnemyCharactor;
 using ShadowMaze.MyCharacterController;
 using System.Collections.Generic;
 using UnityEngine;
@@ -48,6 +49,14 @@ public class PlayerLight : MonoBehaviour
             _flickerTimer += Time.deltaTime * flickerSpeedNow;
             float flicker = Mathf.PingPong(_flickerTimer, 1f);
             targetIntensity = Mathf.Lerp(minIntensity, maxIntensity, flicker);
+
+            foreach (GameObject GO in GetObjectsInFlashlightCone())
+            {
+                if  (GO.TryGetComponent<SimpleEnemy>(out SimpleEnemy se))
+                {
+                   se.hit?.Invoke();
+                }
+            }
         }
 
         if (_playerStats.Battery > 0f) _light.intensity = targetIntensity;
@@ -89,7 +98,7 @@ public class PlayerLight : MonoBehaviour
             float distance = Vector3.Distance(origin, target.position);
 
             // อยู่ในกรวย
-            if (angle <= halfAngle && distance <= range)
+            if (angle <= halfAngle - 1 && distance <= range)
             {
                 // ตรวจว่า tag ตรงหรือไม่
                 bool tagMatch = false;

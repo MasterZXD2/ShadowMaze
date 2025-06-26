@@ -6,6 +6,8 @@ public class ShadowTrap : MonoBehaviour
 
     [SerializeField] private GameObject button;
     [SerializeField] private GameObject downButton;
+    [SerializeField] private Vector3 scale;
+    [SerializeField] private Vector3 offset;
 
     [field:SerializeField] private LayerMask passLayer;
 
@@ -20,18 +22,16 @@ public class ShadowTrap : MonoBehaviour
 
     private bool HasThingUpButton()
     {
-        Vector3 halfSize = downButton.transform.localScale * 0.5f;
-
         Collider[] colliders = Physics.OverlapBox(
-            downButton.transform.position,
-            halfSize,
+            downButton.transform.position + offset,
+            scale,
             Quaternion.identity,
             passLayer
         );
-
+        
         foreach (Collider collider in colliders)
         {
-            Debug.Log(collider.gameObject.name);
+            //Debug.Log(collider.gameObject.name);
         }
         return true;
     }
@@ -39,6 +39,6 @@ public class ShadowTrap : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.white;
-        Gizmos.DrawWireCube(downButton.transform.position, downButton.transform.localScale);
+        Gizmos.DrawWireCube(downButton.transform.position + offset, scale);
     }
 }

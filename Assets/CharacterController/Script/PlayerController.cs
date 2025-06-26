@@ -37,10 +37,6 @@ namespace ShadowMaze.MyCharacterController
         public PlayerInteract _playerInteract;
 
         [Space(10)]
-        [Header("Object Holding")] // ไม่จำเป็นต้องมี Header ถ้าไม่ต้องการจัดระเบียบใน Inspector
-        public Transform objectHolder;
-
-        [Space(10)]
         [Header("Camera Obj")]
 
         [SerializeField] private GameObject FirstCam;

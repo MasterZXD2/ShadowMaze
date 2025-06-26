@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using ShadowMaze.MyCharacterController;
 using ShadowMaze.InteractSystem;
 using UnityEngine.AI;
-
 public class EnemyAI : MonoBehaviour
 {
     // --- ส่วนหัวข้อ "Enemy Stats" (ค่าสถานะศัตรู) ---
@@ -53,25 +52,9 @@ public class EnemyAI : MonoBehaviour
     private void Start()
     {
         // ค้นหา Player GameObject และ Components ที่เกี่ยวข้อง
-        playerGameObject = GameObject.FindGameObjectWithTag("Player");
-        if (playerGameObject != null)
-        {
-            playerController = playerGameObject.GetComponent<PlayerController>();
-            playerLight = playerGameObject.GetComponent<PlayerLight>();
-
-            if (playerController != null)
-            {
-                playerStats = playerController._playerStats;
-            }
-            else
-            {
-                Debug.LogError("EnemyAI: PlayerController component not found on Player GameObject.");
-            }
-        }
-        else
-        {
-            Debug.LogError("EnemyAI: Player GameObject not found. Make sure your Player has the tag 'Player'.");
-        }
+        playerGameObject = PlayerController.Instance.gameObject;
+        playerController = PlayerController.Instance;
+        playerLight = playerGameObject.GetComponent<PlayerLight>();
 
         // ดึง Rigidbody และ NavMeshAgent จาก GameObject ตัวนี้ (EnemyAI)
         rb = GetComponent<Rigidbody>();
