@@ -35125,7 +35125,7 @@ MonoBehaviour:
   flashlightStunDuration: 3
   cubeFormDuration: 5
   enemyMeshRenderer: {fileID: 289412406}
-  enemyCollider: {fileID: 289412405}
+  enemyController: {fileID: 289412405}
   cubeFormPrefab: {fileID: 7677901736339717805, guid: bbf19f84d2f00774d908cf5cf93551c1, type: 3}
 --- !u!114 &289412404
 MonoBehaviour:
@@ -35787,6 +35787,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 357286580995939407, guid: fdb8e110d987e5d4787d979ffa580df5, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1458895854108288946, guid: fdb8e110d987e5d4787d979ffa580df5, type: 3}
       propertyPath: m_Name
       value: Capsule

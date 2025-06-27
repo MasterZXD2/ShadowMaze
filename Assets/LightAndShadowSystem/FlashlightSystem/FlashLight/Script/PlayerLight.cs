@@ -52,9 +52,19 @@ public class PlayerLight : MonoBehaviour
 
             foreach (GameObject GO in GetObjectsInFlashlightCone())
             {
-                if  (GO.TryGetComponent<SimpleEnemy>(out SimpleEnemy se))
+                if (GO.CompareTag("Enemy"))
                 {
-                   se.hit?.Invoke();
+                    if (GO.TryGetComponent<SimpleEnemy>(out SimpleEnemy se))
+                    {
+                        se.hit?.Invoke();
+                    }
+                    else if (GO.transform.parent.CompareTag("Enemy"))
+                    {
+                        if (GO.transform.parent.TryGetComponent<SimpleEnemy>(out SimpleEnemy pse))
+                        {
+                            pse.hit?.Invoke();
+                        }
+                    }
                 }
             }
         }
