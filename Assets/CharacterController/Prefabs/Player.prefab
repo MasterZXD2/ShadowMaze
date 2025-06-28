@@ -270,7 +270,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -681,7 +681,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -796,14 +796,14 @@ MonoBehaviour:
   Drag: 15
   MovingThreshold: 0.01
   WalkAcceleration: 50
-  WalkSpeed: 4
+  WalkSpeed: 2.75
   RunAcceleration: 80
-  RunSpeed: 7
+  RunSpeed: 4.25
   Gravity: 10
-  TerminalVelo: 50
-  JumpSpeed: 0.15
-  InAirAcceleration: 25
-  InAirDrag: 5
+  TerminalVelo: 10
+  JumpSpeed: 0.1
+  InAirAcceleration: 1
+  InAirDrag: 1
   holdToSpring: 1
   PlayerModelRotationSpeed: 10
   rotateToTargetTime: 0.68
@@ -935,8 +935,8 @@ MonoBehaviour:
   OnOffSpeed: 2
   flickerSpeed: 5
   baseFlickerSpeed: 1
-  minIntensity: 1.5
-  maxIntensity: 2
+  minIntensity: 5
+  maxIntensity: 6
   lowBatteryThreshold: 20
   FlashLight: {fileID: 2022027908763691823}
 --- !u!114 &5599670264407384861

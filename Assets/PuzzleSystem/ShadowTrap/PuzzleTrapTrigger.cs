@@ -2,16 +2,19 @@ using UnityEngine;
 
 public class PuzzleTrapTrigger : MonoBehaviour
 {
+    public TimelineTrigger timelineTrigger; // ลิงก์ไปยัง TimelineTrigger
     private bool isBoxOnTrap = false;
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("Enemy") && !isBoxOnTrap)
         {
-            if (!isBoxOnTrap)
+            isBoxOnTrap = true;
+            Debug.Log("Finish");
+
+            if (timelineTrigger != null)
             {
-                isBoxOnTrap = true;
-                Debug.Log("Finish");
+                timelineTrigger.PlayTimeline();
             }
         }
     }

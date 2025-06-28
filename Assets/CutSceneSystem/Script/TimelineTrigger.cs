@@ -28,6 +28,18 @@ public class TimelineTrigger : MonoBehaviour
         }
     }
 
+    public void PlayTimeline()
+    {
+        if (timelineToPlay != null)
+        {
+            timelineToPlay.Play();
+        }
+        else
+        {
+            Debug.LogWarning("Timeline not assigned.");
+        }
+    }
+
     private void OnTimelineStopped(PlayableDirector director)
     {
         gameObject.SetActive(false);
