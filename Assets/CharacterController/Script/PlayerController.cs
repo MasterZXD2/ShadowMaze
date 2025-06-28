@@ -133,6 +133,7 @@ namespace ShadowMaze.MyCharacterController
         public bool _isDead { get; private set; } = false;
         private bool s = false;
         private bool astop = false;
+        private bool _esc = false;
 
         private PlayerMovementState _lastMovementState = PlayerMovementState.Falling;
 
@@ -169,18 +170,6 @@ namespace ShadowMaze.MyCharacterController
             StopHeadBob();
             if (_isDead) return;
             _playerGameObject.transform.rotation = transform.rotation;
-
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
-
-            if (Input.GetMouseButtonDown(0))
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
         }
 
         private void LateUpdate()
@@ -479,39 +468,21 @@ namespace ShadowMaze.MyCharacterController
         #endregion
 
         #region KeyBoard Function
-        /*public void OnKey(KeyBoardClass kb)
+        public void OnClickLeft(bool b)
         {
-            string name = kb.name;
-            if (kb.phase == KeyPhaseType.Started)
+            if (_esc && b)
             {
-                if (name == "f5")
-                {
-                    ChangeCam();
-                }
-                if (name == "space")
-                {
-                    JumpPressed = true;
-                }
-            } 
-            else if (kb.phase == KeyPhaseType.Performed)
-            {
-                if (name == "shift")
-                {
-                    SprintToggledOn = holdToSpring || !SprintToggledOn;
-                }
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
             }
-            else if (kb.phase == KeyPhaseType.Canceled)
-            {
-                if (name == "shift")
-                {
-                    SprintToggledOn = !holdToSpring && SprintToggledOn;
-                }
-                if (name == "space")
-                {
-                    JumpPressed = false;
-                }
-            }
-        }*/
+        }
+
+        public void OnEsc()
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            _esc = true;
+        }
 
         public void OnJump(bool b)
         {

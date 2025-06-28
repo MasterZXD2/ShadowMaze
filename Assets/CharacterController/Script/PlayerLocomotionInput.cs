@@ -68,9 +68,9 @@ namespace ShadowMaze.MyCharacterController
 
         public void OnLeftClick(InputAction.CallbackContext context)
         {
-            if (LeftClick) return;
             if (context.performed) return;
-            //_plrController.LeftClick(context.started);
+            _plrController.OnClickLeft(context.started);
+            if (LeftClick) return;
             LeftClick = true;
         }
 
@@ -92,22 +92,5 @@ namespace ShadowMaze.MyCharacterController
         {
             LookPosInput = context.ReadValue<Vector2>();
         }
-
-        /*public void OnKeyBoard(InputAction.CallbackContext context)
-        {
-            string name = context.control.name;
-            string phaseStr = context.phase.ToString();
-
-            if (!Enum.TryParse<KeyPhaseType>(
-                phaseStr,
-                true,
-                out var phaseEnum))
-            {
-                phaseEnum = KeyPhaseType.None;
-            }
-
-            // keyBoardMap[name] = new KeyBoardClass(name,context.time,phaseEnum);
-            _plrController.OnKey(new KeyBoardClass(name, context.time, phaseEnum));
-        }*/
     }
 }

@@ -70,6 +70,11 @@ namespace ShadowMaze.MyCharacterController
         {
             if (context.started) interact = true;
         }
+
+        public void OnEsc(InputAction.CallbackContext context)
+        {
+            if (context.started) _plrController.OnEsc();
+        }
     }
 
 }

@@ -318,6 +318,15 @@ namespace ShadowMaze.MyCharacterController
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Esc"",
+                    ""type"": ""Button"",
+                    ""id"": ""3fdd2df0-06d4-47db-a40f-4739651e536c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -386,6 +395,17 @@ namespace ShadowMaze.MyCharacterController
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f5cd4dbb-faee-4cbd-a014-dce85a65944c"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Esc"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -408,6 +428,7 @@ namespace ShadowMaze.MyCharacterController
             m_PlayerKeyBoardMap_TestSkip = m_PlayerKeyBoardMap.FindAction("TestSkip", throwIfNotFound: true);
             m_PlayerKeyBoardMap_FlashLight = m_PlayerKeyBoardMap.FindAction("FlashLight", throwIfNotFound: true);
             m_PlayerKeyBoardMap_Interact = m_PlayerKeyBoardMap.FindAction("Interact", throwIfNotFound: true);
+            m_PlayerKeyBoardMap_Esc = m_PlayerKeyBoardMap.FindAction("Esc", throwIfNotFound: true);
         }
 
         ~@PlayerControls()
@@ -646,6 +667,7 @@ namespace ShadowMaze.MyCharacterController
         private readonly InputAction m_PlayerKeyBoardMap_TestSkip;
         private readonly InputAction m_PlayerKeyBoardMap_FlashLight;
         private readonly InputAction m_PlayerKeyBoardMap_Interact;
+        private readonly InputAction m_PlayerKeyBoardMap_Esc;
         /// <summary>
         /// Provides access to input actions defined in input action map "PlayerKeyBoardMap".
         /// </summary>
@@ -681,6 +703,10 @@ namespace ShadowMaze.MyCharacterController
             /// Provides access to the underlying input action "PlayerKeyBoardMap/Interact".
             /// </summary>
             public InputAction @Interact => m_Wrapper.m_PlayerKeyBoardMap_Interact;
+            /// <summary>
+            /// Provides access to the underlying input action "PlayerKeyBoardMap/Esc".
+            /// </summary>
+            public InputAction @Esc => m_Wrapper.m_PlayerKeyBoardMap_Esc;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -725,6 +751,9 @@ namespace ShadowMaze.MyCharacterController
                 @Interact.started += instance.OnInteract;
                 @Interact.performed += instance.OnInteract;
                 @Interact.canceled += instance.OnInteract;
+                @Esc.started += instance.OnEsc;
+                @Esc.performed += instance.OnEsc;
+                @Esc.canceled += instance.OnEsc;
             }
 
             /// <summary>
@@ -754,6 +783,9 @@ namespace ShadowMaze.MyCharacterController
                 @Interact.started -= instance.OnInteract;
                 @Interact.performed -= instance.OnInteract;
                 @Interact.canceled -= instance.OnInteract;
+                @Esc.started -= instance.OnEsc;
+                @Esc.performed -= instance.OnEsc;
+                @Esc.canceled -= instance.OnEsc;
             }
 
             /// <summary>
@@ -886,6 +918,13 @@ namespace ShadowMaze.MyCharacterController
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnInteract(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Esc" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnEsc(InputAction.CallbackContext context);
         }
     }
 }
