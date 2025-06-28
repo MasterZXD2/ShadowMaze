@@ -35364,6 +35364,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spawnPoint: {fileID: 344340922}
   _player: {fileID: 5317513966196724232, guid: 17135688c901ddd408690eb9c659466a, type: 3}
+  isTest: 0
 --- !u!1 &304890443
 GameObject:
   m_ObjectHideFlags: 0

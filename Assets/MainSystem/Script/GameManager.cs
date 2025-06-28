@@ -8,13 +8,13 @@ namespace ShadowMaze
         [SerializeField] private GameObject _spawnPoint;
         [SerializeField] private GameObject _player;
         private GameObject _playerIN;
-
+        public bool isTest = false;
         public GameObject PlayerIN => _playerIN;
 
         private void Awake()
         {
             spawnPlayer();
-            SetActivePlayer(false);
+            SetActivePlayer(isTest);
         }
 
         public void spawnPlayer()
