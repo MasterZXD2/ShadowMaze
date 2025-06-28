@@ -16,9 +16,6 @@ namespace ShadowMaze.CutSceneSystem
         [SerializeField] private GameObject playUI;
         [SerializeField] private Button playBU;
 
-        [SerializeField] private GameObject _spawnPoint;
-        [SerializeField] private GameObject _player;
-
         private Camera _camera;
         private int _currCutScene = 0;
         private GameObject _playerIN;
@@ -103,8 +100,7 @@ namespace ShadowMaze.CutSceneSystem
             BattUI.SetActive(true);
             skipUI.SetActive(false);
 
-            _playerIN = Instantiate(_player);
-            _playerIN.transform.position = _spawnPoint.transform.position;
+            GameManager.Instance.SetActivePlayer(true);
         }
 
 

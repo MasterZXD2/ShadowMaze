@@ -136,31 +136,21 @@ namespace ShadowMaze.EnemyCharactor
             isCurrentlyHitByFlashlight = false;
         }
 
-        // --- สำหรับแสดง Debug ใน Scene View (Gizmos) ---
         private void OnDrawGizmos()
         {
-            // วาดวงกลมสีเหลืองแสดงรัศมีการตรวจจับผู้เล่น (detectionRange)
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(transform.position, DetectionRange);
 
-            // วาดวงกลมสีแดงแสดงรัศมีการโจมตีผู้เล่น (attackRange)
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, AttackRange);
 
             Gizmos.color = Color.blue;
             Vector3 pos = new Vector3(transform.position.x, transform.position.y - (_characterController.height / 2f), transform.position.z);
             Gizmos.DrawWireSphere(pos, _characterController.radius);
-
-            Vector3 origin = transform.position - Vector3.up * 0.5f;
-            Vector3 dir = transform.forward;
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawRay(origin,dir);
         }
 
         private void HitByFlashlight()
         {
-            //if (_enemyState.CurrEnemyActionState == EnemyActionState.StunnedAsCube) isCurrentlyHitByFlashlight = true;
-            //else if (_enemyState.CurrEnemyActionState == EnemyActionState.StunnedAsCube && currentCubeFormInstance != null) isCurrentlyHitByFlashlight = true;
             isCurrentlyHitByFlashlight = true;
         }
 
@@ -193,7 +183,6 @@ namespace ShadowMaze.EnemyCharactor
         }
         private void HandleIdleState()
         {
-            // ในสถานะ Idle, จะเริ่มไล่ล่าเมื่อผู้เล่นเข้าใกล้ detectionRange
             if (!_playerGameObject) return;
             float distanceToPlayer = Vector3.Distance(transform.position, _playerGameObject.transform.position);
             if (distanceToPlayer <= DetectionRange) _enemyState.ActionSet(EnemyActionState.Chasing);

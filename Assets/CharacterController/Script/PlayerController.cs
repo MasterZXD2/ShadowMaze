@@ -152,12 +152,13 @@ namespace ShadowMaze.MyCharacterController
 
         private void Start()
         {
-            CameraMode = CamMode.FirstPerson;
-            SetCam();
-            _plrCamera.fieldOfView = normalFOV;
+            Debug.Log("Spawn");
+            //CameraMode = CamMode.FirstPerson;
+            //SetCam();
+            //_plrCamera.fieldOfView = normalFOV;
             _startPos = cameraHolder.localPosition;
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            //Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.visible = false;
         }
 
         private void Update()
@@ -409,14 +410,18 @@ namespace ShadowMaze.MyCharacterController
         #region Control Functions
         public void pause()
         {
+            Debug.Log("PAUSE");
             astop = true;
             _playerLocomotionInput.enabled = false;
             _playerKeyBoardInput.enabled = false;
+            OnEsc();
         }
         public void replay() {
             astop = false;
             _playerLocomotionInput.enabled = true;
             _playerKeyBoardInput.enabled = true;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
 
         public void Stop()
@@ -470,6 +475,7 @@ namespace ShadowMaze.MyCharacterController
         #region KeyBoard Function
         public void OnClickLeft(bool b)
         {
+            if (astop) return;
             if (_esc && b)
             {
                 Cursor.lockState = CursorLockMode.Locked;
@@ -479,6 +485,7 @@ namespace ShadowMaze.MyCharacterController
 
         public void OnEsc()
         {
+            if (astop) return;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             _esc = true;
@@ -500,9 +507,10 @@ namespace ShadowMaze.MyCharacterController
             }
         }
 
-        public void ChangeCam()
+        public void ChangeCam(CamMode mode)
         {
-            CameraMode = (CameraMode == CamMode.FirstPerson) ? CamMode.ThirdPerson : CamMode.FirstPerson;
+            Debug.Log(mode);
+            CameraMode = mode;
             SetCam();
         }
 
@@ -511,6 +519,7 @@ namespace ShadowMaze.MyCharacterController
             if (CameraMode == CamMode.FirstPerson)
             {
                 _plrCamera = FirstCam.GetComponent<Camera>();
+                _plrCamera.fieldOfView = normalFOV;
                 FirstCam.tag = "MainCamera";
                 ThirdCam.tag = "Untagged";
                 SetAllCamComponents(true);
@@ -518,6 +527,7 @@ namespace ShadowMaze.MyCharacterController
             else if (CameraMode == CamMode.ThirdPerson)
             {
                 _plrCamera = ThirdCam.GetComponent<Camera>();
+                _plrCamera.fieldOfView = normalFOV;
                 FirstCam.tag = "Untagged";
                 ThirdCam.tag = "MainCamera";
                 SetAllCamComponents(false);
