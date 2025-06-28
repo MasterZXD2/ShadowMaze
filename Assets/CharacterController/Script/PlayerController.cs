@@ -155,6 +155,8 @@ namespace ShadowMaze.MyCharacterController
             SetCam();
             _plrCamera.fieldOfView = normalFOV;
             _startPos = cameraHolder.localPosition;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
 
         private void Update()
@@ -167,6 +169,18 @@ namespace ShadowMaze.MyCharacterController
             StopHeadBob();
             if (_isDead) return;
             _playerGameObject.transform.rotation = transform.rotation;
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
         }
 
         private void LateUpdate()
