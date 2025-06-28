@@ -903,10 +903,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerController: {fileID: 2674317561704720980}
-  DeHealth: 0
+  DeHealth: 100
   Health: 100
   MaxHealth: 100
-  DeBattery: 0
+  DeBattery: 100
   Battery: 100
   MaxBattery: 100
   isDie: 0

@@ -3,7 +3,10 @@ using ShadowMaze.MyCharacterController;
 using System;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Rendering;
+using static Unity.Cinemachine.CinemachineOrbitalTransposer;
 using static UnityEditor.SceneView;
+using static UnityEngine.UI.Image;
 
 namespace ShadowMaze.EnemyCharactor
 {
@@ -133,6 +136,27 @@ namespace ShadowMaze.EnemyCharactor
             isCurrentlyHitByFlashlight = false;
         }
 
+        // --- สำหรับแสดง Debug ใน Scene View (Gizmos) ---
+        private void OnDrawGizmos()
+        {
+            // วาดวงกลมสีเหลืองแสดงรัศมีการตรวจจับผู้เล่น (detectionRange)
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, DetectionRange);
+
+            // วาดวงกลมสีแดงแสดงรัศมีการโจมตีผู้เล่น (attackRange)
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, AttackRange);
+
+            Gizmos.color = Color.blue;
+            Vector3 pos = new Vector3(transform.position.x, transform.position.y - (_characterController.height / 2f), transform.position.z);
+            Gizmos.DrawWireSphere(pos, _characterController.radius);
+
+            Vector3 origin = transform.position - Vector3.up * 0.5f;
+            Vector3 dir = transform.forward;
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawRay(origin,dir);
+        }
+
         private void HitByFlashlight()
         {
             //if (_enemyState.CurrEnemyActionState == EnemyActionState.StunnedAsCube) isCurrentlyHitByFlashlight = true;
@@ -177,13 +201,19 @@ namespace ShadowMaze.EnemyCharactor
 
         private void HandleChasingState()
         {
-            float distanceToPlayer = Vector3.Distance(transform.position, _playerGameObject .transform.position);
-            if (distanceToPlayer <= DetectionRange)
+            float distanceToPlayer = Vector3.Distance(transform.position, _playerGameObject.transform.position);
+            if (distanceToPlayer <= DetectionRange && CanSeePlayer())
             {
                 LateralMovement();
+                if (distanceToPlayer <= AttackRange)
+                {
+                    if (isAttack) return;
+                    OnAttack();
+                }
             }
             else
             {
+                StopMove();
                 _enemyState.ActionSet(EnemyActionState.Idle);
                 flashlightHitTimer = 0f; 
                 return;
@@ -205,15 +235,34 @@ namespace ShadowMaze.EnemyCharactor
             }
         }
 
+        bool CanSeePlayer()
+        {
+            if (_playerGameObject == null) return false;
+            
+            Vector3 dir = (_playerGameObject.transform.position - transform.position).normalized;
+            float distance = Vector3.Distance(transform.position, _playerGameObject.transform.position);
+
+            float colliderHeight = enemyController != null ? enemyController.height : 0.5f;
+
+            if (Physics.Raycast(transform.position + Vector3.up * colliderHeight, dir, out RaycastHit hit, distance))
+            {
+                if (hit.collider.gameObject == _playerGameObject)
+                    return true; // มองเห็น
+            }
+            return false; // มีบางอย่างบัง
+        }
+
         private void VerticalMovement()
         {
+            if (astop || _enemyState.CurrEnemyActionState == EnemyActionState.StunnedAsCube) return;
+
             bool isGrounded = _enemyState.InGroundedState();
  
             _verticalVelo -= Gravity * Time.deltaTime;
 
             if (isGrounded && _verticalVelo < 0) _verticalVelo = -_anitBump;
 
-            if (Jump && isGrounded)
+            if (ObstacleInFront() && isGrounded)
             {
                 _verticalVelo += _anitBump * Mathf.Sqrt(JumpSpeed * Gravity);
                 _jumpedLastFrame = true;
@@ -226,6 +275,8 @@ namespace ShadowMaze.EnemyCharactor
 
         void LateralMovement()
         {
+            if (astop) return;
+            
             bool isGrounded = _enemyState.InGroundedState();
 
             isMovement = true;
@@ -250,6 +301,21 @@ namespace ShadowMaze.EnemyCharactor
             newVelo = !isGrounded ? SteepWalls(newVelo) : newVelo;
             _characterController.Move(newVelo * Time.deltaTime);
         }
+        bool ObstacleInFront()
+        {
+            Vector3 origin = transform.position - Vector3.up * 0.5f;
+            Vector3 dir = transform.forward;
+            return Physics.Raycast(origin, dir, 1.0f, _groundLayers); // ระยะ 1 เมตรข้างหน้า
+        }
+
+        private void StopMove()
+        {
+            isMovement = false;
+
+            Vector3 currentVelo = _characterController.velocity;
+            Vector3 stopVelo = new Vector3(0f, currentVelo.y, 0f);
+            _characterController.Move(stopVelo * Time.deltaTime);
+        }
 
         private Vector3 SteepWalls(Vector3 velo)
         {
@@ -273,14 +339,13 @@ namespace ShadowMaze.EnemyCharactor
             if (dir.sqrMagnitude < 0.01f) return;
 
             Quaternion targetRotation = Quaternion.LookRotation(dir);
-            targetRotation *= Quaternion.Euler(0f, 90f, 0f);
+            //targetRotation *= Quaternion.Euler(0f, 90f, 0f);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, EnemyModelRotationSpeed * Time.deltaTime);
         }
 
         private bool IsMovinglaterally()
         {
             Vector3 lateralVelo = new Vector3(_characterController.velocity.x, 0f, _characterController.velocity.z);
-
             return lateralVelo.magnitude > MovingThreshold;
         }
 
@@ -328,7 +393,7 @@ namespace ShadowMaze.EnemyCharactor
         {
             if (_enemyState.CurrEnemyActionState == EnemyActionState.StunnedAsCube)
                 return;
-
+            astop = true;
             _enemyState.ActionSet(EnemyActionState.StunnedAsCube); // เปลี่ยนสถานะเป็น StunnedAsCube
 
             if (enemyMeshRenderer != null) enemyMeshRenderer.enabled = false; // ซ่อน Mesh ของแคปซูล
@@ -352,15 +417,14 @@ namespace ShadowMaze.EnemyCharactor
             float colliderHeight = enemyController != null ? enemyController.height : 0.5f;
 
             RaycastHit hit;
-            Vector3 raycastOrigin = currentCubeFormInstance != null ? currentCubeFormInstance.transform.position + Vector3.up * 5f : transform.position + Vector3.up * 5f;
-            if (Physics.Raycast(raycastOrigin, Vector3.down, out hit, 15f + colliderHeight, _groundLayers))
+            Vector3 raycastOrigin = currentCubeFormInstance != null ? currentCubeFormInstance.transform.position + Vector3.up * colliderHeight : transform.position + Vector3.up * colliderHeight;
+            if (Physics.Raycast(raycastOrigin, Vector3.down, out hit, colliderHeight, _groundLayers))
             {
                 spawnPosition = hit.point + Vector3.up * colliderHeight;
-                Debug.Log($"EnemyAI: Found ground at {hit.point}, spawning at {spawnPosition}");
             }
             else
             {
-                Debug.LogError($"Enemy '{gameObject.name}' could NOT find ground to respawn on! Spawning at last known position ({spawnPosition}). This might lead to falling through the map. Check groundLayer and environment.");
+                spawnPosition = currentCubeFormInstance.transform.position + Vector3.up * colliderHeight;
             }
 
             if (currentCubeFormInstance != null)
@@ -384,222 +448,31 @@ namespace ShadowMaze.EnemyCharactor
             flashlightHitTimer = 0f;
             cubeFormTimer = 0f;
 
+            astop = false;
+
             if (enemyMeshRenderer != null) enemyMeshRenderer.enabled = true;
             if (enemyController != null) enemyController.enabled = true;
         }
 
-        // --- สำหรับแสดง Debug ใน Scene View (Gizmos) ---
-        private void OnDrawGizmosSelected()
+        private void OnAttack()
         {
-            // วาดวงกลมสีเหลืองแสดงรัศมีการตรวจจับผู้เล่น (detectionRange)
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, DetectionRange);
-
-            // วาดวงกลมสีแดงแสดงรัศมีการโจมตีผู้เล่น (attackRange)
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, AttackRange);
-
-            Gizmos.color = Color.blue;
-            Vector3 pos = new Vector3(transform.position.x, transform.position.y - (_characterController.height / 2f), transform.position.z);
-            Gizmos.DrawWireSphere(pos, _characterController.radius);
+            _targetController.takeDamage(AttackDamage);
+            isAttack = true;
+            Invoke(nameof(CanAttack), AttackCD);
         }
+        private void CanAttack() => isAttack = false;
+
+        public void takeDamage(float damage)
+        {
+            Health -= damage;
+            if (Health <= 0) die();
+        }
+
+        private void die()
+        {
+            Destroy(gameObject);
+        }
+
         #endregion
     }
 }
-
-/*
-private void Update()
-{
-    if (astop) return;
-
-    MovementState();
-    VerticalMovement();
-
-    if (_target)
-    {
-        LateralMovement();
-        if (!isAttack)
-        {
-            float mag = (_target.position - transform.position).magnitude;
-            if (mag < 3) Attack();
-        }
-    }
-    else StopMove();
-}
-
-private void LateUpdate()
-{
-
-}
-
-private void OnDrawGizmos()
-{
-    Gizmos.color = Color.azure;
-    Vector3 pos = new Vector3(transform.position.x, transform.position.y - _characterController.height, transform.position.z);
-    Gizmos.DrawWireSphere(pos, _characterController.radius);
-}
-
-#endregion
-
-private void MovementState()
-{
-    _lastMovementState = _enemyState.CurrEnemyMovementState;
-
-    bool isMovinglaterally = IsMovinglaterally(); //matter
-    bool isRunning = Sprint && isMovinglaterally; //order matters
-
-    if ((!IsGrounded() || _jumpedLastFrame) && _characterController.velocity.y > 0f)
-    {
-        _enemyState.MovementSet(EnemyMovementState.Jumping);
-        _jumpedLastFrame = false;
-        _characterController.stepOffset = 0f;
-    }
-    else if ((!IsGrounded() || _jumpedLastFrame) && _characterController.velocity.y <= 0f)
-    {
-        _enemyState.MovementSet(EnemyMovementState.Falling);
-        _jumpedLastFrame = false;
-        _characterController.stepOffset = 0f;
-    }
-    else
-    {
-        EnemyMovementState lateralState = isRunning ? EnemyMovementState.Running :
-            (isMovinglaterally || isMovement ? EnemyMovementState.Walking : EnemyMovementState.Idling);
-        _enemyState.MovementSet(lateralState);
-        _characterController.stepOffset = _stepOffset;
-    }
-}
-
-private void StopMove()
-{
-    isMovement = false;
-
-    Vector3 currentVelo = _characterController.velocity;
-    Vector3 stopVelo = new Vector3(0f, currentVelo.y, 0f);
-    _characterController.Move(stopVelo * Time.deltaTime);
-}
-
-private void VerticalMovement()
-{
-    bool isGrounded = _enemyState.InGroundedState();
-
-    _verticalVelo -= Gravity * Time.deltaTime;
-
-    if (isGrounded && _verticalVelo < 0) _verticalVelo = -_anitBump;
-
-    if (Jump && isGrounded)
-    {
-        _verticalVelo += _anitBump * Mathf.Sqrt(JumpSpeed * Gravity);
-        _jumpedLastFrame = true;
-    }
-
-    if (_enemyState.InStateGroundedState(_lastMovementState) && !isGrounded) _verticalVelo += _anitBump;
-
-    if (Mathf.Abs(_verticalVelo) > Mathf.Abs(TerminalVelo)) _verticalVelo = -1f * Mathf.Abs(TerminalVelo);
-}
-
-void LateralMovement()
-{
-    bool isGrounded = _enemyState.InGroundedState();
-
-    isMovement = true;
-    Vector3 heading = (_target.position - transform.position);
-    float tarDist = heading.magnitude;
-    Vector3 Dir = heading / tarDist;
-
-    Vector3 moveDir = new Vector3(Dir.x, 0, Dir.z);
-    RotatePlayerToTar(heading);
-
-    Vector3 moveDelta = moveDir * WalkAcceleration * Time.deltaTime;
-    Vector3 newVelo = _characterController.velocity + moveDelta;
-
-    float DragMagnitude = Drag;
-    //Add drag to player
-    Vector3 currDrag = newVelo.normalized * DragMagnitude * Time.deltaTime;
-    newVelo = (newVelo.magnitude > DragMagnitude * Time.deltaTime) ? newVelo - currDrag : Vector3.zero;
-
-    //Move charactor
-    newVelo = Vector3.ClampMagnitude(new Vector3(newVelo.x, 0f, newVelo.z), WalkSpeed);
-    newVelo.y += _verticalVelo;
-    newVelo = !isGrounded ? SteepWalls(newVelo) : newVelo;
-    _characterController.Move(newVelo * Time.deltaTime);
-}
-
-private Vector3 SteepWalls(Vector3 velo)
-{
-    Vector3 normal = CharacterControllerUnils.GetNormalWithSphereCast(_characterController, _groundLayers);
-    float angle = Vector3.Angle(normal, Vector3.up);
-    bool validAngle = angle < _characterController.slopeLimit;
-
-    if (!validAngle && _verticalVelo < 0f)
-    {
-        velo = Vector3.ProjectOnPlane(velo, normal);
-    }
-
-    return velo;
-}
-
-private void RotatePlayerToTar(Vector3 dir)
-{
-    if (_target == null) return;
-    dir.y = 0f;
-
-    if (dir.sqrMagnitude < 0.01f) return;
-
-    Quaternion targetRotation = Quaternion.LookRotation(dir);
-    targetRotation *= Quaternion.Euler(0f, 90f, 0f);
-    transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, EnemyModelRotationSpeed * Time.deltaTime);
-}
-
-private bool IsMovinglaterally()
-{
-    Vector3 lateralVelo = new Vector3(_characterController.velocity.x, 0f, _characterController.velocity.z);
-
-    return lateralVelo.magnitude > MovingThreshold;
-}
-
-private bool IsGrounded()
-{
-    bool grounded = _enemyState.InGroundedState() ? IsGroundedWhileGrounded() : IsGroundedWhileAirborne();
-    return grounded;
-}
-
-private bool IsGroundedWhileGrounded()
-{
-    Vector3 pos = new Vector3(transform.position.x, transform.position.y - _characterController.height, transform.position.z);
-    bool grounded = Physics.CheckSphere(pos, _characterController.radius, _groundLayers, QueryTriggerInteraction.Ignore);
-    return grounded;
-}
-
-private bool IsGroundedWhileAirborne()
-{
-    Vector3 normal = CharacterControllerUnils.GetNormalWithSphereCast(_characterController, _groundLayers);
-    float angle = Vector3.Angle(normal, Vector3.up);
-    bool validAngle = angle < _characterController.slopeLimit;
-
-    return _characterController.isGrounded && validAngle;
-}
-
-private void Attack()
-{
-    _targetController.takeDamage(AttackDamage);
-    isAttack = true;
-    Invoke(nameof(CanAttack), AttackCD);
-}
-private void CanAttack() => isAttack = false;
-
-public void takeDamage(float damage)
-{
-    Health -= damage;
-    if (Health <= 0) die();
-}
-
-private void die()
-{
-    PlayerStats PS = _target.GetComponent<PlayerStats>();
-    if (!PS.isDie) PS.UP(exp);
-    Destroy(gameObject);
-}
-
-public void pause() => astop = true;
-public void resume() => astop = false;
-*/

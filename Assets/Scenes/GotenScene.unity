@@ -35099,7 +35099,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d18171dad21eab84eb10648d2c67d012, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characterController: {fileID: 289412405}
+  _characterController: {fileID: 289412409}
   _enemyState: {fileID: 289412404}
   DetectionRange: 5
   Health: 100
@@ -35108,12 +35108,12 @@ MonoBehaviour:
   AttackDamage: 10
   AttackCD: 1
   EnemyModelRotationSpeed: 10
-  Drag: 0.1
+  Drag: 15
   MovingThreshold: 0.01
-  WalkAcceleration: 0.25
-  WalkSpeed: 4
-  RunAcceleration: 0.5
-  RunSpeed: 7
+  WalkAcceleration: 50
+  WalkSpeed: 2.75
+  RunAcceleration: 80
+  RunSpeed: 4.25
   Gravity: 10
   TerminalVelo: 50
   JumpSpeed: 1
@@ -35125,7 +35125,7 @@ MonoBehaviour:
   flashlightStunDuration: 3
   cubeFormDuration: 5
   enemyMeshRenderer: {fileID: 289412406}
-  enemyController: {fileID: 289412405}
+  enemyController: {fileID: 0}
   cubeFormPrefab: {fileID: 7677901736339717805, guid: bbf19f84d2f00774d908cf5cf93551c1, type: 3}
 --- !u!114 &289412404
 MonoBehaviour:
@@ -35141,7 +35141,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <CurrEnemyMovementState>k__BackingField: 0
   <CurrEnemyActionState>k__BackingField: 0
---- !u!143 &289412405
+--- !u!23 &289412406 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 357286580995939407, guid: fdb8e110d987e5d4787d979ffa580df5, type: 3}
+  m_PrefabInstance: {fileID: 357819302}
+  m_PrefabAsset: {fileID: 0}
+--- !u!143 &289412409
 CharacterController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -35166,11 +35171,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &289412406 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 357286580995939407, guid: fdb8e110d987e5d4787d979ffa580df5, type: 3}
-  m_PrefabInstance: {fileID: 357819302}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &292110546
 GameObject:
   m_ObjectHideFlags: 0
@@ -35843,7 +35843,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1458895854108288946, guid: fdb8e110d987e5d4787d979ffa580df5, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 289412405}
+      addedObject: {fileID: 289412409}
     - targetCorrespondingSourceObject: {fileID: 1458895854108288946, guid: fdb8e110d987e5d4787d979ffa580df5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 289412404}
