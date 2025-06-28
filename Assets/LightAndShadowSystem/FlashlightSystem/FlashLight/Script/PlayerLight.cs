@@ -58,11 +58,19 @@ public class PlayerLight : MonoBehaviour
                     {
                         se.hit?.Invoke();
                     }
+                    else if (GO.TryGetComponent<SimpleEnemyAi>(out SimpleEnemyAi sei))
+                    {
+                        sei.hit?.Invoke();
+                    }
                     else if (GO.transform.parent.CompareTag("Enemy"))
                     {
                         if (GO.transform.parent.TryGetComponent<SimpleEnemy>(out SimpleEnemy pse))
                         {
                             pse.hit?.Invoke();
+                        }
+                        else if (GO.transform.parent.TryGetComponent<SimpleEnemyAi>(out SimpleEnemyAi psei))
+                        {
+                            psei.hit?.Invoke();
                         }
                     }
                 }

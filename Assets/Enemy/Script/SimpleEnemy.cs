@@ -105,15 +105,12 @@ namespace ShadowMaze.EnemyCharactor
         private void Start()
         {
             hit = HitByFlashlight;
-            if (!PlayerController.Instance) return;
             _targetController = PlayerController.Instance;
             _playerGameObject = _targetController.gameObject;
         }
 
         private void Update()
         {
-            if (!_targetController) _targetController = PlayerController.Instance;
-            if (_targetController && !_playerGameObject) _playerGameObject = _targetController.gameObject;
             MovementState();
             VerticalMovement();
             Vector3 currVec = Vector3.zero;
@@ -328,7 +325,6 @@ namespace ShadowMaze.EnemyCharactor
             if (dir.sqrMagnitude < 0.01f) return;
 
             Quaternion targetRotation = Quaternion.LookRotation(dir);
-            //targetRotation *= Quaternion.Euler(0f, 90f, 0f);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, EnemyModelRotationSpeed * Time.deltaTime);
         }
 
@@ -359,7 +355,6 @@ namespace ShadowMaze.EnemyCharactor
 
             return _characterController.isGrounded && validAngle;
         }
-
 
         private void HandleStunnedAsCubeState()
         {

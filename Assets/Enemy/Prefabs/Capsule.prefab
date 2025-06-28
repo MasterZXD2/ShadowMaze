@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 7828237693912689315}
   - component: {fileID: 2197248209787867728}
   - component: {fileID: 357286580995939407}
-  - component: {fileID: 8096307595361965781}
-  - component: {fileID: 842687118227325669}
+  - component: {fileID: 6051388553939998752}
+  - component: {fileID: 753993226354448162}
+  - component: {fileID: 3916193177207629377}
   m_Layer: 9
   m_Name: Capsule
   m_TagString: Enemy
@@ -88,8 +89,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &8096307595361965781
-CapsuleCollider:
+--- !u!143 &6051388553939998752
+CharacterController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -103,38 +104,67 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
+  serializedVersion: 3
   m_Height: 2
-  m_Direction: 1
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &842687118227325669
-Rigidbody:
+--- !u!114 &753993226354448162
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1458895854108288946}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a108b8cfc544b3498fb57504c6725b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <CurrEnemyMovementState>k__BackingField: 0
+  <CurrEnemyActionState>k__BackingField: 0
+--- !u!114 &3916193177207629377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1458895854108288946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d18171dad21eab84eb10648d2c67d012, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _characterController: {fileID: 6051388553939998752}
+  _enemyState: {fileID: 753993226354448162}
+  DetectionRange: 10
+  Health: 100
+  MaxHealth: 100
+  AttackRange: 1.5
+  AttackDamage: 10
+  AttackCD: 1
+  EnemyModelRotationSpeed: 10
+  Drag: 15
+  MovingThreshold: 0.01
+  WalkAcceleration: 50
+  WalkSpeed: 2.75
+  RunAcceleration: 80
+  RunSpeed: 4.25
+  Gravity: 10
+  TerminalVelo: 50
+  JumpSpeed: 1
+  InAirAcceleration: 0.15
+  InAirDrag: 0.025
+  _groundLayers:
     serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+    m_Bits: 64
+  flashlightStunDuration: 3
+  cubeFormDuration: 5
+  enemyMeshRenderer: {fileID: 357286580995939407}
+  enemyController: {fileID: 0}
+  cubeFormPrefab: {fileID: 7677901736339717805, guid: bbf19f84d2f00774d908cf5cf93551c1, type: 3}
