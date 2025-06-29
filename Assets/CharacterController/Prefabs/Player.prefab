@@ -721,7 +721,7 @@ GameObject:
   - component: {fileID: 261899133957030099}
   - component: {fileID: 2385353096068005018}
   - component: {fileID: 5599670264407384861}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -784,6 +784,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _characterController: {fileID: 4554860607982410009}
+  _playerLocomotionInput: {fileID: 0}
   _playerKeyBoardInput: {fileID: 1627595484241856121}
   _playerLight: {fileID: 2385353096068005018}
   _playerState: {fileID: 4481828767381072383}
