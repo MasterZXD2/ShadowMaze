@@ -1,9 +1,11 @@
 ﻿using ShadowMaze.InteractSystem;
 using ShadowMaze.MyCharacterController;
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Splines;
+using UnityEngine.UIElements;
 
 namespace ShadowMaze.EnemyCharactor
 {
@@ -33,6 +35,16 @@ namespace ShadowMaze.EnemyCharactor
         [SerializeField] private float walkPointRange;
         [SerializeField] private float EnemyModelRotationSpeed = 10f;
 
+        private float WalkAcceleration = 0.25f;
+        private float WalkSpeed = 4f;
+
+        [Header("Jump")]
+        public float Gravity = 10f;
+        public float TerminalVelo = 50f;
+        public float JumpSpeed = 1.0f;
+        public float InAirAcceleration = 0.15f;
+        public float InAirDrag = 0.025f;
+
         [Header("Sight Settings")]
         [SerializeField] private float sightRange;
         [SerializeField] private float viewAngle = 90f;
@@ -54,7 +66,7 @@ namespace ShadowMaze.EnemyCharactor
         [Space(10)]
         [Header("Environment Details")]
         [SerializeField] private LayerMask _groundLayers;
-        
+
         [Space(10)]
         [Header("Transformation Settings")]
         [SerializeField] private float flashlightStunDuration = 3f; // ระยะเวลาที่ต้องโดนไฟฉายส่องก่อนกลายเป็นกล่อง (ตั้งเป็น 0 จะเปลี่ยนทันที)
@@ -65,6 +77,13 @@ namespace ShadowMaze.EnemyCharactor
 
         public Action hit { get; private set; }
         public bool isMovement { get; private set; }
+        public bool isJump { get; private set; }
+        public bool isAttacking { get; private set; }
+
+        private bool _jumpedLastFrame = false;
+        private float _verticalVelo = 0f;
+        private float _anitBump;
+        private float _stepOffset;
 
         private bool isSearching = false;
         private float searchTimer = 0f;
@@ -81,6 +100,8 @@ namespace ShadowMaze.EnemyCharactor
         private bool _positionSet;
         private bool isAttack;
         private Vector3 _lastPlayerPosition;
+        private float _sameGTPositionTimer = 0f;
+        private Vector3 _lastGTPosition;
         private bool isLPP = false;
         private bool isPH = false;
 
@@ -95,18 +116,35 @@ namespace ShadowMaze.EnemyCharactor
         #endregion
 
         #region Normal Function
-        private void Awake() => MaxHealth = Health;
+        private void Awake() {
+            MaxHealth = Health;
+            enemyController.enabled = false;
+            agent.enabled = true;
+        }
 
         private void Start()
         {
             hit = HitByFlashlight;
             _player = PlayerController.Instance.gameObject.transform;
             if (!agent) agent = GetComponent<NavMeshAgent>();
+
+            WalkSpeed = agent.speed * 1.1f;
+            WalkAcceleration = agent.acceleration * 5;
         }
 
         private void Update()
         {
-            if (!_player) return;
+            if (!_player || isJump) return;
+
+            float PH = PlayerController.Instance._characterController.height / 2f;
+            Vector3 _tarVec = _player.position;
+            _tarVec.y += PH;
+
+            if ((ShouldJumpTo(_tarVec) && agent.pathStatus != NavMeshPathStatus.PathComplete) || (_sameGTPositionTimer > 2f && !isAttacking && isMovement))
+            {
+                _sameGTPositionTimer = 0f;
+                StartCoroutine(JumpTo(_player.position));
+            }
 
             if (isSearching)
             {
@@ -138,7 +176,7 @@ namespace ShadowMaze.EnemyCharactor
                     if (CanSeePlayer())
                     {
                         _lastPlayerPosition = _player.position;
-                        _lastPlayerPosition.y += PlayerController.Instance._characterController.height / 2f;
+                        _lastPlayerPosition.y += PH;
 
                         if (dist <= attackRange)
                         {
@@ -152,22 +190,29 @@ namespace ShadowMaze.EnemyCharactor
                     else if (isLPP && IsPlayerInAwarenessRange())
                     {
                         _lastPlayerPosition = _player.position;
-                        _lastPlayerPosition.y += PlayerController.Instance._characterController.height / 2f;
+                        _lastPlayerPosition.y += PH;
                         ChasePlayer();
                     }
                     else
                     {
                         Patroling();
                         flashlightHitTimer = 0f;
-                        return;
+                        //return;
                     }
                 }
                 else
                 {
                     Patroling();
                     flashlightHitTimer = 0f;
-                    return;
+                    //return;
                 }
+                if (!isAttacking)
+                {
+                    if (transform.position == _lastGTPosition) _sameGTPositionTimer += Time.deltaTime;
+                    else _sameGTPositionTimer = 0f;
+                }
+
+                _lastGTPosition = transform.position;
             }
 
             if (isCurrentlyHitByFlashlight)
@@ -207,7 +252,7 @@ namespace ShadowMaze.EnemyCharactor
             Gizmos.DrawWireSphere(transform.position, awarenessDistance);
             if (isPH) Gizmos.DrawWireSphere(_lastPlayerPosition, awarenessDistance);
 
-            if (isLPP)
+            if (_lastPlayerPosition != null)
             {
                 Gizmos.color = Color.magenta;
                 Gizmos.DrawSphere(_lastPlayerPosition, 0.2f);
@@ -327,6 +372,7 @@ namespace ShadowMaze.EnemyCharactor
 
         private void Patroling()
         {
+            isAttacking = false;
             if (isLPP)
             {
                 float d = Vector3.Distance(_player.position,_lastPlayerPosition);
@@ -383,6 +429,7 @@ namespace ShadowMaze.EnemyCharactor
             enemyState.MovementSet(EnemyMovementState.Walking);
             agent.SetDestination(_player.position);
             isLPP = true;
+            isAttacking = false;
             isMovement = true;
         }
 
@@ -391,6 +438,7 @@ namespace ShadowMaze.EnemyCharactor
             enemyState.MovementSet(EnemyMovementState.Idling);
             agent.SetDestination(transform.position); // don't move
             isMovement = false;
+            isAttacking = true;
 
             if (!isAttack)
             {
@@ -400,6 +448,146 @@ namespace ShadowMaze.EnemyCharactor
                 Invoke(nameof(ResetAtteck), AttackCD);
             }
         }
+        bool ShouldJumpTo(Vector3 targetPos)
+        {
+            Vector3 start = transform.position;
+            Vector3 end = targetPos;
+            float dx = Vector3.Distance(
+                new Vector3(start.x, 0, start.z),
+                new Vector3(end.x, 0, end.z)
+            );
+            float dy = end.y - start.y;
+            float v0y = JumpSpeed;     // ความเร็วเริ่มต้นขึ้น
+            float v_max = WalkSpeed;
+            float a = InAirAcceleration;
+            float g = Gravity;       // ค่า gravity ในเกม
+
+            // 1) ตรวจความสูงสูงสุด
+            float Hmax = (v0y * v0y) / (2f * g);
+            if (Hmax + 0.1f < dy) return false; // สูงเกินปืนกระโดด
+
+            // 2) เวลาทั้งหมดของกระโดด
+            float T = 2f * v0y / g;
+
+            // 3) คำนวณระยะสูงสุดแนวราบเมื่อมี acceleration
+            float tAcc = v_max / a;
+            float Dmax;
+            if (T <= tAcc)
+            {
+                // กระโดดทั้งกระบอกยังไม่ถึง v_max
+                Dmax = 0.5f * a * T * T;
+            }
+            else
+            {
+                // เร่งถึง v_max แล้วเดินด้วย v_max ถึงจบ
+                float D1 = 0.5f * a * tAcc * tAcc;
+                float D2 = v_max * (T - tAcc);
+                Dmax = D1 + D2;
+            }
+            //Debug.Log(dx.ToString() + "," + Dmax.ToString());
+            if (dx > Dmax + 0.1f) return false;
+
+            // 4) ตรวจ trajectory ณ ระยะ dx
+            //   t_dx: เวลา ณ ตำแหน่งแนวราบ dx
+            float t_dx;
+            if (dx <= 0.5f * a * tAcc * tAcc)
+            {
+                // ยังอยู่ในช่วงเร่ง
+                // x = 0.5 a t^2  → t = sqrt(2 x / a)
+                t_dx = Mathf.Sqrt(2f * dx / a);
+            }
+            else
+            {
+                // แบ่งระยะ: D1 + v_max*(t_dx - tAcc) = dx
+                float D1 = 0.5f * a * tAcc * tAcc;
+                t_dx = tAcc + (dx - D1) / v_max;
+            }
+            // ความสูง y ณ t_dx
+            float yAtDx = v0y * t_dx - 0.5f * g * t_dx * t_dx;
+            if (yAtDx + 0.1f < dy) return false;
+
+            return true;
+        }
+
+        IEnumerator JumpTo(Vector3 targetPos)
+        {
+            // ปิดการเคลื่อนที่ปกติ
+            isJump = true;
+            isMovement = false;
+
+            agent.enabled = false;
+            enemyController.enabled = true;
+
+            float v0y = JumpSpeed;
+            float v0x = WalkSpeed;
+            float g = Gravity;
+
+            Vector3 horizontalDir = (new Vector3(targetPos.x, 0, targetPos.z)
+                                     - new Vector3(transform.position.x, 0, transform.position.z))
+                                    .normalized;
+
+            float dx = Vector3.Distance(
+                new Vector3(transform.position.x, 0, transform.position.z),
+                new Vector3(targetPos.x, 0, targetPos.z)
+            );
+            float totalTime = dx / v0x;
+            float elapsed = 0f;
+
+            // 2) กระโดดตามพาราโบลา
+            while (elapsed < totalTime)
+            {
+                // คำนวณ velocity ณ เวลานั้น
+                float vy = v0y - g * elapsed;
+                Vector3 vel = horizontalDir * v0x + Vector3.up * vy;
+                enemyController.Move(vel * Time.deltaTime);
+
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            // 3) รอให้ลงถึงพื้น (เช็ก CharacterController.isGrounded)
+            while (!enemyController.isGrounded)
+            {
+                enemyController.Move(Vector3.down * g * Time.deltaTime);
+                yield return null;
+            }
+
+            // ลงจอดแล้วกลับไปเดินปกติ
+            isMovement = true;
+
+            float followTime = 0f;
+            float maxFollow = 0.5f;
+            while (followTime < maxFollow)
+            {
+                Vector3 dir = (_player.position - transform.position);
+                dir.y = 0;
+                if (dir.sqrMagnitude > 0.01f)
+                {
+                    Vector3 step = dir.normalized * v0x * Time.deltaTime;
+                    enemyController.Move(step);
+                    transform.rotation = Quaternion.Slerp(
+                        transform.rotation,
+                        Quaternion.LookRotation(dir),
+                        EnemyModelRotationSpeed * Time.deltaTime
+                    );
+                }
+                followTime += Time.deltaTime;
+                yield return null;
+            }
+
+            agent.enabled = true;
+            enemyController.enabled = false;
+
+            _positionSet = false;
+
+            isMovement = false;
+            isJump = false;
+
+            agent.Warp(transform.position);
+            agent.SetDestination(_player.position);
+        }
+
+
         private void ResetAtteck()
         {
             isAttack = false;
@@ -489,6 +677,8 @@ namespace ShadowMaze.EnemyCharactor
             }
 
             transform.position = spawnPosition;
+            agent.Warp(transform.position);
+            agent.SetDestination(_player.position);
 
             enemyState.ActionSet(EnemyActionState.Idle);
             flashlightHitTimer = 0f;
