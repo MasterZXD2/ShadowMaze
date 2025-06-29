@@ -26,8 +26,8 @@ namespace ShadowMaze.MyCharacterController
         [Space(10)]
         [Header("Player Components")]
 
-        [SerializeField] private CharacterController _characterController;
-        public PlayerLocomotionInput _playerLocomotionInput { get; private set; }
+        public CharacterController _characterController;
+        public PlayerLocomotionInput _playerLocomotionInput;
         [SerializeField] private PlayerKeyBoardInput _playerKeyBoardInput;
         [SerializeField] private PlayerLight _playerLight;
         [SerializeField] private PlayerState _playerState;
