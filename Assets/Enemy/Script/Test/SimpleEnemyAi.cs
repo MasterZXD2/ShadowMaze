@@ -140,10 +140,27 @@ namespace ShadowMaze.EnemyCharactor
             Vector3 _tarVec = _player.position;
             _tarVec.y += PH;
 
-            if ((ShouldJumpTo(_tarVec) && agent.pathStatus != NavMeshPathStatus.PathComplete) || (_sameGTPositionTimer > 2f && !isAttacking && isMovement))
+            if (ShouldJumpTo(_tarVec) && agent.pathStatus != NavMeshPathStatus.PathComplete)
             {
                 _sameGTPositionTimer = 0f;
                 StartCoroutine(JumpTo(_player.position));
+                return;
+            } else if (_sameGTPositionTimer > 1.2f && !isAttacking && isMovement)
+            {
+                Vector3 point;
+                if (GetGroundAtAngle(transform.position + Vector3.up * eyeHeightOffset, out point))
+                {
+                    if (ShouldJumpTo(point))
+                    {
+                        _sameGTPositionTimer = 0f;
+                        StartCoroutine(JumpTo(point));
+                        return;
+                    }
+                }
+                else
+                {
+                    
+                }
             }
 
             if (isSearching)
@@ -252,7 +269,7 @@ namespace ShadowMaze.EnemyCharactor
             Gizmos.DrawWireSphere(transform.position, awarenessDistance);
             if (isPH) Gizmos.DrawWireSphere(_lastPlayerPosition, awarenessDistance);
 
-            if (_lastPlayerPosition != null)
+            if (isLPP)
             {
                 Gizmos.color = Color.magenta;
                 Gizmos.DrawSphere(_lastPlayerPosition, 0.2f);
@@ -586,7 +603,32 @@ namespace ShadowMaze.EnemyCharactor
             agent.Warp(transform.position);
             agent.SetDestination(_player.position);
         }
+        public bool GetGroundAtAngle(Vector3 origin, out Vector3 hitTopPoint)
+        {
+            hitTopPoint = Vector3.zero;
 
+            // ยิงลงแบบทำมุม 45 องศา (ด้านหน้า + ลง)
+            Vector3 forward = transform.forward;
+            Vector3 down = Vector3.down;
+
+            // สร้างทิศทาง 45 องศา: ปกติจะ normalize ก่อน lerp
+            Vector3 direction = (forward + down).normalized;
+
+            // ระยะยิง
+            float rayDistance = 5f;
+
+            if (Physics.Raycast(origin, direction, out RaycastHit hit, rayDistance, _groundLayers))
+            {
+                // hit.point คือจุดชน
+                // hit.normal คือ normal ของพื้น
+
+                // ปรับตำแหน่งให้ขึ้นบนสุดของพื้น (เช่นเอาไว้ยืน)
+                hitTopPoint = hit.point + hit.normal * 0.1f; // ดันออกเล็กน้อยเพื่อไม่จม
+                return true;
+            }
+
+            return false;
+        }
 
         private void ResetAtteck()
         {
