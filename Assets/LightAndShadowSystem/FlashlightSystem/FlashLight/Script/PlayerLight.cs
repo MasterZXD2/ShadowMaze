@@ -54,23 +54,15 @@ public class PlayerLight : MonoBehaviour
             {
                 if (GO.CompareTag("Enemy"))
                 {
-                    if (GO.TryGetComponent<SimpleEnemy>(out SimpleEnemy se))
+                    if (GO.TryGetComponent<SimpleEnemyAi>(out SimpleEnemyAi sei))
                     {
-                        se.hit?.Invoke();
-                    }
-                    else if (GO.TryGetComponent<SimpleEnemyAi>(out SimpleEnemyAi sei))
-                    {
-                        sei.hit?.Invoke();
+                        sei.HitByFlashlight();
                     }
                     else if (GO.transform.parent.CompareTag("Enemy"))
                     {
-                        if (GO.transform.parent.TryGetComponent<SimpleEnemy>(out SimpleEnemy pse))
+                        if (GO.transform.parent.TryGetComponent<SimpleEnemyAi>(out SimpleEnemyAi psei))
                         {
-                            pse.hit?.Invoke();
-                        }
-                        else if (GO.transform.parent.TryGetComponent<SimpleEnemyAi>(out SimpleEnemyAi psei))
-                        {
-                            psei.hit?.Invoke();
+                            psei.HitByFlashlight();
                         }
                     }
                 }

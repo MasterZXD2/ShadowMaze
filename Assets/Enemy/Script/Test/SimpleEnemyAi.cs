@@ -75,10 +75,10 @@ namespace ShadowMaze.EnemyCharactor
         [SerializeField] private CharacterController enemyController; // Collider ของแคปซูล (ศัตรู)
         [SerializeField] private GameObject cubeFormPrefab; // Prefab ของกล่องที่จะใช้แปลงร่าง
 
-        public Action hit { get; private set; }
         public bool isMovement { get; private set; }
         public bool isJump { get; private set; }
         public bool isAttacking { get; private set; }
+        public bool isCanSeePlayer { get; private set; }
 
         private bool _jumpedLastFrame = false;
         private float _verticalVelo = 0f;
@@ -105,6 +105,7 @@ namespace ShadowMaze.EnemyCharactor
         private bool isLPP = false;
         private bool isPH = false;
 
+        private bool InMemeoryFragmentArea = false;
         private bool astop = false;
 
         private GameObject currentCubeFormInstance; // ตัวแปรเก็บ Instance ของกล่องที่ถูกสร้างขึ้นมา
@@ -118,13 +119,13 @@ namespace ShadowMaze.EnemyCharactor
         #region Normal Function
         private void Awake() {
             MaxHealth = Health;
+            isCanSeePlayer = true;
             enemyController.enabled = false;
             agent.enabled = true;
         }
 
         private void Start()
         {
-            hit = HitByFlashlight;
             _player = PlayerController.Instance.gameObject.transform;
             if (!agent) agent = GetComponent<NavMeshAgent>();
 
@@ -140,12 +141,12 @@ namespace ShadowMaze.EnemyCharactor
             Vector3 _tarVec = _player.position;
             _tarVec.y += PH;
 
-            if (ShouldJumpTo(_tarVec) && agent.pathStatus != NavMeshPathStatus.PathComplete)
+            if (ShouldJumpTo(_tarVec) && agent.pathStatus != NavMeshPathStatus.PathComplete && !astop)
             {
                 _sameGTPositionTimer = 0f;
                 StartCoroutine(JumpTo(_player.position));
                 return;
-            } else if (_sameGTPositionTimer > 1.2f && !isAttacking && isMovement)
+            } else if (_sameGTPositionTimer > 1.2f && !isAttacking && isMovement && !astop)
             {
                 Vector3 point;
                 if (GetGroundAtAngle(transform.position + Vector3.up * eyeHeightOffset, out point))
@@ -159,11 +160,16 @@ namespace ShadowMaze.EnemyCharactor
                 }
                 else
                 {
-                    
+                    if (!isCanSeePlayer) return;
+                    _sameGTPositionTimer = 0f;
+                    _positionSet = false;
+                    isCanSeePlayer = false;
+                    Invoke(nameof(MakeCanSeePlayer), 2f);
+                    return;
                 }
             }
 
-            if (isSearching)
+            if (isSearching && !astop)
             {
                 SearchRotate();
                 return;
@@ -177,6 +183,7 @@ namespace ShadowMaze.EnemyCharactor
                 }
                 else
                 {
+                    if (InMemeoryFragmentArea) return;
                     cubeFormTimer += Time.deltaTime;
                     if (cubeFormTimer >= cubeFormDuration)
                     {
@@ -186,9 +193,8 @@ namespace ShadowMaze.EnemyCharactor
                 }
             } else
             {
-                if (astop) return;
                 float dist = Vector3.Distance(transform.position, _player.position);
-                if (dist <= sightRange)
+                if (dist <= sightRange && isCanSeePlayer)
                 {
                     if (CanSeePlayer())
                     {
@@ -223,6 +229,7 @@ namespace ShadowMaze.EnemyCharactor
                     flashlightHitTimer = 0f;
                     //return;
                 }
+
                 if (!isAttacking)
                 {
                     if (transform.position == _lastGTPosition) _sameGTPositionTimer += Time.deltaTime;
@@ -290,12 +297,7 @@ namespace ShadowMaze.EnemyCharactor
         }
         #endregion
 
-        private bool IsPlayerInAwarenessRange()
-        {
-            float dist = Vector3.Distance(transform.position, _player.position);
-            return dist <= awarenessDistance;
-        }
-
+        #region Movement Function
         private void SearchRotate()
         {
             if (!isSearching) return;
@@ -330,29 +332,6 @@ namespace ShadowMaze.EnemyCharactor
                 searchDuration = 0f;
                 isLPP = false;
             }
-        }
-
-        private bool PlayerInSightDuringSearch()
-        {
-            if (!_player) return false;
-
-            Vector3 dirToPlayer = (_player.position - transform.position).normalized;
-            float distToPlayer = Vector3.Distance(transform.position, _player.position);
-            float viewAngle = Vector3.Angle(transform.forward, dirToPlayer);
-
-            float maxViewAngle = 100f; // สามารถมองได้ในช่วงมุมประมาณ 100 องศา
-            float maxViewDistance = sightRange;
-
-            if (viewAngle < maxViewAngle * 0.5f && distToPlayer <= maxViewDistance)
-            {
-                // ✅ ตรวจว่าไม่มีอะไรมาบัง
-                if (!Physics.Raycast(transform.position + Vector3.up * 1.5f, dirToPlayer, out RaycastHit hit, distToPlayer, _groundLayers))
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         private void StartIdleLookAround()
@@ -465,66 +444,6 @@ namespace ShadowMaze.EnemyCharactor
                 Invoke(nameof(ResetAtteck), AttackCD);
             }
         }
-        bool ShouldJumpTo(Vector3 targetPos)
-        {
-            Vector3 start = transform.position;
-            Vector3 end = targetPos;
-            float dx = Vector3.Distance(
-                new Vector3(start.x, 0, start.z),
-                new Vector3(end.x, 0, end.z)
-            );
-            float dy = end.y - start.y;
-            float v0y = JumpSpeed;     // ความเร็วเริ่มต้นขึ้น
-            float v_max = WalkSpeed;
-            float a = InAirAcceleration;
-            float g = Gravity;       // ค่า gravity ในเกม
-
-            // 1) ตรวจความสูงสูงสุด
-            float Hmax = (v0y * v0y) / (2f * g);
-            if (Hmax + 0.1f < dy) return false; // สูงเกินปืนกระโดด
-
-            // 2) เวลาทั้งหมดของกระโดด
-            float T = 2f * v0y / g;
-
-            // 3) คำนวณระยะสูงสุดแนวราบเมื่อมี acceleration
-            float tAcc = v_max / a;
-            float Dmax;
-            if (T <= tAcc)
-            {
-                // กระโดดทั้งกระบอกยังไม่ถึง v_max
-                Dmax = 0.5f * a * T * T;
-            }
-            else
-            {
-                // เร่งถึง v_max แล้วเดินด้วย v_max ถึงจบ
-                float D1 = 0.5f * a * tAcc * tAcc;
-                float D2 = v_max * (T - tAcc);
-                Dmax = D1 + D2;
-            }
-            //Debug.Log(dx.ToString() + "," + Dmax.ToString());
-            if (dx > Dmax + 0.1f) return false;
-
-            // 4) ตรวจ trajectory ณ ระยะ dx
-            //   t_dx: เวลา ณ ตำแหน่งแนวราบ dx
-            float t_dx;
-            if (dx <= 0.5f * a * tAcc * tAcc)
-            {
-                // ยังอยู่ในช่วงเร่ง
-                // x = 0.5 a t^2  → t = sqrt(2 x / a)
-                t_dx = Mathf.Sqrt(2f * dx / a);
-            }
-            else
-            {
-                // แบ่งระยะ: D1 + v_max*(t_dx - tAcc) = dx
-                float D1 = 0.5f * a * tAcc * tAcc;
-                t_dx = tAcc + (dx - D1) / v_max;
-            }
-            // ความสูง y ณ t_dx
-            float yAtDx = v0y * t_dx - 0.5f * g * t_dx * t_dx;
-            if (yAtDx + 0.1f < dy) return false;
-
-            return true;
-        }
 
         IEnumerator JumpTo(Vector3 targetPos)
         {
@@ -603,6 +522,43 @@ namespace ShadowMaze.EnemyCharactor
             agent.Warp(transform.position);
             agent.SetDestination(_player.position);
         }
+        
+        private void ResetAtteck()
+        {
+            isAttack = false;
+        }
+        #endregion
+
+        #region Check Function
+        private bool IsPlayerInAwarenessRange()
+        {
+            float dist = Vector3.Distance(transform.position, _player.position);
+            return dist <= awarenessDistance;
+        }
+
+        private bool PlayerInSightDuringSearch()
+        {
+            if (!_player) return false;
+
+            Vector3 dirToPlayer = (_player.position - transform.position).normalized;
+            float distToPlayer = Vector3.Distance(transform.position, _player.position);
+            float viewAngle = Vector3.Angle(transform.forward, dirToPlayer);
+
+            float maxViewAngle = 100f; // สามารถมองได้ในช่วงมุมประมาณ 100 องศา
+            float maxViewDistance = sightRange;
+
+            if (viewAngle < maxViewAngle * 0.5f && distToPlayer <= maxViewDistance)
+            {
+                // ✅ ตรวจว่าไม่มีอะไรมาบัง
+                if (!Physics.Raycast(transform.position + Vector3.up * 1.5f, dirToPlayer, out RaycastHit hit, distToPlayer, _groundLayers))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public bool GetGroundAtAngle(Vector3 origin, out Vector3 hitTopPoint)
         {
             hitTopPoint = Vector3.zero;
@@ -630,14 +586,65 @@ namespace ShadowMaze.EnemyCharactor
             return false;
         }
 
-        private void ResetAtteck()
+        bool ShouldJumpTo(Vector3 targetPos)
         {
-            isAttack = false;
-        }
+            Vector3 start = transform.position;
+            Vector3 end = targetPos;
+            float dx = Vector3.Distance(
+                new Vector3(start.x, 0, start.z),
+                new Vector3(end.x, 0, end.z)
+            );
+            float dy = end.y - start.y;
+            float v0y = JumpSpeed;     // ความเร็วเริ่มต้นขึ้น
+            float v_max = WalkSpeed;
+            float a = InAirAcceleration;
+            float g = Gravity;       // ค่า gravity ในเกม
 
-        private void HitByFlashlight()
-        {
-            isCurrentlyHitByFlashlight = true;
+            // 1) ตรวจความสูงสูงสุด
+            float Hmax = (v0y * v0y) / (2f * g);
+            if (Hmax + 0.1f < dy) return false; // สูงเกินปืนกระโดด
+
+            // 2) เวลาทั้งหมดของกระโดด
+            float T = 2f * v0y / g;
+
+            // 3) คำนวณระยะสูงสุดแนวราบเมื่อมี acceleration
+            float tAcc = v_max / a;
+            float Dmax;
+            if (T <= tAcc)
+            {
+                // กระโดดทั้งกระบอกยังไม่ถึง v_max
+                Dmax = 0.5f * a * T * T;
+            }
+            else
+            {
+                // เร่งถึง v_max แล้วเดินด้วย v_max ถึงจบ
+                float D1 = 0.5f * a * tAcc * tAcc;
+                float D2 = v_max * (T - tAcc);
+                Dmax = D1 + D2;
+            }
+            //Debug.Log(dx.ToString() + "," + Dmax.ToString());
+            if (dx > Dmax + 0.1f) return false;
+
+            // 4) ตรวจ trajectory ณ ระยะ dx
+            //   t_dx: เวลา ณ ตำแหน่งแนวราบ dx
+            float t_dx;
+            if (dx <= 0.5f * a * tAcc * tAcc)
+            {
+                // ยังอยู่ในช่วงเร่ง
+                // x = 0.5 a t^2  → t = sqrt(2 x / a)
+                t_dx = Mathf.Sqrt(2f * dx / a);
+            }
+            else
+            {
+                // แบ่งระยะ: D1 + v_max*(t_dx - tAcc) = dx
+                float D1 = 0.5f * a * tAcc * tAcc;
+                t_dx = tAcc + (dx - D1) / v_max;
+            }
+            // ความสูง y ณ t_dx
+            float yAtDx = v0y * t_dx - 0.5f * g * t_dx * t_dx;
+            if (yAtDx + 0.1f < dy) return false;
+
+            return true;
         }
 
         private bool CanSeePlayer()
@@ -663,12 +670,20 @@ namespace ShadowMaze.EnemyCharactor
 
             return false;
         }
+        #endregion
 
+        #region Transition Functions
         private void TransitionToCubeForm()
         {
             if (enemyState.CurrEnemyActionState == EnemyActionState.StunnedAsCube)
                 return;
-            agent.SetDestination(transform.position);
+
+            _positionSet = false;
+            isMovement = false;
+            isAttack = false;
+            isLPP = false;
+            isCanSeePlayer = true;
+
             astop = true;
             enemyState.ActionSet(EnemyActionState.StunnedAsCube); // เปลี่ยนสถานะเป็น StunnedAsCube
 
@@ -720,7 +735,7 @@ namespace ShadowMaze.EnemyCharactor
 
             transform.position = spawnPosition;
             agent.Warp(transform.position);
-            agent.SetDestination(_player.position);
+            agent.SetDestination(transform.position);
 
             enemyState.ActionSet(EnemyActionState.Idle);
             flashlightHitTimer = 0f;
@@ -731,17 +746,34 @@ namespace ShadowMaze.EnemyCharactor
             if (enemyMeshRenderer != null) enemyMeshRenderer.enabled = true;
             if (enemyController != null) enemyController.enabled = true;
         }
+        #endregion
 
+        #region Control Functions
         private void takeDamage(float damage)
         {
             Health -= damage;
             if (Health <= 0) die();
         }
 
+        private void MakeCanSeePlayer() => isCanSeePlayer = true;
+
         private void die()
         {
             Destroy(gameObject);
         }
+
+        public void HitByFlashlight() => isCurrentlyHitByFlashlight = true;
+        
+        public void InArea(string name)
+        {
+            if (name == "MFA") InMemeoryFragmentArea = true;
+        }
+        
+        public void OutArea()
+        {
+            InMemeoryFragmentArea = false;
+        }
+        #endregion
     }
 
 }
