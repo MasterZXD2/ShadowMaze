@@ -910,6 +910,9 @@ MonoBehaviour:
   DeBattery: 100
   Battery: 100
   MaxBattery: 100
+  DeSanity: 100
+  Sanity: 100
+  MaxSanity: 100
   isDie: 0
 --- !u!114 &2385353096068005018
 MonoBehaviour:

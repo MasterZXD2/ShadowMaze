@@ -80,6 +80,8 @@ namespace ShadowMaze.EnemyCharactor
         public bool isAttacking { get; private set; }
         public bool isCanSeePlayer { get; private set; }
 
+        private Vector3 spawnPoint;
+
         private bool _jumpedLastFrame = false;
         private float _verticalVelo = 0f;
         private float _anitBump;
@@ -126,6 +128,8 @@ namespace ShadowMaze.EnemyCharactor
 
         private void Start()
         {
+            spawnPoint = transform.position;
+
             _player = PlayerController.Instance.gameObject.transform;
             if (!agent) agent = GetComponent<NavMeshAgent>();
 
@@ -193,6 +197,8 @@ namespace ShadowMaze.EnemyCharactor
                 }
             } else
             {
+                if (astop) return;
+
                 float dist = Vector3.Distance(transform.position, _player.position);
                 if (dist <= sightRange && isCanSeePlayer)
                 {
@@ -431,18 +437,24 @@ namespace ShadowMaze.EnemyCharactor
 
         private void AttackPlayer()
         {
-            enemyState.MovementSet(EnemyMovementState.Idling);
-            agent.SetDestination(transform.position); // don't move
-            isMovement = false;
-            isAttacking = true;
+            //enemyState.MovementSet(EnemyMovementState.Idling);
+            //agent.SetDestination(transform.position); // don't move
+            //isMovement = false;
+            //isAttacking = true;
 
+            PlayerController.Instance._playerStats.Sanity -= AttackDamage;
+            disappear();
+            Invoke(nameof(DelayedRespawn), 3f);
+
+            /*
             if (!isAttack)
             {
                 PlayerController.Instance.takeDamage(AttackDamage);
-
+                
                 isAttack = true;
                 Invoke(nameof(ResetAtteck), AttackCD);
             }
+            */
         }
 
         IEnumerator JumpTo(Vector3 targetPos)
@@ -677,18 +689,8 @@ namespace ShadowMaze.EnemyCharactor
         {
             if (enemyState.CurrEnemyActionState == EnemyActionState.StunnedAsCube)
                 return;
-
-            _positionSet = false;
-            isMovement = false;
-            isAttack = false;
-            isLPP = false;
-            isCanSeePlayer = true;
-
-            astop = true;
+            disappear();
             enemyState.ActionSet(EnemyActionState.StunnedAsCube); // เปลี่ยนสถานะเป็น StunnedAsCube
-
-            if (enemyMeshRenderer != null) enemyMeshRenderer.enabled = false; // ซ่อน Mesh ของแคปซูล
-            if (enemyController != null) enemyController.enabled = false; // ปิด Collider ของแคปซูล
 
             if (cubeFormPrefab != null)
             {
@@ -733,18 +735,7 @@ namespace ShadowMaze.EnemyCharactor
                 currentCubeFormInstance = null;
             }
 
-            transform.position = spawnPosition;
-            agent.Warp(transform.position);
-            agent.SetDestination(transform.position);
-
-            enemyState.ActionSet(EnemyActionState.Idle);
-            flashlightHitTimer = 0f;
-            cubeFormTimer = 0f;
-
-            astop = false;
-
-            if (enemyMeshRenderer != null) enemyMeshRenderer.enabled = true;
-            if (enemyController != null) enemyController.enabled = true;
+            respawn(spawnPosition);
         }
         #endregion
 
@@ -760,6 +751,42 @@ namespace ShadowMaze.EnemyCharactor
         private void die()
         {
             Destroy(gameObject);
+        }
+
+        private void disappear()
+        {
+            agent.SetDestination(transform.position);
+
+            _positionSet = false;
+            isMovement = false;
+            isAttack = false;
+            isLPP = false;
+            isCanSeePlayer = false;
+
+            astop = true;
+
+            if (enemyMeshRenderer) enemyMeshRenderer.enabled = false;
+            if (enemyController) enemyController.enabled = false;
+            //if (agent) agent.enabled = false;
+        }
+        private void DelayedRespawn() => respawn(spawnPoint);
+
+        private void respawn(Vector3 point)
+        {
+            transform.position = spawnPoint;
+            agent.Warp(transform.position);
+            agent.SetDestination(transform.position);
+
+            enemyState.ActionSet(EnemyActionState.Idle);
+            flashlightHitTimer = 0f;
+            cubeFormTimer = 0f;
+
+            isCanSeePlayer = true;
+            astop = false;
+
+            if (enemyMeshRenderer) enemyMeshRenderer.enabled = true;
+            if (enemyController) enemyController.enabled = true;
+            if (agent) agent.enabled = true;
         }
 
         public void HitByFlashlight() => isCurrentlyHitByFlashlight = true;

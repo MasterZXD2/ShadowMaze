@@ -17,6 +17,9 @@ namespace ShadowMaze.MyCharacterController
         public float DeBattery;
         public float Battery = 100f;
         public float MaxBattery = 100f;
+        public float DeSanity;
+        public float Sanity = 100f;
+        public float MaxSanity = 100f;
 
         public bool isDie;
 
@@ -24,6 +27,7 @@ namespace ShadowMaze.MyCharacterController
         {
             DeHealth = Health;
             DeBattery = Battery;
+            DeSanity = Sanity;
         }
 
         public void die()
@@ -32,6 +36,8 @@ namespace ShadowMaze.MyCharacterController
             MaxHealth = DeHealth;
             Battery = DeBattery;
             MaxBattery = DeBattery;
+            Sanity = DeSanity;
+            MaxSanity = DeSanity;
             isDie = true;
         }
 

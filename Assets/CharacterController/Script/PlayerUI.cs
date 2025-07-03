@@ -10,12 +10,16 @@ namespace ShadowMaze.MyCharacterController {
         private GameObject _mainUI;
         private GameObject _batteryBar;
         private Slider _batteryBS;
+        private GameObject _sanityBar;
+        private Slider _sanityBS;
 
         private void SetupUI()
         {
             _mainUI = GameObject.FindGameObjectWithTag("MainUI");
             _batteryBar = _mainUI.transform.Find("BatteryBar").gameObject;
             _batteryBS = _batteryBar.GetComponentInChildren<Slider>();
+            _sanityBar = _mainUI.transform.Find("SanityBar").gameObject;
+            _sanityBS = _sanityBar.GetComponentInChildren<Slider>();
         }
 
         private void Awake() => SetupUI();
@@ -27,16 +31,23 @@ namespace ShadowMaze.MyCharacterController {
                 _batteryBS.minValue = 0;
                 _batteryBS.maxValue = _playerStats.MaxBattery;
             }
+            if (_sanityBS)
+            {
+                _sanityBS.minValue = 0;
+                _sanityBS.maxValue = _playerStats.MaxSanity;
+            }
         }
 
         private void Update()
         {
             if (_batteryBS.value != _playerStats.Health) _batteryBS.value = Mathf.Lerp(_batteryBS.value, _playerStats.Battery, BBLerpSpeed);
+            if (_sanityBS.value != _playerStats.Sanity) _sanityBS.value = Mathf.Lerp(_sanityBS.value, _playerStats.Sanity, BBLerpSpeed);
         }
 
         public void die()
         {
             _batteryBar.SetActive(false);
+            _sanityBar.SetActive(false);
         }
 
         public void restart()
@@ -44,6 +55,8 @@ namespace ShadowMaze.MyCharacterController {
             SetupUI();
             _batteryBS.minValue = 0;
             _batteryBS.maxValue = _playerStats.MaxBattery;
+            _sanityBS.minValue = 0;
+            _sanityBS.maxValue = _playerStats.MaxSanity;
         }
     }
 
