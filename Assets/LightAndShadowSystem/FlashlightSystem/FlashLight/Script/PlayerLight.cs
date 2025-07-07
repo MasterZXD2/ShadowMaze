@@ -66,6 +66,11 @@ public class PlayerLight : MonoBehaviour
                         }
                     }
                 }
+
+            if (GO.TryGetComponent<LightPuzzleChanger>(out LightPuzzleChanger lpc))
+                {
+                    lpc.HitByFlashlight();
+                }
             }
         }
 
