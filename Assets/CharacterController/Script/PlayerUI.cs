@@ -12,6 +12,9 @@ namespace ShadowMaze.MyCharacterController {
         private Slider _batteryBS;
         private GameObject _sanityBar;
         private Slider _sanityBS;
+        private GameObject _memoryFragment;
+        private TextMeshProUGUI _memoryFragmentText;
+        private int _MFV = 0;
 
         private void SetupUI()
         {
@@ -20,6 +23,8 @@ namespace ShadowMaze.MyCharacterController {
             _batteryBS = _batteryBar.GetComponentInChildren<Slider>();
             _sanityBar = _mainUI.transform.Find("SanityBar").gameObject;
             _sanityBS = _sanityBar.GetComponentInChildren<Slider>();
+            _memoryFragment = _mainUI.transform.Find("MFText").gameObject;
+            _memoryFragmentText = _memoryFragment.GetComponent<TextMeshProUGUI>();
         }
 
         private void Awake() => SetupUI();
@@ -42,6 +47,10 @@ namespace ShadowMaze.MyCharacterController {
         {
             if (_batteryBS.value != _playerStats.Health) _batteryBS.value = Mathf.Lerp(_batteryBS.value, _playerStats.Battery, BBLerpSpeed);
             if (_sanityBS.value != _playerStats.Sanity) _sanityBS.value = Mathf.Lerp(_sanityBS.value, _playerStats.Sanity, BBLerpSpeed);
+            if (_MFV != _playerStats.memoryFragment) {
+                _MFV = _playerStats.memoryFragment;
+                _memoryFragmentText.text = $"memory fragment {_MFV.ToString()}/3";
+            }
         }
 
         public void die()

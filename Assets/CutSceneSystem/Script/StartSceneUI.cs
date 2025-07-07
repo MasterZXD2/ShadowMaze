@@ -16,6 +16,7 @@ namespace ShadowMaze.CutSceneSystem
         [SerializeField] private Button skipBU;
         [SerializeField] private GameObject playUI;
         [SerializeField] private Button playBU;
+        [SerializeField] private GameObject MFText; 
 
         private Camera _camera;
         private int _currCutScene = 0;
@@ -30,6 +31,7 @@ namespace ShadowMaze.CutSceneSystem
             skipUI.SetActive(false);
             BattUI.SetActive(false);
             SanUI.SetActive(false);
+            MFText.SetActive(false);
 
             menuCutScene.SetVideoPrepared(() => {
                 menuCutScene.Play();
@@ -101,6 +103,7 @@ namespace ShadowMaze.CutSceneSystem
 
             BattUI.SetActive(true);
             SanUI.SetActive(true);
+            MFText.SetActive(true);
             skipUI.SetActive(false);
 
             GameManager.Instance.SetActivePlayer(true);

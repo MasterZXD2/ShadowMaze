@@ -20,6 +20,8 @@ namespace ShadowMaze.MyCharacterController
         public float DeSanity;
         public float Sanity = 100f;
         public float MaxSanity = 100f;
+        public int memoryFragment = 0;
+        public int memoryFragmentMax = 3;
 
         public bool isDie;
 
