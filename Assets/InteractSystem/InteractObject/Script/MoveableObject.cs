@@ -13,6 +13,7 @@ namespace ShadowMaze.InteractSystem
         [field: SerializeField] private string interactLayerName = "PlrInteractObject";
         [field: SerializeField] private LayerMask raycastMask;
 
+        [SerializeField] private Quaternion _rotation;
         [SerializeField] private Vector3 offset = Vector3.zero;
         [SerializeField] private float height;
         [SerializeField] private float far;
@@ -97,7 +98,7 @@ namespace ShadowMaze.InteractSystem
             {
                 transform.position = desiredPos;
             }
-            transform.rotation = player.rotation;
+            transform.rotation = player.rotation * _rotation;
         }
     }
 }

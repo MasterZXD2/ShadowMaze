@@ -31,7 +31,7 @@ namespace ShadowMaze.InteractSystem
 
         protected virtual void Update()
         {
-            var player = PlayerController.Instance;
+            PlayerController player = PlayerController.Instance;
             if (!player || !player._playerInteract) return;
 
             float sqrDist = (player.transform.position - transform.position).sqrMagnitude;

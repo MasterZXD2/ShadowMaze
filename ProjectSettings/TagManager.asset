@@ -6,6 +6,7 @@ TagManager:
   tags:
   - MainUI
   - Enemy
+  - bookPuzzle
   layers:
   - Default
   - TransparentFX
