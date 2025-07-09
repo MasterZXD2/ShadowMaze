@@ -706,11 +706,11 @@ namespace ShadowMaze.EnemyCharactor
 
         private void TransitionToEnemyForm()
         {
-            Vector3 spawnPosition = transform.position;
+            Vector3 spawnPosition;
             float colliderHeight = enemyController != null ? enemyController.height : 0.5f;
-
+            
             RaycastHit hit;
-            Vector3 raycastOrigin = currentCubeFormInstance != null ? currentCubeFormInstance.transform.position + Vector3.up * colliderHeight : transform.position + Vector3.up * colliderHeight;
+            Vector3 raycastOrigin = currentCubeFormInstance ? currentCubeFormInstance.transform.position + Vector3.up * colliderHeight : transform.position + Vector3.up * colliderHeight;
             if (Physics.Raycast(raycastOrigin, Vector3.down, out hit, colliderHeight, _groundLayers))
             {
                 spawnPosition = hit.point + Vector3.up * colliderHeight;
