@@ -1,7 +1,8 @@
 using UnityEngine;
 
-public class LightPuzzleChanger : MonoBehaviour
+public class LightPuzzleChanger : Puzzle
 {
+    [SerializeField] LightPuzzleManager manager;
     public Material grayscaleMat;
     public Material normalMat;
 
@@ -24,7 +25,7 @@ public class LightPuzzleChanger : MonoBehaviour
             _renderer.material = grayscaleMat;
         }
 
-        PuzzleManager.Instance?.RegisterPuzzle(this);
+        manager.RegisterPuzzle(this);
     }
 
     private void Update()

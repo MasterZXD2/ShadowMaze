@@ -3,44 +3,15 @@ using UnityEngine;
 
 public class PuzzleManager : MonoBehaviour
 {
-    public static PuzzleManager Instance;
+    [field: SerializeField] private List<Puzzle> puzzleList;
+    public TimelineTrigger timelineTrigger;
 
-    private HashSet<LightPuzzleChanger> puzzles = new HashSet<LightPuzzleChanger>();
-    private HashSet<LightPuzzleChanger> completedPuzzles = new HashSet<LightPuzzleChanger>();
-
-    [SerializeField] private GameObject cutsceneTrigger; // หรือเรียก Cutscene ตรงนี้ก็ได้
-
-    private void Awake()
+    private void Update()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
-    }
-
-    public void RegisterPuzzle(LightPuzzleChanger puzzle)
-    {
-        puzzles.Add(puzzle);
-    }
-
-    public void ReportCompleted(LightPuzzleChanger puzzle)
-    {
-        if (!puzzles.Contains(puzzle)) return;
-
-        completedPuzzles.Add(puzzle);
-
-        if (completedPuzzles.Count == puzzles.Count)
-        {
-            Debug.Log("✅ Puzzle All Completed!");
-            PlayCutscene();
+        bool t = true;
+        foreach (Puzzle puzzle in puzzleList) {
+            if (!puzzle.isFinish) t = false;
         }
-    }
-
-    private void PlayCutscene()
-    {
-        if (cutsceneTrigger != null)
-        {
-            cutsceneTrigger.SetActive(true); // หรือเรียก Play Timeline
-        }
-
-        // หรือใช้ Timeline.Play(), LoadScene, เปิดประตู ฯลฯ
+        if (t && timelineTrigger) timelineTrigger.PlayTimeline();
     }
 }

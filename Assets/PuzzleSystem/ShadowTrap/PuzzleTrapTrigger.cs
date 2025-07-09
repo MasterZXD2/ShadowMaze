@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PuzzleTrapTrigger : MonoBehaviour
+public class PuzzleTrapTrigger : Puzzle
 {
     public TimelineTrigger timelineTrigger; // ลิงก์ไปยัง TimelineTrigger
     private bool isBoxOnTrap = false;
@@ -10,11 +10,12 @@ public class PuzzleTrapTrigger : MonoBehaviour
         if (other.CompareTag("Enemy") && !isBoxOnTrap)
         {
             isBoxOnTrap = true;
+            isFinish = true;
             Debug.Log("Finish");
 
             if (timelineTrigger != null)
             {
-                timelineTrigger.PlayTimeline();
+                //timelineTrigger.PlayTimeline();
             }
         }
     }
@@ -24,6 +25,7 @@ public class PuzzleTrapTrigger : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             isBoxOnTrap = false;
+            isFinish = false;
             Debug.Log("Box removed from trap");
         }
     }

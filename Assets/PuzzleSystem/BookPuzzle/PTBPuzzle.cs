@@ -3,67 +3,32 @@ using ShadowMaze.MyCharacterController;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PTBPuzzle : MonoBehaviour
+public class PTBPuzzle : Puzzle
 {
     [field: SerializeField] private List<GameObject> placePoints;
-    [field: SerializeField] private float chenkRange = .5f;
-    [field: SerializeField] private float puzzleRange = 2f;
-    private bool isFinish = false;
+    [field: SerializeField] private List<string> placeNames;
+    [SerializeField] private float chenkRange = .5f;
+    [SerializeField] private float puzzleRange = 2f;
     private int i = 0;
 
     private void Update()
     {
-        /*PlayerController player = PlayerController.Instance;
-        if (!player) return;
-
-        float sqrDist = (player.transform.position - transform.position).sqrMagnitude;
-
-        var interact = player._playerInteract?._interactObject;
-
-        if (sqrDist < puzzleRange * puzzleRange)
+        i = 0;
+        for (int j = 0; j < placePoints.Count; j++)
         {
-            if (interact is BookPuzzleObject bp)
-            {
-                bp.inBookPuzzle = true;
-                _playerIsInRange = true;
-            }
-        }
-        else
-        {
-            if (_playerIsInRange && interact is BookPuzzleObject bp)
-            {
-                bp.inBookPuzzle = false;
-                _playerIsInRange = false;
-            }
-        }*/
-        /*Collider[] colliders = Physics.OverlapSphere(transform.position, puzzleRange);
-        foreach (Collider collider in colliders) {
-            if (collider.TryGetComponent<BookPuzzleObject>(out BookPuzzleObject bp)) 
-            { 
-                i++;
-            }
-        }*/
-        foreach (GameObject go in placePoints)
-        {
+            GameObject go = placePoints[j];
             Collider[] colliders = Physics.OverlapSphere(go.transform.position, chenkRange);
             foreach (Collider collider in colliders)
             {
-                if (collider.gameObject.GetComponent<BookPuzzleObject>())
+                if (collider.gameObject.TryGetComponent<BookPuzzleObject>(out BookPuzzleObject bp))
                 {
-                    i++;
+                    if (bp.Name == placeNames[j]) i++;
                 }
             }
         }
-        Debug.Log(i);
-        Debug.Log(placePoints.Count);
-        if (i >= placePoints.Count) { 
-            isFinish = true;
-            i = placePoints.Count;
-        }
-        else { 
-            isFinish = false;
-            i = 0;
-        }
+
+        if (i >= placePoints.Count) isFinish = true;
+        else isFinish = false;
     }
 
     private void OnDrawGizmos()

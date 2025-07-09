@@ -8,7 +8,7 @@ namespace ShadowMaze.InteractSystem
     public class InteractObject : MonoBehaviour
     {
         [SerializeField] private GameObject UI;
-        [SerializeField] private float range = 2f;
+        [SerializeField] protected float range = 2f;
         private GameObject currUI;
         private bool _playerIsInRange = false;
 

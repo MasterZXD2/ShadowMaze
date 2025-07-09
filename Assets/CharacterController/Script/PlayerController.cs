@@ -111,7 +111,7 @@ namespace ShadowMaze.MyCharacterController
 
         public Camera _plrCamera { get; private set; }
 
-        private Vector2 _camRotation = Vector2.zero;
+        public Vector2 _camRotation = Vector2.zero;
         private Vector2 _plrTarRotation = Vector2.zero;
 
         private Quaternion _flashLightTargetRot;

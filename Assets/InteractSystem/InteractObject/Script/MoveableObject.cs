@@ -10,13 +10,13 @@ namespace ShadowMaze.InteractSystem
         private bool pick = false;
         [SerializeField] private Rigidbody _rb;
 
-        [field: SerializeField] private string interactLayerName = "PlrInteractObject";
-        [field: SerializeField] private LayerMask raycastMask;
+        [field: SerializeField] protected string interactLayerName = "PlrInteractObject";
+        [field: SerializeField] protected LayerMask raycastMask;
 
-        [SerializeField] private Quaternion _rotation;
-        [SerializeField] private Vector3 offset = Vector3.zero;
-        [SerializeField] private float height;
-        [SerializeField] private float far;
+        [SerializeField] protected Quaternion _rotation;
+        [SerializeField] protected Vector3 offset = Vector3.zero;
+        [SerializeField] protected float height;
+        [SerializeField] protected float far;
 
         private int interactLayer;
         private int _normalLayer;
@@ -69,12 +69,12 @@ namespace ShadowMaze.InteractSystem
             }
         }
 
-        public void MoveSelectObj()
+        protected virtual void MoveSelectObj()
         {
             if (PlayerController.Instance == null) return;
 
             Transform player = PlayerController.Instance.transform;
-
+            
             // คำนวณตำแหน่งเป้าหมายตาม Player และ offset/height/far
             Vector3 desiredPos = (player.position + player.forward * far + Vector3.up * height) + offset;
 
