@@ -478,14 +478,18 @@ namespace ShadowMaze.MyCharacterController
             if (astop) return;
             if (_esc && b)
             {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
+                //Cursor.lockState = CursorLockMode.Locked;
+                //Cursor.visible = false;
             }
         }
 
         public void OnEsc()
         {
             if (astop) return;
+            if (Cursor.visible && !_esc) return;
+            if (_esc) return;
+
+            _playerUI.OnEsc();
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             _esc = true;

@@ -14,7 +14,11 @@ namespace ShadowMaze.MyCharacterController {
         private Slider _sanityBS;
         private GameObject _memoryFragment;
         private TextMeshProUGUI _memoryFragmentText;
+        private GameObject _resumeUI;
+        private Button _resumeBU;
         private int _MFV = 0;
+
+        private bool _esc = false;
 
         private void SetupUI()
         {
@@ -25,12 +29,23 @@ namespace ShadowMaze.MyCharacterController {
             _sanityBS = _sanityBar.GetComponentInChildren<Slider>();
             _memoryFragment = _mainUI.transform.Find("MFText").gameObject;
             _memoryFragmentText = _memoryFragment.GetComponent<TextMeshProUGUI>();
+            _resumeUI = _mainUI.transform.Find("Resume").gameObject;
+            _resumeBU = _resumeUI.GetComponent<Button>();
         }
 
         private void Awake() => SetupUI();
 
         private void Start()
         {
+            _resumeUI.SetActive(false);
+            _resumeBU.onClick.RemoveAllListeners();
+            _resumeBU.onClick.AddListener(() =>
+            {
+                OnEsc();
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            });
+
             if (_batteryBS)
             {
                 _batteryBS.minValue = 0;
@@ -51,6 +66,12 @@ namespace ShadowMaze.MyCharacterController {
                 _MFV = _playerStats.memoryFragment;
                 _memoryFragmentText.text = $"memory fragment {_MFV.ToString()}/3";
             }
+        }
+
+        public void OnEsc()
+        {
+            _esc = !_esc;
+            _resumeUI.SetActive(_esc);
         }
 
         public void die()
