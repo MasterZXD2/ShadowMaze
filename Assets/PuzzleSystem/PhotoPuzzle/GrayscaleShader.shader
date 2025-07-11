@@ -1,7 +1,8 @@
-Shader "Custom/GrayscaleShader"
+﻿Shader "Custom/GrayscaleShader"
 {
     Properties
     {
+        _Color ("Color", Color) = (1,1,1,1)
         _MainTex ("Texture", 2D) = "white" {}
     }
     SubShader
@@ -29,6 +30,7 @@ Shader "Custom/GrayscaleShader"
             };
 
             sampler2D _MainTex;
+            fixed4 _Color; // ✅ ต้องมีการประกาศ
 
             v2f vert (appdata v)
             {
@@ -42,7 +44,8 @@ Shader "Custom/GrayscaleShader"
             {
                 fixed4 col = tex2D(_MainTex, i.uv);
                 float gray = dot(col.rgb, float3(0.3, 0.59, 0.11));
-                return fixed4(gray, gray, gray, col.a);
+                fixed3 grayscale = float3(gray, gray, gray);
+                return fixed4(grayscale * _Color.rgb, col.a * _Color.a); // ✅ ใช้ _Color ผสม
             }
             ENDCG
         }

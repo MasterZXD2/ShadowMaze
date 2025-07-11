@@ -51,7 +51,7 @@ public class PTBPuzzle : Puzzle
 
         Canvas canvas = currUI.GetComponentInChildren<Canvas>();
 
-        Vector3 uiOffset = -HintBook.transform.forward * (HintBook.transform.localScale.z / 2f);
+        Vector3 uiOffset = -HintBook.transform.forward * ((HintBook.transform.localScale.z / 2f) - .2f);
         canvas.transform.position = HintBook.transform.position + uiOffset;
 
         currUI.SetActive(false);
@@ -82,7 +82,8 @@ public class PTBPuzzle : Puzzle
                 currUI.SetActive(false);
             }
         }
-        /*i = 0;
+
+        i = 0;
         for (int j = 0; j < placePoints.Count; j++)
         {
             GameObject go = placePoints[j];
@@ -97,17 +98,15 @@ public class PTBPuzzle : Puzzle
         }
 
         if (i >= placePoints.Count) isFinish = true;
-        else isFinish = false;*/
+        else isFinish = false;
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(HintBook.transform.position, rangeHB);
-        /*Gizmos.color = Color.white;
+        Gizmos.color = Color.white;
         if (placePoints.Count > 0 ) foreach (GameObject go in placePoints) Gizmos.DrawWireSphere(go.transform.position,chenkRange);
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, puzzleRange);*/
     }
 
     public virtual void Interact()

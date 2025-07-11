@@ -7,10 +7,12 @@ namespace ShadowMaze.InteractSystem
     public class BookPuzzleObject : MoveableObject
     {
         public string Name;
+        [SerializeField] private Light light;
         [SerializeField] private float MaxScrollDist = 2f;
         [SerializeField] private float MinScrollDist = -.2f;
         [SerializeField] private float Speed = 5f;
 
+        private bool b;
         private float _currrange;
         private float _scrollDist;
 
@@ -18,6 +20,17 @@ namespace ShadowMaze.InteractSystem
         {
             base.Start();
             _currrange = range;
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+            light.enabled = b;
+        }
+
+        private void LateUpdate()
+        {
+            b = false;
         }
 
         public override void Interact()
@@ -61,6 +74,10 @@ namespace ShadowMaze.InteractSystem
                 transform.position = targetPosition;
             }
             transform.rotation = Quaternion.Slerp(transform.rotation, cameraYaw, Speed * Time.deltaTime);
+        }
+
+        public void HitByFlashlight() { 
+            b = true;
         }
     }
 }

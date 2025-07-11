@@ -22,7 +22,11 @@ public class LightPuzzleChanger : Puzzle
         if (_renderer != null && grayscaleMat != null)
         {
             runtimeMat = new Material(grayscaleMat);
-            _renderer.material = grayscaleMat;
+
+            Material[] mats = _renderer.materials;
+            mats[0] = runtimeMat;
+            _renderer.materials = mats;
+
         }
 
         manager.RegisterPuzzle(this);
@@ -30,12 +34,29 @@ public class LightPuzzleChanger : Puzzle
 
     private void Update()
     {
+        if (isChanged) return;
+
+        float progress = Mathf.Clamp01(lightHitTimer / timeToChangeMat);
+
+        Color from = grayscaleMat.color;
+        Color to = Color.grey;
+        runtimeMat.color = Color.Lerp(from, to, progress);
+
+        if (lightHitTimer >= timeToChangeMat)
+        {
+            isChanged = true;
+            _renderer.material = normalMat;
+            transitionProgress = 0f;
+            lightHitTimer = 0f;
+        }
+
+        /*
         if (isTransitioning && runtimeMat != null && normalMat != null)
         {
             transitionProgress += Time.deltaTime / 1.5f;
             transitionProgress = Mathf.Clamp01(transitionProgress);
 
-            Color from = grayscaleMat.color;
+            Color from = runtimeMat.color;
             Color to = normalMat.color;
             runtimeMat.color = Color.Lerp(from, to, transitionProgress);
 
@@ -46,20 +67,12 @@ public class LightPuzzleChanger : Puzzle
                 _renderer.material = normalMat;
             }
         }
+        */
     }
 
     public void HitByFlashlight()
     {
         if (isChanged) return;
-
         lightHitTimer += Time.deltaTime;
-        if (lightHitTimer >= timeToChangeMat)
-        {
-            if (_renderer != null && normalMat != null)
-            {
-                _renderer.material = normalMat;
-                isChanged = true;
-            }
-        }
     }
 }

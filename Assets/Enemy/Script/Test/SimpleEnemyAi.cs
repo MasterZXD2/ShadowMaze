@@ -16,8 +16,8 @@ namespace ShadowMaze.EnemyCharactor
 
         [Space(10)]
         [Header("Enemy Components")]
-        [SerializeField] private NavMeshAgent agent;
-        [SerializeField] private EnemyState enemyState;
+        [SerializeField] protected NavMeshAgent agent;
+        [SerializeField] protected EnemyState enemyState;
 
         [Space(10)]
         [Header("Stats")]
@@ -26,13 +26,13 @@ namespace ShadowMaze.EnemyCharactor
 
         [Space(10)]
         [Header("Attack")]
-        [SerializeField] private float attackRange;
-        [SerializeField] private float AttackCD;
-        [SerializeField] private float AttackDamage;
+        [SerializeField] private float attackRange = 1.8f;
+        [SerializeField] private float AttackCD = .5f;
+        [SerializeField] private float AttackDamage = 10f;
 
         [Space(10)]
         [Header("Move")]
-        [SerializeField] private float walkPointRange;
+        [SerializeField] private float walkPointRange = 12f;
         [SerializeField] private float EnemyModelRotationSpeed = 10f;
 
         private float WalkAcceleration = 0.25f;
@@ -40,47 +40,44 @@ namespace ShadowMaze.EnemyCharactor
 
         [Header("Jump")]
         public float Gravity = 10f;
-        public float TerminalVelo = 50f;
-        public float JumpSpeed = 1.0f;
-        public float InAirAcceleration = 0.15f;
-        public float InAirDrag = 0.025f;
+        public float TerminalVelo = 10f;
+        public float JumpSpeed = 8f;
+        public float InAirAcceleration = 40f;
+        public float InAirDrag = 1f;
 
         [Header("Sight Settings")]
-        [SerializeField] private float sightRange;
+        [SerializeField] private float sightRange = 20f;
         [SerializeField] private float viewAngle = 90f;
-        [SerializeField] private float eyeHeightOffset = 1.5f;
+        [SerializeField] private float eyeHeightOffset = .5f;
 
         [Space(10)]
         [Header("Search Settings")]
         [SerializeField] private float minSearchDuration = 1f;
         [SerializeField] private float maxSearchDuration = 3f;
-        [SerializeField] private float rotationAngleLimit = 60f;
+        [SerializeField] private float rotationAngleLimit = 120f;
         [SerializeField] private float activeRotationAngleLimit = 90f;
-        [SerializeField] private float rotationSpeedDuringSearch = 60f;
-        [SerializeField] private float activeRotationSpeedDuringSearch = 120f;
+        [SerializeField] private float rotationSpeedDuringSearch = 100f;
+        [SerializeField] private float activeRotationSpeedDuringSearch = 200f;
 
         [Space(10)]
         [Header("Awareness")]
-        [SerializeField] private float awarenessDistance = 3.5f; // ระยะที่ศัตรูจะรู้ว่าผู้เล่นอยู่ใกล้ แม้จะมองไม่เห็น
+        [SerializeField] private float awarenessDistance = 4f; // ระยะที่ศัตรูจะรู้ว่าผู้เล่นอยู่ใกล้ แม้จะมองไม่เห็น
 
         [Space(10)]
         [Header("Environment Details")]
-        [SerializeField] private LayerMask _groundLayers;
+        [SerializeField] protected LayerMask _groundLayers;
 
         [Space(10)]
         [Header("Transformation Settings")]
-        [SerializeField] private float flashlightStunDuration = 3f; // ระยะเวลาที่ต้องโดนไฟฉายส่องก่อนกลายเป็นกล่อง (ตั้งเป็น 0 จะเปลี่ยนทันที)
-        [SerializeField] private float cubeFormDuration = 5f; // ระยะเวลาที่อยู่ในร่างกล่องก่อนกลับเป็นศัตรู (ถ้าไม่โดนไฟฉายส่อง)
-        [SerializeField] private MeshRenderer enemyMeshRenderer; // MeshRenderer ของแคปซูล (ศัตรู)
-        [SerializeField] private CharacterController enemyController; // Collider ของแคปซูล (ศัตรู)
-        [SerializeField] private GameObject cubeFormPrefab; // Prefab ของกล่องที่จะใช้แปลงร่าง
+        [SerializeField] protected float flashlightStunDuration = 3f; // ระยะเวลาที่ต้องโดนไฟฉายส่องก่อนกลายเป็นกล่อง (ตั้งเป็น 0 จะเปลี่ยนทันที)
+        [SerializeField] protected CharacterController enemyController; // Collider ของแคปซูล (ศัตรู)
 
-        public bool isMovement { get; private set; }
+        protected bool isMovement { get; set; }
         public bool isJump { get; private set; }
         public bool isAttacking { get; private set; }
-        public bool isCanSeePlayer { get; private set; }
+        protected bool isCanSeePlayer { get; set; }
 
-        private Vector3 spawnPoint;
+        protected Vector3 spawnPoint;
 
         private bool _jumpedLastFrame = false;
         private float _verticalVelo = 0f;
@@ -99,27 +96,25 @@ namespace ShadowMaze.EnemyCharactor
         private bool isPlayerInSight, isPlayerInAttack;
         private Transform _player;
         private Vector3 _GTPosition;
-        private bool _positionSet;
-        private bool isAttack;
+        protected bool _positionSet;
+        protected bool isAttack;
         private Vector3 _lastPlayerPosition;
         private float _sameGTPositionTimer = 0f;
         private Vector3 _lastGTPosition;
-        private bool isLPP = false;
+        protected bool isLPP = false;
         private bool isPH = false;
 
-        private bool InMemeoryFragmentArea = false;
-        private bool astop = false;
+        protected bool InMemeoryFragmentArea = false;
+        protected bool astop = false;
 
-        private GameObject currentCubeFormInstance; // ตัวแปรเก็บ Instance ของกล่องที่ถูกสร้างขึ้นมา
-        private bool isCurrentlyHitByFlashlight = false; // สถานะปัจจุบันว่ากำลังโดนไฟฉายส่องหรือไม่
-        private float flashlightHitTimer = 0f; // นับเวลาที่โดนไฟฉายส่อง (เพื่อเปลี่ยนเป็นกล่อง)
-        private float cubeFormTimer = 0f; // นับเวลาที่อยู่ในร่างกล่อง (เพื่อกลับร่างเดิม)
+        protected bool isCurrentlyHitByFlashlight = false; // สถานะปัจจุบันว่ากำลังโดนไฟฉายส่องหรือไม่
+        protected float flashlightHitTimer = 0f; // นับเวลาที่โดนไฟฉายส่อง (เพื่อเปลี่ยนเป็นกล่อง)
 
         private EnemyMovementState _lastMovementState = EnemyMovementState.Falling;
         #endregion
 
         #region Normal Function
-        private void Awake() {
+        protected virtual void Awake() {
             MaxHealth = Health;
             isCanSeePlayer = true;
             enemyController.enabled = false;
@@ -137,7 +132,7 @@ namespace ShadowMaze.EnemyCharactor
             WalkAcceleration = agent.acceleration * 5;
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             if (!_player || isJump) return;
 
@@ -179,71 +174,7 @@ namespace ShadowMaze.EnemyCharactor
                 return;
             }
 
-            if (enemyState.CurrEnemyActionState == EnemyActionState.StunnedAsCube)
-            {
-                if (isCurrentlyHitByFlashlight)
-                {
-                    cubeFormTimer = 0f;
-                }
-                else
-                {
-                    if (InMemeoryFragmentArea) return;
-                    cubeFormTimer += Time.deltaTime;
-                    if (cubeFormTimer >= cubeFormDuration)
-                    {
-                        TransitionToEnemyForm();
-                        cubeFormTimer = 0f;
-                    }
-                }
-            } else
-            {
-                if (astop) return;
-
-                float dist = Vector3.Distance(transform.position, _player.position);
-                if (dist <= sightRange && isCanSeePlayer)
-                {
-                    if (CanSeePlayer())
-                    {
-                        _lastPlayerPosition = _player.position;
-                        _lastPlayerPosition.y += PH;
-
-                        if (dist <= attackRange)
-                        {
-                            AttackPlayer();
-                        }
-                        else
-                        {
-                            ChasePlayer();
-                        }
-                    }
-                    else if (isLPP && IsPlayerInAwarenessRange())
-                    {
-                        _lastPlayerPosition = _player.position;
-                        _lastPlayerPosition.y += PH;
-                        ChasePlayer();
-                    }
-                    else
-                    {
-                        Patroling();
-                        flashlightHitTimer = 0f;
-                        //return;
-                    }
-                }
-                else
-                {
-                    Patroling();
-                    flashlightHitTimer = 0f;
-                    //return;
-                }
-
-                if (!isAttacking)
-                {
-                    if (transform.position == _lastGTPosition) _sameGTPositionTimer += Time.deltaTime;
-                    else _sameGTPositionTimer = 0f;
-                }
-
-                _lastGTPosition = transform.position;
-            }
+            Move(PH);
 
             if (isCurrentlyHitByFlashlight)
             {
@@ -254,11 +185,7 @@ namespace ShadowMaze.EnemyCharactor
                 flashlightHitTimer = 0f;
             }
 
-            if (flashlightHitTimer >= flashlightStunDuration)
-            {
-                TransitionToCubeForm();
-                flashlightHitTimer = 0f;
-            }
+            OnFlashLight();
 
             isCurrentlyHitByFlashlight = false;
         }
@@ -304,6 +231,62 @@ namespace ShadowMaze.EnemyCharactor
         #endregion
 
         #region Movement Function
+        protected virtual void Move(float PH) => NormalMove(PH);
+
+        protected void NormalMove(float PH)
+        {
+            if (astop) return;
+
+            float dist = Vector3.Distance(transform.position, _player.position);
+            if (dist <= sightRange && isCanSeePlayer)
+            {
+                if (CanSeePlayer())
+                {
+                    _lastPlayerPosition = _player.position;
+                    _lastPlayerPosition.y += PH;
+
+                    if (dist <= attackRange)
+                    {
+                        AttackPlayer();
+                    }
+                    else
+                    {
+                        ChasePlayer();
+                    }
+                }
+                else if (isLPP && IsPlayerInAwarenessRange())
+                {
+                    _lastPlayerPosition = _player.position;
+                    _lastPlayerPosition.y += PH;
+                    ChasePlayer();
+                }
+                else
+                {
+                    Patroling();
+                    flashlightHitTimer = 0f;
+                    //return;
+                }
+            }
+            else
+            {
+                Patroling();
+                flashlightHitTimer = 0f;
+                //return;
+            }
+
+            if (!isAttacking)
+            {
+                if (transform.position == _lastGTPosition) _sameGTPositionTimer += Time.deltaTime;
+                else _sameGTPositionTimer = 0f;
+            }
+
+            _lastGTPosition = transform.position;
+        }
+
+        protected virtual void OnFlashLight() {
+            if (flashlightHitTimer >= flashlightStunDuration) die();
+        }
+
         private void SearchRotate()
         {
             if (!isSearching) return;
@@ -443,8 +426,7 @@ namespace ShadowMaze.EnemyCharactor
             //isAttacking = true;
 
             PlayerController.Instance._playerStats.Sanity -= AttackDamage;
-            disappear();
-            Invoke(nameof(DelayedRespawn), 3f);
+            AAP();
 
             /*
             if (!isAttack)
@@ -456,6 +438,8 @@ namespace ShadowMaze.EnemyCharactor
             }
             */
         }
+
+        protected virtual void AAP() => die();
 
         IEnumerator JumpTo(Vector3 targetPos)
         {
@@ -535,10 +519,12 @@ namespace ShadowMaze.EnemyCharactor
             agent.SetDestination(_player.position);
         }
         
+        /*
         private void ResetAtteck()
         {
             isAttack = false;
         }
+        */
         #endregion
 
         #region Check Function
@@ -684,67 +670,15 @@ namespace ShadowMaze.EnemyCharactor
         }
         #endregion
 
-        #region Transition Functions
-        private void TransitionToCubeForm()
-        {
-            if (enemyState.CurrEnemyActionState == EnemyActionState.StunnedAsCube)
-                return;
-            disappear();
-            enemyState.ActionSet(EnemyActionState.StunnedAsCube); // เปลี่ยนสถานะเป็น StunnedAsCube
-
-            if (cubeFormPrefab != null)
-            {
-                // สร้างกล่องที่ตำแหน่งและ Rotation ปัจจุบันของ EnemyAI (แคปซูล)
-                currentCubeFormInstance = Instantiate(cubeFormPrefab, transform.position, transform.rotation, transform);
-                currentCubeFormInstance.tag = gameObject.tag;
-                currentCubeFormInstance.layer = gameObject.layer;
-                // *** ลบบรรทัดนี้: ไม่ให้ EnemyAI เป็น Parent ของกล่องอีกต่อไป ***
-                // currentCubeFormInstance.transform.SetParent(this.transform); 
-                // แต่จะให้ MoveableObject เป็นตัวจัดการ Parent ตัวเองกับ Player แทน
-            }
-        }
-
-        private void TransitionToEnemyForm()
-        {
-            Vector3 spawnPosition;
-            float colliderHeight = enemyController != null ? enemyController.height : 0.5f;
-            
-            RaycastHit hit;
-            Vector3 raycastOrigin = currentCubeFormInstance ? currentCubeFormInstance.transform.position + Vector3.up * colliderHeight : transform.position + Vector3.up * colliderHeight;
-            if (Physics.Raycast(raycastOrigin, Vector3.down, out hit, colliderHeight, _groundLayers))
-            {
-                spawnPosition = hit.point + Vector3.up * colliderHeight;
-            }
-            else
-            {
-                spawnPosition = currentCubeFormInstance.transform.position + Vector3.up * colliderHeight;
-            }
-
-            if (currentCubeFormInstance != null)
-            {
-                MoveableObject moveableObj = currentCubeFormInstance.GetComponent<MoveableObject>();
-                if (moveableObj != null && moveableObj.IsPicked())
-                {
-                    moveableObj.Interact();
-                }
-            }
-
-            if (currentCubeFormInstance != null)
-            {
-                Destroy(currentCubeFormInstance);
-                currentCubeFormInstance = null;
-            }
-
-            respawn(spawnPosition);
-        }
-        #endregion
-
         #region Control Functions
+
+        /*
         private void takeDamage(float damage)
         {
             Health -= damage;
             if (Health <= 0) die();
         }
+        */
 
         private void MakeCanSeePlayer() => isCanSeePlayer = true;
 
@@ -753,6 +687,7 @@ namespace ShadowMaze.EnemyCharactor
             Destroy(gameObject);
         }
 
+        /*
         private void disappear()
         {
             agent.SetDestination(transform.position);
@@ -770,6 +705,7 @@ namespace ShadowMaze.EnemyCharactor
             //if (agent) agent.enabled = false;
         }
         private void DelayedRespawn() => respawn(spawnPoint);
+        
 
         private void respawn(Vector3 point)
         {
@@ -788,6 +724,7 @@ namespace ShadowMaze.EnemyCharactor
             if (enemyController) enemyController.enabled = true;
             if (agent) agent.enabled = true;
         }
+        */
 
         public void HitByFlashlight() => isCurrentlyHitByFlashlight = true;
         

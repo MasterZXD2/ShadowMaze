@@ -7,6 +7,7 @@ TagManager:
   - MainUI
   - Enemy
   - bookPuzzle
+  - lightPuzzle
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - PlrInteractObject
   - Player
   - Enemy
-  - 
+  - Puzzle
   - 
   - 
   - 

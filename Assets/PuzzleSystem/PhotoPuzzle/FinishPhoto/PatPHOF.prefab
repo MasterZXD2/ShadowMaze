@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5355238842912562112}
   - component: {fileID: 3723615742343523678}
   - component: {fileID: 5092160651051954561}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,8 +95,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9088272606709170341}
-  - component: {fileID: -9028854807074233509}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PatPHOF
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,20 +119,6 @@ Transform:
   - {fileID: 4185556477154461103}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-9028854807074233509
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8461093150019033631}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9c09aee01274b04fa62ddc7c0f6ab26, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  grayscaleMat: {fileID: 2100000, guid: 3505555502cb6c6468c0896a9d676472, type: 2}
-  normalMat: {fileID: 2100000, guid: 97ebb466072967944ba320f71367fc6f, type: 2}
 --- !u!1 &8658477772400956861
 GameObject:
   m_ObjectHideFlags: 0
@@ -146,9 +131,10 @@ GameObject:
   - component: {fileID: 1154137926442783508}
   - component: {fileID: 5609993222600477429}
   - component: {fileID: 6617814793435344416}
-  m_Layer: 9
+  - component: {fileID: 6465225135793109679}
+  m_Layer: 10
   m_Name: Plane (1)
-  m_TagString: Enemy
+  m_TagString: lightPuzzle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -243,3 +229,20 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &6465225135793109679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8658477772400956861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9c09aee01274b04fa62ddc7c0f6ab26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isFinish: 0
+  manager: {fileID: 0}
+  grayscaleMat: {fileID: 2100000, guid: 3505555502cb6c6468c0896a9d676472, type: 2}
+  normalMat: {fileID: 2100000, guid: 97ebb466072967944ba320f71367fc6f, type: 2}
+  timeToChangeMat: 3

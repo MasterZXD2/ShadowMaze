@@ -1,4 +1,5 @@
 using ShadowMaze.EnemyCharactor;
+using ShadowMaze.InteractSystem;
 using ShadowMaze.MyCharacterController;
 using System.Collections.Generic;
 using UnityEngine;
@@ -67,9 +68,14 @@ public class PlayerLight : MonoBehaviour
                     }
                 }
 
-            if (GO.TryGetComponent<LightPuzzleChanger>(out LightPuzzleChanger lpc))
+                if (GO.TryGetComponent<LightPuzzleChanger>(out LightPuzzleChanger lpc))
                 {
                     lpc.HitByFlashlight();
+                }
+
+                if (GO.TryGetComponent<BookPuzzleObject>(out BookPuzzleObject bp))
+                {
+                    bp.HitByFlashlight();
                 }
             }
         }

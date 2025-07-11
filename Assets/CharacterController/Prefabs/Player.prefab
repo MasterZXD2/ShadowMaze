@@ -784,7 +784,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _characterController: {fileID: 4554860607982410009}
-  _playerLocomotionInput: {fileID: 0}
+  _playerLocomotionInput: {fileID: 9004511922639230726}
   _playerKeyBoardInput: {fileID: 1627595484241856121}
   _playerLight: {fileID: 2385353096068005018}
   _playerState: {fileID: 4481828767381072383}
@@ -824,6 +824,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   flashLightTurnSpeed: 20
+  _camRotation: {x: 0, y: 0}
 --- !u!114 &9004511922639230726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -913,6 +914,8 @@ MonoBehaviour:
   DeSanity: 100
   Sanity: 100
   MaxSanity: 100
+  memoryFragment: 0
+  memoryFragmentMax: 3
   isDie: 0
 --- !u!114 &2385353096068005018
 MonoBehaviour:
@@ -930,9 +933,11 @@ MonoBehaviour:
   reducedBattery: 1
   targetTags:
   - Enemy
+  - bookPuzzle
+  - lightPuzzle
   targetLayerMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 1536
   occlusionLayerMask:
     serializedVersion: 2
     m_Bits: 65

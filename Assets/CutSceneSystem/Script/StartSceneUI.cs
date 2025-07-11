@@ -100,6 +100,10 @@ namespace ShadowMaze.CutSceneSystem
 
             Cam.tag = "Untagged";
             Cam.SetActive(false);
+            foreach (var comp in Cam.GetComponents<Behaviour>())
+            {
+                comp.enabled = false;
+            }
 
             BattUI.SetActive(true);
             SanUI.SetActive(true);
