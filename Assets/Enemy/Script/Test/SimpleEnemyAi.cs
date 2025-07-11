@@ -26,7 +26,7 @@ namespace ShadowMaze.EnemyCharactor
 
         [Space(10)]
         [Header("Attack")]
-        [SerializeField] private float attackRange = 1.8f;
+        [SerializeField] protected float attackRange = 1.8f;
         [SerializeField] private float AttackCD = .5f;
         [SerializeField] private float AttackDamage = 10f;
 
@@ -46,7 +46,7 @@ namespace ShadowMaze.EnemyCharactor
         public float InAirDrag = 1f;
 
         [Header("Sight Settings")]
-        [SerializeField] private float sightRange = 20f;
+        [SerializeField] protected float sightRange = 20f;
         [SerializeField] private float viewAngle = 90f;
         [SerializeField] private float eyeHeightOffset = .5f;
 
@@ -94,13 +94,13 @@ namespace ShadowMaze.EnemyCharactor
         private int rotationDirection = 1; // 1 = ขวา, -1 = ซ้าย
 
         private bool isPlayerInSight, isPlayerInAttack;
-        private Transform _player;
+        protected Transform _player;
         private Vector3 _GTPosition;
         protected bool _positionSet;
         protected bool isAttack;
-        private Vector3 _lastPlayerPosition;
-        private float _sameGTPositionTimer = 0f;
-        private Vector3 _lastGTPosition;
+        protected Vector3 _lastPlayerPosition;
+        protected float _sameGTPositionTimer = 0f;
+        protected Vector3 _lastGTPosition;
         protected bool isLPP = false;
         private bool isPH = false;
 
@@ -110,7 +110,7 @@ namespace ShadowMaze.EnemyCharactor
         protected bool isCurrentlyHitByFlashlight = false; // สถานะปัจจุบันว่ากำลังโดนไฟฉายส่องหรือไม่
         protected float flashlightHitTimer = 0f; // นับเวลาที่โดนไฟฉายส่อง (เพื่อเปลี่ยนเป็นกล่อง)
 
-        private EnemyMovementState _lastMovementState = EnemyMovementState.Falling;
+        protected EnemyMovementState _lastMovementState = EnemyMovementState.Falling;
         #endregion
 
         #region Normal Function
@@ -233,7 +233,7 @@ namespace ShadowMaze.EnemyCharactor
         #region Movement Function
         protected virtual void Move(float PH) => NormalMove(PH);
 
-        protected void NormalMove(float PH)
+        protected virtual void NormalMove(float PH)
         {
             if (astop) return;
 
@@ -409,7 +409,7 @@ namespace ShadowMaze.EnemyCharactor
             if (Physics.Raycast(_GTPosition, -transform.up, 2f, _groundLayers)) _positionSet = true;
         }
 
-        private void ChasePlayer()
+        protected void ChasePlayer()
         {
             enemyState.MovementSet(EnemyMovementState.Walking);
             agent.SetDestination(_player.position);
@@ -418,7 +418,7 @@ namespace ShadowMaze.EnemyCharactor
             isMovement = true;
         }
 
-        private void AttackPlayer()
+        protected void AttackPlayer()
         {
             //enemyState.MovementSet(EnemyMovementState.Idling);
             //agent.SetDestination(transform.position); // don't move
@@ -518,7 +518,7 @@ namespace ShadowMaze.EnemyCharactor
             agent.Warp(transform.position);
             agent.SetDestination(_player.position);
         }
-        
+
         /*
         private void ResetAtteck()
         {
@@ -528,7 +528,7 @@ namespace ShadowMaze.EnemyCharactor
         #endregion
 
         #region Check Function
-        private bool IsPlayerInAwarenessRange()
+        protected bool IsPlayerInAwarenessRange()
         {
             float dist = Vector3.Distance(transform.position, _player.position);
             return dist <= awarenessDistance;
@@ -645,7 +645,7 @@ namespace ShadowMaze.EnemyCharactor
             return true;
         }
 
-        private bool CanSeePlayer()
+        protected bool CanSeePlayer()
         {
             if (!_player) return false;
 
