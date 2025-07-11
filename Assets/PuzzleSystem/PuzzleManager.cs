@@ -14,9 +14,12 @@ public class PuzzleManager : Puzzle
         foreach (Puzzle puzzle in puzzleList) {
             if (!puzzle.isFinish) t = false;
         }
-        if (t && timelineTrigger) { 
-            timelineTrigger.PlayTimeline(); 
+        if (t) { 
             isFinish = true;
+            if (timelineTrigger)
+            {
+                timelineTrigger.PlayTimeline();
+            }
         }
     }
 }

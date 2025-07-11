@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace ShadowMaze.CutSceneSystem
@@ -16,7 +17,10 @@ namespace ShadowMaze.CutSceneSystem
         [SerializeField] private Button skipBU;
         [SerializeField] private GameObject playUI;
         [SerializeField] private Button playBU;
-        [SerializeField] private GameObject MFText; 
+        [SerializeField] private GameObject MFText;
+
+        [SerializeField] private string nextScene;
+        [SerializeField] private bool InStartScene = false;
 
         private Camera _camera;
         private int _currCutScene = 0;
@@ -28,16 +32,17 @@ namespace ShadowMaze.CutSceneSystem
             _camera = Cam.GetComponent<Camera>();
             menuCutScene.SetVideoCamera(_camera);
 
-            skipUI.SetActive(false);
-            BattUI.SetActive(false);
-            SanUI.SetActive(false);
-            MFText.SetActive(false);
+            if (skipUI) skipUI.SetActive(false);
+            if (BattUI) BattUI.SetActive(false);
+            if (SanUI) SanUI.SetActive(false);
+            if (MFText) MFText.SetActive(false);
 
             menuCutScene.SetVideoPrepared(() => {
                 menuCutScene.Play();
             });
             menuCutScene.Prepare();
 
+            playBU.onClick.RemoveAllListeners();
             playBU.onClick.AddListener(OnPlayCutscene);
         }
 
@@ -96,21 +101,27 @@ namespace ShadowMaze.CutSceneSystem
                 _currCutScene++;
             }
 
-            skipBU.onClick.RemoveAllListeners();
-
-            Cam.tag = "Untagged";
-            Cam.SetActive(false);
-            foreach (var comp in Cam.GetComponents<Behaviour>())
+            if (InStartScene)
             {
-                comp.enabled = false;
+                SceneManager.LoadScene(nextScene);
+            } else
+            {
+                skipBU.onClick.RemoveAllListeners();
+
+                Cam.tag = "Untagged";
+                Cam.SetActive(false);
+                foreach (var comp in Cam.GetComponents<Behaviour>())
+                {
+                    comp.enabled = false;
+                }
+
+                BattUI.SetActive(true);
+                SanUI.SetActive(true);
+                MFText.SetActive(true);
+                skipUI.SetActive(false);
+
+                GameManager.Instance.SetActivePlayer(true);
             }
-
-            BattUI.SetActive(true);
-            SanUI.SetActive(true);
-            MFText.SetActive(true);
-            skipUI.SetActive(false);
-
-            GameManager.Instance.SetActivePlayer(true);
         }
 
 

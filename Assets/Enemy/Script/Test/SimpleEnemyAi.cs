@@ -106,6 +106,7 @@ namespace ShadowMaze.EnemyCharactor
 
         protected bool InMemeoryFragmentArea = false;
         protected bool astop = false;
+        protected bool stun = false;
 
         protected bool isCurrentlyHitByFlashlight = false; // สถานะปัจจุบันว่ากำลังโดนไฟฉายส่องหรือไม่
         protected float flashlightHitTimer = 0f; // นับเวลาที่โดนไฟฉายส่อง (เพื่อเปลี่ยนเป็นกล่อง)
@@ -136,55 +137,49 @@ namespace ShadowMaze.EnemyCharactor
         {
             if (!_player || isJump) return;
 
-            float PH = PlayerController.Instance._characterController.height / 2f;
-            Vector3 _tarVec = _player.position;
-            _tarVec.y += PH;
+            if (!stun)
+            {
+                float PH = PlayerController.Instance._characterController.height / 2f;
+                Vector3 _tarVec = _player.position;
+                _tarVec.y += PH;
 
-            if (ShouldJumpTo(_tarVec) && agent.pathStatus != NavMeshPathStatus.PathComplete && !astop)
-            {
-                _sameGTPositionTimer = 0f;
-                StartCoroutine(JumpTo(_player.position));
-                return;
-            } else if (_sameGTPositionTimer > 1.2f && !isAttacking && isMovement && !astop)
-            {
-                Vector3 point;
-                if (GetGroundAtAngle(transform.position + Vector3.up * eyeHeightOffset, out point))
+                if (ShouldJumpTo(_tarVec) && agent.pathStatus != NavMeshPathStatus.PathComplete && !astop)
                 {
-                    if (ShouldJumpTo(point))
+                    _sameGTPositionTimer = 0f;
+                    StartCoroutine(JumpTo(_player.position));
+                    return;
+                }
+                else if (_sameGTPositionTimer > 1.2f && !isAttacking && isMovement && !astop)
+                {
+                    Vector3 point;
+                    if (GetGroundAtAngle(transform.position + Vector3.up * eyeHeightOffset, out point))
                     {
+                        if (ShouldJumpTo(point))
+                        {
+                            _sameGTPositionTimer = 0f;
+                            StartCoroutine(JumpTo(point));
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        if (!isCanSeePlayer) return;
                         _sameGTPositionTimer = 0f;
-                        StartCoroutine(JumpTo(point));
+                        _positionSet = false;
+                        isCanSeePlayer = false;
+                        Invoke(nameof(MakeCanSeePlayer), 2f);
                         return;
                     }
                 }
-                else
+
+                if (isSearching && !astop)
                 {
-                    if (!isCanSeePlayer) return;
-                    _sameGTPositionTimer = 0f;
-                    _positionSet = false;
-                    isCanSeePlayer = false;
-                    Invoke(nameof(MakeCanSeePlayer), 2f);
+                    SearchRotate();
                     return;
                 }
-            }
 
-            if (isSearching && !astop)
-            {
-                SearchRotate();
-                return;
+                Move(PH);
             }
-
-            Move(PH);
-
-            if (isCurrentlyHitByFlashlight)
-            {
-                flashlightHitTimer += Time.deltaTime;
-            }
-            else
-            {
-                flashlightHitTimer = 0f;
-            }
-
             OnFlashLight();
 
             isCurrentlyHitByFlashlight = false;
@@ -283,7 +278,17 @@ namespace ShadowMaze.EnemyCharactor
             _lastGTPosition = transform.position;
         }
 
-        protected virtual void OnFlashLight() {
+        protected virtual void OnFlashLight()
+        {
+            if (isCurrentlyHitByFlashlight)
+            {
+                flashlightHitTimer += Time.deltaTime;
+            }
+            else
+            {
+                flashlightHitTimer = 0f;
+            }
+
             if (flashlightHitTimer >= flashlightStunDuration) die();
         }
 
@@ -412,7 +417,7 @@ namespace ShadowMaze.EnemyCharactor
         protected void ChasePlayer()
         {
             enemyState.MovementSet(EnemyMovementState.Walking);
-            agent.SetDestination(_player.position);
+            agent.SetDestination(_lastPlayerPosition);
             isLPP = true;
             isAttacking = false;
             isMovement = true;
@@ -425,18 +430,13 @@ namespace ShadowMaze.EnemyCharactor
             //isMovement = false;
             //isAttacking = true;
 
-            PlayerController.Instance._playerStats.Sanity -= AttackDamage;
-            AAP();
-
-            /*
             if (!isAttack)
             {
-                PlayerController.Instance.takeDamage(AttackDamage);
-                
+                PlayerController.Instance._playerStats.Sanity -= AttackDamage;
                 isAttack = true;
                 Invoke(nameof(ResetAtteck), AttackCD);
             }
-            */
+            AAP();
         }
 
         protected virtual void AAP() => die();
@@ -679,6 +679,7 @@ namespace ShadowMaze.EnemyCharactor
             if (Health <= 0) die();
         }
         */
+        private void ResetAtteck() => isAttack = false;
 
         private void MakeCanSeePlayer() => isCanSeePlayer = true;
 

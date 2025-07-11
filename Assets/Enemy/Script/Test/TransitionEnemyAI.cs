@@ -52,6 +52,15 @@ namespace ShadowMaze.EnemyCharactor
 
         protected override void OnFlashLight()
         {
+            if (isCurrentlyHitByFlashlight)
+            {
+                flashlightHitTimer += Time.deltaTime;
+            }
+            else
+            {
+                flashlightHitTimer = 0f;
+            }
+
             if (flashlightHitTimer >= flashlightStunDuration)
             {
                 TransitionToCubeForm();
@@ -154,6 +163,7 @@ namespace ShadowMaze.EnemyCharactor
 
             isCanSeePlayer = true;
             astop = false;
+            isAttack = false;
 
             if (enemyMeshRenderer) enemyMeshRenderer.enabled = true;
             if (enemyController) enemyController.enabled = true;

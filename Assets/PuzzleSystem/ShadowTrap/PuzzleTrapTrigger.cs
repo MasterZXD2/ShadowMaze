@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class PuzzleTrapTrigger : Puzzle
 {
-    public TimelineTrigger timelineTrigger; // ลิงก์ไปยัง TimelineTrigger
     private bool isBoxOnTrap = false;
 
     private void OnTriggerStay(Collider other)
@@ -12,11 +11,6 @@ public class PuzzleTrapTrigger : Puzzle
             isBoxOnTrap = true;
             isFinish = true;
             Debug.Log("Finish");
-
-            if (timelineTrigger != null)
-            {
-                //timelineTrigger.PlayTimeline();
-            }
         }
     }
 
