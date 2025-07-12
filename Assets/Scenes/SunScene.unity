@@ -17,7 +17,7 @@ RenderSettings:
   m_Fog: 1
   m_FogColor: {r: 0.4528302, g: 0.4250623, b: 0.4250623, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.046
+  m_FogDensity: 0.028
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
@@ -18445,6 +18445,11 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!1 &355118184 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1531710133846390, guid: 5cce324618b941cebfdab9b92ca611a7, type: 3}
+  m_PrefabInstance: {fileID: 1101446420}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &355972781
 GameObject:
   m_ObjectHideFlags: 0
@@ -25113,7 +25118,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &579297632
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44616,13 +44621,38 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1531710133846390, guid: 5cce324618b941cebfdab9b92ca611a7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1101446422}
   m_SourcePrefab: {fileID: 100100000, guid: 5cce324618b941cebfdab9b92ca611a7, type: 3}
 --- !u!4 &1101446421 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4814636578431708, guid: 5cce324618b941cebfdab9b92ca611a7, type: 3}
   m_PrefabInstance: {fileID: 1101446420}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &1101446422
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355118184}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1087704896564004a9cc412f0483bfdf, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1119293525
 GameObject:
   m_ObjectHideFlags: 0
@@ -90178,7 +90208,7 @@ Transform:
   m_GameObject: {fileID: 2083433679}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 940.543, y: 290.174, z: 932.395}
+  m_LocalPosition: {x: 959.3, y: 283.406, z: 830.61}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
