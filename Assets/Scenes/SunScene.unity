@@ -15,9 +15,9 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
   m_Fog: 1
-  m_FogColor: {r: 0, g: 0, b: 0, a: 1}
+  m_FogColor: {r: 0.4528302, g: 0.4250623, b: 0.4250623, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.028
+  m_FogDensity: 0.046
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
@@ -25113,7 +25113,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &579297632
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33643,6 +33643,14 @@ PrefabInstance:
     - target: {fileID: 4200761856269352, guid: 65e334bdb2144cb99217a46c5cad245c, type: 3}
       propertyPath: m_LocalPosition.z
       value: -8.193
+      objectReference: {fileID: 0}
+    - target: {fileID: 4267335703661066, guid: 65e334bdb2144cb99217a46c5cad245c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 8.668
+      objectReference: {fileID: 0}
+    - target: {fileID: 4818956315320596, guid: 65e334bdb2144cb99217a46c5cad245c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 6.561
       objectReference: {fileID: 0}
     - target: {fileID: 4951866673860132, guid: 65e334bdb2144cb99217a46c5cad245c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -66792,7 +66800,7 @@ Light:
   serializedVersion: 11
   m_Type: 1
   m_Color: {r: 1, g: 0.9858491, b: 0.9858491, a: 1}
-  m_Intensity: 0.08
+  m_Intensity: 0.04
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -77121,7 +77129,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4677396804583000, guid: f39c1f6ba325484fa24c78dad993d781, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1038.12
+      value: 1037.501
       objectReference: {fileID: 0}
     - target: {fileID: 4677396804583000, guid: f39c1f6ba325484fa24c78dad993d781, type: 3}
       propertyPath: m_LocalPosition.y
