@@ -19,6 +19,8 @@ namespace ShadowMaze.CutSceneSystem
         [SerializeField] private Button playBU;
         [SerializeField] private GameObject MFText;
 
+        [SerializeField] private GameObject ST;
+
         [SerializeField] private string nextScene;
         [SerializeField] private bool InStartScene = false;
 
@@ -68,6 +70,7 @@ namespace ShadowMaze.CutSceneSystem
 
         private IEnumerator StartCutScene()
         {
+            ST.SetActive(false);
             skipUI.SetActive(true);
 
             while (_currCutScene < cutSceneList.Count)
