@@ -25,7 +25,7 @@ namespace ShadowMaze.InteractSystem
         protected override void Update()
         {
             base.Update();
-            light.enabled = b;
+            if (light) light.enabled = b;
         }
 
         private void LateUpdate()

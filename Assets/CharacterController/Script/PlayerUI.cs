@@ -20,7 +20,7 @@ namespace ShadowMaze.MyCharacterController {
         private float _beatSanitySize = 1.3f;
 
         private int _MFV = 0;
-        private bool _esc = false;
+        public bool _esc = false;
 
         private void SetupUI()
         {

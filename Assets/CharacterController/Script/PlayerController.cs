@@ -133,8 +133,7 @@ namespace ShadowMaze.MyCharacterController
         public bool _isDead { get; private set; } = false;
         private bool s = false;
         private bool astop = false;
-        private bool _esc = false;
-
+        
         private PlayerMovementState _lastMovementState = PlayerMovementState.Falling;
 
         #endregion
@@ -476,23 +475,17 @@ namespace ShadowMaze.MyCharacterController
         public void OnClickLeft(bool b)
         {
             if (astop) return;
-            if (_esc && b)
-            {
-                //Cursor.lockState = CursorLockMode.Locked;
-                //Cursor.visible = false;
-            }
         }
 
         public void OnEsc()
         {
             if (astop) return;
-            if (Cursor.visible && !_esc) return;
-            if (_esc) return;
+            if (Cursor.visible && !_playerUI._esc) return;
+            if (_playerUI._esc) return;
 
             _playerUI.OnEsc();
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            _esc = true;
         }
 
         public void OnJump(bool b)
