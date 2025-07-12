@@ -36023,6 +36023,8 @@ MonoBehaviour:
   playUI: {fileID: 1972874878}
   playBU: {fileID: 1972874879}
   MFText: {fileID: 490391387}
+  nextScene: 
+  InStartScene: 0
 --- !u!114 &292110552
 MonoBehaviour:
   m_ObjectHideFlags: 0
