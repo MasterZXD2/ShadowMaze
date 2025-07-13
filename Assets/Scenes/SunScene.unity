@@ -94,7 +94,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000000, guid: 353155e722392da49934484895ad55cc, type: 2}
-  m_LightingSettings: {fileID: 4890085278179872738, guid: 93ce95e9a5966cf4f9f751835a0b13f1, type: 2}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 61c70de50ab8a884d853f21b61e884c7, type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -9696,7 +9696,7 @@ Light:
   serializedVersion: 11
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.06
+  m_Intensity: 0
   m_Range: 1000
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -9738,7 +9738,7 @@ Light:
   m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 48.06
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -81072,9 +81072,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4721851310215522, guid: 6044779e2178474b952bd5bccc1dc836, type: 3}
       insertIndex: 30
       addedObject: {fileID: 2097622383}
-    - targetCorrespondingSourceObject: {fileID: 4721851310215522, guid: 6044779e2178474b952bd5bccc1dc836, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1999848696}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1144173189036998, guid: 6044779e2178474b952bd5bccc1dc836, type: 3}
       insertIndex: -1
@@ -87888,68 +87885,6 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
---- !u!1001 &1999848695
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1749747551}
-    m_Modifications:
-    - target: {fileID: 156410, guid: 2711a74187aa47118fa1e57e3aea8b79, type: 3}
-      propertyPath: m_Name
-      value: Damaged_Column_02
-      objectReference: {fileID: 0}
-    - target: {fileID: 456410, guid: 2711a74187aa47118fa1e57e3aea8b79, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -3.8772583
-      objectReference: {fileID: 0}
-    - target: {fileID: 456410, guid: 2711a74187aa47118fa1e57e3aea8b79, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.0024719238
-      objectReference: {fileID: 0}
-    - target: {fileID: 456410, guid: 2711a74187aa47118fa1e57e3aea8b79, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 2.0685425
-      objectReference: {fileID: 0}
-    - target: {fileID: 456410, guid: 2711a74187aa47118fa1e57e3aea8b79, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 456410, guid: 2711a74187aa47118fa1e57e3aea8b79, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 456410, guid: 2711a74187aa47118fa1e57e3aea8b79, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 456410, guid: 2711a74187aa47118fa1e57e3aea8b79, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 456410, guid: 2711a74187aa47118fa1e57e3aea8b79, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 456410, guid: 2711a74187aa47118fa1e57e3aea8b79, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 456410, guid: 2711a74187aa47118fa1e57e3aea8b79, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 2711a74187aa47118fa1e57e3aea8b79, type: 3}
---- !u!4 &1999848696 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 456410, guid: 2711a74187aa47118fa1e57e3aea8b79, type: 3}
-  m_PrefabInstance: {fileID: 1999848695}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2007585328
 MonoBehaviour:
   m_ObjectHideFlags: 0
