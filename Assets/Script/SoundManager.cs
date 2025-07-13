@@ -7,12 +7,15 @@ public class SoundManager : Singleton<SoundManager>
 
     public void PlayBGM(AudioClip clip)
     {
-        if (bgm != null && clip != null)
+        if (!bgm.isPlaying && bgm.clip == null && bgm.clip != clip)
         {
+            // If BGM is not playing, we can directly set the clip and play it
             bgm.clip = clip;
+            bgm.volume = 1f; // Ensure volume is reset to default
+            bgm.loop = true; // Set BGM to loop
             bgm.Play();
         }
-        else if( bgm != null && bgm.isPlaying)
+        else
         {
             // If BGM is already playing, we can stop it before playing a new one
             StopBGM(clip);
@@ -24,14 +27,15 @@ public class SoundManager : Singleton<SoundManager>
         {
             //reduce the volume to zero before stopping
             Tween.Custom(
-                bgm.volume,
-                0f,
-                1f,
-                v => bgm.volume = v,
-                Ease.Linear,
+                startValue: bgm.volume,
+                endValue: 0f,
+                duration: 1f,
+                onValueChange: v => bgm.volume = v,
+                ease: Ease.Linear,
                 startDelay: 0.5f
             ).OnComplete(() =>
             {
+                bgm.clip = null; // clear the clip
                 bgm.Stop();
                 bgm.volume = 1f; // reset volume to default
             });
@@ -44,11 +48,11 @@ public class SoundManager : Singleton<SoundManager>
         {
             //reduce the volume to zero before stopping
             Tween.Custom(
-                bgm.volume,
-                0f,
-                1f,
-                v => bgm.volume = v,
-                Ease.Linear,
+                startValue: bgm.volume,
+                endValue: 0f,
+                duration: 1f,
+                onValueChange: v => bgm.volume = v,
+                ease: Ease.Linear,
                 startDelay: 0.5f
             ).OnComplete(() =>
             {
