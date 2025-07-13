@@ -11,7 +11,7 @@ namespace ShadowMaze.MyCharacterController
         Falling,
         Strafing,
     }
-    public class PlayerState : MonoBehaviour
+    public class PlayerState : Singleton<PlayerState>
     {
         [field: SerializeField] public PlayerMovementState CurrPlayerMovementState { get; private set; } = PlayerMovementState.Idling; 
         

@@ -26,7 +26,9 @@ namespace ShadowMaze.MyCharacterController
         [Space(10)]
         [Header("Player Components")]
 
+
         public CharacterController _characterController;
+        [HideInInspector] public CapsuleCollider capsuleCollider => GetComponent<CapsuleCollider>();
         public PlayerLocomotionInput _playerLocomotionInput;
         [SerializeField] private PlayerKeyBoardInput _playerKeyBoardInput;
         [SerializeField] private PlayerLight _playerLight;
@@ -287,18 +289,18 @@ namespace ShadowMaze.MyCharacterController
             _camRotation.x += LookSenseH * _playerLocomotionInput.LookInput.x;
             _camRotation.y = Mathf.Clamp(_camRotation.y - LookSenseV * _playerLocomotionInput.LookInput.y, -LookLimitV, LookLimitV);
 
-            // Step 2: ¤Ó¹Ç³à»éÒËÁÒÂ·ÔÈ·Ò§¨Ò¡ LookInput
+            // Step 2: ï¿½Ó¹Ç³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½È·Ò§ï¿½Ò¡ LookInput
             Quaternion flashlightYaw = Quaternion.Euler(_camRotation.y , _camRotation.x, 0f); // yaw only
             _flashLightTargetRot = flashlightYaw;
 
-            // Step 3: Flashlight ËÑ¹·Ñ¹·Õ (ËÃ×ÍàÃçÇÁÒ¡)
+            // Step 3: Flashlight ï¿½Ñ¹ï¿½Ñ¹ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¡)
             _playerLight.FlashLight.transform.rotation = Quaternion.Lerp(
                 _playerLight.FlashLight.transform.rotation,
                 _flashLightTargetRot,
                 Time.deltaTime * flashLightTurnSpeed
             );
 
-            // Step 4: Camera µÒÁ Flashlight ·ÕËÅÑ§
+            // Step 4: Camera ï¿½ï¿½ï¿½ Flashlight ï¿½ï¿½ï¿½ï¿½Ñ§
             _cameraTargetRot = Quaternion.Euler(_camRotation.y, _flashLightTargetRot.eulerAngles.y, 0f);
             _plrCamera.transform.rotation = Quaternion.Lerp(
                 _plrCamera.transform.rotation,
@@ -385,8 +387,30 @@ namespace ShadowMaze.MyCharacterController
 
         private bool IsGrounded()
         {
-            bool grounded = _playerState.InGroundedState() ? IsGroundedWhileGrounded() : IsGroundedWhileAirborne();
-            return grounded;
+            Vector3 center = transform.position + capsuleCollider.center;
+            float radius = capsuleCollider.radius * 0.95f;
+            float height = capsuleCollider.height * 0.5f - radius;
+
+            Vector3 point1 = center + Vector3.up * height;
+            Vector3 point2 = center - Vector3.up * height;
+
+            Vector3 direction = Vector3.down;
+            float distance = 0.2f;
+
+            RaycastHit[] hits = Physics.CapsuleCastAll(
+                point1, point2, radius, direction, distance,
+                ~0, // Everything
+                QueryTriggerInteraction.Ignore
+            );
+
+            foreach (RaycastHit hit in hits)
+            {
+                if (hit.collider != capsuleCollider)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private bool IsGroundedWhileGrounded()

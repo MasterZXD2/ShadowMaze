@@ -7,7 +7,7 @@ public class SoundManager : Singleton<SoundManager>
 
     public void PlayBGM(AudioClip clip)
     {
-        if (!bgm.isPlaying && bgm.clip == null && bgm.clip != clip)
+        if (bgm.clip == null && bgm.clip != clip)
         {
             // If BGM is not playing, we can directly set the clip and play it
             bgm.clip = clip;

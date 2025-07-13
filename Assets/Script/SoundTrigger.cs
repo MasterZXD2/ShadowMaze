@@ -18,8 +18,7 @@ public class SoundTrigger : MonoBehaviour
             switch (triggerType)
             {
                 case SoundTriggerType.Control:
-                    SoundManager.Instance.PlayBGM(soundClip);
-
+                    ControlSound();
                     break;
                 case SoundTriggerType.Play:
                     TriggerSound();

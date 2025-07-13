@@ -5,9 +5,7 @@ namespace ShadowMaze.MyCharacterController
 {
     public class PlayerAnimation : MonoBehaviour
     {
-        [SerializeField] private Animator _animator;
-        [SerializeField] private PlayerLocomotionInput _playerLocomotionInput;
-        [SerializeField] private PlayerController _playerController;
+        private Animator _animator;
         private static int inputXHash = Animator.StringToHash("InputX");
         private static int inputYHash = Animator.StringToHash("InputY");
         
@@ -19,9 +17,7 @@ namespace ShadowMaze.MyCharacterController
 
         private void Awake()
         {
-            if(!_playerLocomotionInput) _playerLocomotionInput = GetComponent<PlayerLocomotionInput>();
-            if(!_playerController) _playerController = GetComponent<PlayerController>();
-            actionHashes = new int[] {isAttacking, isDie};
+            _animator = GetComponent<Animator>();
         }
 
         private void Update()
@@ -31,16 +27,22 @@ namespace ShadowMaze.MyCharacterController
 
         private void UpdataAnimationState()
         {
-            Vector2 inputTar = _playerLocomotionInput.MovementInput;
-            bool isPlayingAction = actionHashes.Any(hash => _animator.GetBool(hash));
-
-            _animator.SetBool(isDie, _playerController._isDead);
-
-            _animator.SetFloat(inputXHash, inputTar.x);
-            _animator.SetFloat(inputYHash, inputTar.y);
-
-            _animator.SetBool(isAttacking, _playerLocomotionInput.LeftClick);
-            _animator.SetBool(isPlayerAction, isPlayingAction);
+            if (PlayerState.Instance.CurrPlayerMovementState == PlayerMovementState.Walking)
+            {
+                _animator.SetBool("IsRunning", false);
+                _animator.SetBool("IsWalking", true);
+            }
+            else if (PlayerState.Instance.CurrPlayerMovementState == PlayerMovementState.Running)
+            {
+                _animator.SetBool("IsRunning", true);
+                _animator.SetBool("IsWalking", false);
+            }
+            else
+            {
+                _animator.SetBool("IsRunning", false);
+                _animator.SetBool("IsWalking", false);
+            }
+            
         }
 
         public void AttackEnd()
