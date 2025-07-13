@@ -112395,7 +112395,7 @@ GameObject:
   - component: {fileID: 1349104572}
   - component: {fileID: 1349104571}
   - component: {fileID: 1349104570}
-  - component: {fileID: 1349104569}
+  - component: {fileID: 1349104574}
   - component: {fileID: 1349104568}
   m_Layer: 10
   m_Name: BlockShadow
@@ -112431,35 +112431,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1349104569
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1349104567}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f095845606d5c8b408394f585b866506, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  UI: {fileID: 2724836644241498865, guid: 9583650b2d952354e9e74d474754854a, type: 3}
-  range: 2
-  _name: null
-  _rb: {fileID: 1349104568}
-  interactLayerName: PlrInteractObject
-  raycastMask:
-    serializedVersion: 2
-    m_Bits: 65
-  _rotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
-  offset: {x: 0, y: 0, z: 0}
-  height: 1.2
-  far: 1.5
-  Name: null
-  light: {fileID: 0}
-  MaxScrollDist: 2
-  MinScrollDist: -0.5
-  Speed: 5
 --- !u!65 &1349104570
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -112549,6 +112520,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1349104574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1349104567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 824205da054be504cbda5e5ad75f0841, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UI: {fileID: 2724836644241498865, guid: 9583650b2d952354e9e74d474754854a, type: 3}
+  range: 2
+  _name: null
+  _rb: {fileID: 1349104568}
+  interactLayerName: PlrInteractObject
+  raycastMask:
+    serializedVersion: 2
+    m_Bits: 65
+  _rotation: {x: 0, y: 0, z: 0, w: 0}
+  offset: {x: 0, y: 0, z: 0}
+  height: 1.2
+  far: 1.5
+  Name: null
+  light: {fileID: 0}
+  MaxScrollDist: 2
+  MinScrollDist: 0
+  Speed: 5
+  SP: {fileID: 0}
+  collider: {fileID: 1349104570}
 --- !u!1 &1385589876
 GameObject:
   m_ObjectHideFlags: 0
@@ -113440,6 +113442,9 @@ MonoBehaviour:
   - {fileID: 1599477543}
   - {fileID: 541699081}
   - {fileID: 842371509}
+  _puzzleLayerMask:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!4 &1490290704
 Transform:
   m_ObjectHideFlags: 0
