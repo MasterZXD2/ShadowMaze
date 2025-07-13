@@ -12,7 +12,7 @@ namespace ShadowMaze.InteractSystem
         [SerializeField] private float MinScrollDist = -.2f;
         [SerializeField] private float Speed = 5f;
 
-        private bool b;
+        protected bool b;
         private float _currrange;
         private float _scrollDist;
 
@@ -28,7 +28,7 @@ namespace ShadowMaze.InteractSystem
             if (light) light.enabled = b;
         }
 
-        private void LateUpdate()
+        protected virtual void LateUpdate()
         {
             b = false;
         }
@@ -71,13 +71,18 @@ namespace ShadowMaze.InteractSystem
             }
             else
             {
-                transform.position = targetPosition;
+                transform.position = raycastOrigin + direction.normalized * _scrollDist;
             }
             transform.rotation = Quaternion.Slerp(transform.rotation, cameraYaw, Speed * Time.deltaTime);
         }
 
-        public void HitByFlashlight() { 
+        public virtual void HitByFlashlight() {
             b = true;
+        }
+
+        public bool getB()
+        {
+            return b;
         }
     }
 }

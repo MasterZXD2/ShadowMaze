@@ -130,7 +130,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8355330131040135230}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: CamHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -166,7 +166,7 @@ GameObject:
   - component: {fileID: 8498949570243887105}
   - component: {fileID: 9041457902753247568}
   - component: {fileID: 4369628380142819955}
-  m_Layer: 8
+  m_Layer: 2
   m_Name: Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -337,7 +337,7 @@ GameObject:
   - component: {fileID: 8350393699144739221}
   - component: {fileID: 1936352166789264330}
   - component: {fileID: 8693946218147377719}
-  m_Layer: 8
+  m_Layer: 2
   m_Name: FreeLook Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -575,7 +575,7 @@ GameObject:
   - component: {fileID: 8139919143629899548}
   - component: {fileID: 3205966363597786845}
   - component: {fileID: 8367276158725159647}
-  m_Layer: 8
+  m_Layer: 2
   m_Name: Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -892,6 +892,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerStats: {fileID: 261899133957030099}
   BBLerpSpeed: 0.05
+  _esc: 0
 --- !u!114 &261899133957030099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -935,6 +936,7 @@ MonoBehaviour:
   - Enemy
   - bookPuzzle
   - lightPuzzle
+  - ShadowPuzzle
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 1536

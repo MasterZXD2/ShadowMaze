@@ -1,25 +1,53 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ShadowPuzzle : Puzzle
 {
-    [field: SerializeField] private List<BoxCollider> _Shapes;
-    private List<Collider> _collidersInPuzzle = new List<Collider>();
+    struct box {
+        public bool b { get; }
+        public Collider[] colliders { get; }
 
-    private void OnTriggerEnter(Collider other) {
-        if (other.gameObject.CompareTag("ShadowPuzzle"))
+        public box(bool v, Collider[] c) : this()
         {
-            _collidersInPuzzle.Add(other);
-            CheckPuzzleComplete();
+            b = v;
+            colliders = c;
         }
     }
-    private void OnTriggerExit(Collider other)
+
+    [field: SerializeField] private List<BoxCollider> _Shapes;
+
+    [SerializeField] private LayerMask _puzzleLayerMask;
+
+    private List<BoxCollider> colliderInLights = new List<BoxCollider>();
+    private List<ShadowBlockObject> shadowBlockObjects = new List<ShadowBlockObject>();
+
+    private void Update()
     {
-        if (other.gameObject.CompareTag("ShadowPuzzle")) {
-            _collidersInPuzzle.Remove(other);
-            CheckPuzzleComplete();
+        Debug.Log(CheckPuzzleComplete());
+        foreach (BoxCollider c in colliderInLights)
+        {
+            if (c.gameObject.TryGetComponent<ShadowBlockObject>(out ShadowBlockObject sb))
+            {
+                if (sb.SP != this) { 
+                    sb.SP = this;
+                    shadowBlockObjects.Add(sb);
+                }
+            }
         }
+        bool f = true;
+        foreach (ShadowBlockObject s in shadowBlockObjects)
+        {
+            if (!s.getB())
+            {
+                f = false;
+                break;
+            }
+        }
+        isFinish = f;
     }
+
     private void OnDrawGizmos()
     {
         if (_Shapes == null) return;
@@ -31,79 +59,75 @@ public class ShadowPuzzle : Puzzle
             Gizmos.matrix = shape.transform.localToWorldMatrix;
             Gizmos.DrawWireCube(shape.center, shape.size);
         }
-
-        Gizmos.color = Color.yellow;
-        if (_collidersInPuzzle != null)
-        {
-            foreach (var col in _collidersInPuzzle)
-            {
-                Gizmos.DrawCube(Vector3Int.RoundToInt(col.transform.position), Vector3.one * 0.9f);
-            }
-        }
     }
 
     public bool CheckPuzzleComplete()
     {
+        List<Collider> c = new List<Collider>();
+
         foreach (var shape in _Shapes)
         {
-            if (CheckShapeMatch(shape)) return true;
+            box b = CheckShapeMatch(shape);
+            if (!b.b)
+            {
+                foreach (BoxCollider l in colliderInLights)
+                {
+                    if (l.gameObject.TryGetComponent<ShadowBlockObject>(out ShadowBlockObject sb))
+                    {
+                        if (sb.SP == this) sb.SP = null;
+                    }
+                }
+                colliderInLights.Clear();
+                return false;
+            }
+            c.AddRange(b.colliders);
+
         }
 
-        return false;
+        colliderInLights = c
+            .OfType<BoxCollider>()   // กรองเฉพาะ BoxCollider (ถ้าต้องการ)
+            .Distinct()
+            .ToList(); ;
+        return true;
     }
 
-
-    private bool CheckShapeMatch(BoxCollider shape)
+    private box CheckShapeMatch(BoxCollider shape)
     {
-        HashSet<Vector3Int> expectedPositions = new HashSet<Vector3Int>();
-        HashSet<Vector3Int> actualBoxPositions = new HashSet<Vector3Int>();
-
         // คำนวณขนาด box collider (world space)
-        Vector3 size = shape.size;
-        Vector3 center = shape.center;
+        Bounds b = shape.bounds;
+        Vector3 halfExtents = b.extents - Vector3.one * 0.05f;
 
-        Vector3 worldCenter = shape.transform.TransformPoint(center);
-        Vector3 worldSize = Vector3.Scale(size, shape.transform.lossyScale);
-
-        // กำหนด bounding box เริ่มที่ world space (min/max)
-        Vector3 min = worldCenter - worldSize / 2f;
-        Vector3 max = worldCenter + worldSize / 2f;
+        var expected3D = new HashSet<Vector3Int>();
+        var actual3D = new HashSet<Vector3Int>();
 
         // เติม expected grid positions (แบบ voxel) ขนาด 1x1x1
-        for (int x = Mathf.FloorToInt(min.x); x < Mathf.CeilToInt(max.x); x++)
+        for (int x = Mathf.FloorToInt(b.min.x); x < Mathf.CeilToInt(b.max.x); x++)
         {
-            for (int y = Mathf.FloorToInt(min.y); y < Mathf.CeilToInt(max.y); y++)
+            for (int y = Mathf.FloorToInt(b.min.y); y < Mathf.CeilToInt(b.max.y); y++)
             {
-                for (int z = Mathf.FloorToInt(min.z); z < Mathf.CeilToInt(max.z); z++)
+                for (int z = Mathf.FloorToInt(b.min.z); z < Mathf.CeilToInt(b.max.z); z++)
                 {
-                    Vector3Int gridPos = new Vector3Int(x, y, z);
-
-                    // กล่องต้องอยู่ภายใน AABB จริงๆ
-                    Vector3 worldPos = (Vector3)gridPos + Vector3.one * 0.5f; // center
-                    if (PointInsideBox(worldPos, worldCenter, worldSize))
+                    Vector3 worldPos = new Vector3(x + 0.5f, y + 0.5f, z + 0.5f);
+                    if (b.Contains(worldPos))
                     {
-                        expectedPositions.Add(gridPos);
+                        expected3D.Add(new Vector3Int(x, y, z));
                     }
                 }
             }
         }
 
-        // เก็บตำแหน่งจริงของกล่องทั้งหมดใน Grid
-        foreach (var box in _collidersInPuzzle)
+        Collider[] _collidersInPuzzle = Physics.OverlapBox(
+             b.center,
+             halfExtents, 
+             shape.transform.rotation,
+             _puzzleLayerMask
+             );
+        foreach (var col in _collidersInPuzzle)
         {
-            Vector3Int gridPos = Vector3Int.RoundToInt(box.transform.position);
-            actualBoxPositions.Add(gridPos);
+            if (col == shape) continue;
+            actual3D.Add(Vector3Int.FloorToInt(col.transform.position));
         }
 
-        // ตรวจว่าครบทุกตำแหน่งที่ shape ต้องการ
-        return expectedPositions.SetEquals(actualBoxPositions);
-    }
-
-    private bool PointInsideBox(Vector3 point, Vector3 center, Vector3 size)
-    {
-        Vector3 halfSize = size / 2f;
-        return Mathf.Abs(point.x - center.x) <= halfSize.x &&
-               Mathf.Abs(point.y - center.y) <= halfSize.y &&
-               Mathf.Abs(point.z - center.z) <= halfSize.z;
+        return new box(expected3D.SetEquals(actual3D), _collidersInPuzzle);
     }
 }
