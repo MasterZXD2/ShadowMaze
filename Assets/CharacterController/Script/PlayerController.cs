@@ -286,26 +286,20 @@ namespace ShadowMaze.MyCharacterController
         #region Camera Function
         private void RotationCamera()
         {
+            // Update camera rotation from input
             _camRotation.x += LookSenseH * _playerLocomotionInput.LookInput.x;
             _camRotation.y = Mathf.Clamp(_camRotation.y - LookSenseV * _playerLocomotionInput.LookInput.y, -LookLimitV, LookLimitV);
 
-            // Step 2: �ӹǳ������·�ȷҧ�ҡ LookInput
-            Quaternion flashlightYaw = Quaternion.Euler(_camRotation.y , _camRotation.x, 0f); // yaw only
-            _flashLightTargetRot = flashlightYaw;
+            // Camera rotation (set directly)
+            _cameraTargetRot = Quaternion.Euler(_camRotation.y, _camRotation.x, 0f);
+            _plrCamera.transform.rotation = _cameraTargetRot;
 
-            // Step 3: Flashlight �ѹ�ѹ�� (���������ҡ)
+            // Flashlight follows camera, but lerps slowly
+            _flashLightTargetRot = _cameraTargetRot;
             _playerLight.FlashLight.transform.rotation = Quaternion.Lerp(
                 _playerLight.FlashLight.transform.rotation,
                 _flashLightTargetRot,
-                Time.deltaTime * flashLightTurnSpeed
-            );
-
-            // Step 4: Camera ��� Flashlight ����ѧ
-            _cameraTargetRot = Quaternion.Euler(_camRotation.y, _flashLightTargetRot.eulerAngles.y, 0f);
-            _plrCamera.transform.rotation = Quaternion.Lerp(
-                _plrCamera.transform.rotation,
-                _cameraTargetRot,
-                Time.deltaTime * cameraFollowSpeed
+                Time.deltaTime * flashLightTurnSpeed // Lower flashLightTurnSpeed for slower follow
             );
 
             _plrTarRotation.x += transform.eulerAngles.x + LookSenseH * _playerLocomotionInput.LookInput.x;
@@ -313,14 +307,13 @@ namespace ShadowMaze.MyCharacterController
             float rotationTolerance = 90f;
             bool isIdling = _playerState.CurrPlayerMovementState == PlayerMovementState.Idling;
             IsRotatingToTarget = _rotatingToTargetTimer > 0f;
-            if (!isIdling || CameraMode == CamMode.FirstPerson){ RotatePlayerToTar(); }
+            if (!isIdling || CameraMode == CamMode.FirstPerson) { RotatePlayerToTar(); }
             else if (Mathf.Abs(RotationMismatch) > rotationTolerance || IsRotatingToTarget) { UpdateIdleRotation(rotationTolerance); }
-            //_plrCamera.transform.rotation = Quaternion.Euler(_camRotation.y, _camRotation.x, 0f);
 
             // Get angle between camera and player
-            Vector3 camForwardProjectXZ = new Vector3(_plrCamera.transform.forward.x,0f,_plrCamera.transform.forward.z).normalized;
+            Vector3 camForwardProjectXZ = new Vector3(_plrCamera.transform.forward.x, 0f, _plrCamera.transform.forward.z).normalized;
             Vector3 crossPD = Vector3.Cross(transform.forward, camForwardProjectXZ);
-            float sign = Mathf.Sign(Vector3.Dot(crossPD,transform.up));
+            float sign = Mathf.Sign(Vector3.Dot(crossPD, transform.up));
             RotationMismatch = sign * Vector3.Angle(transform.forward, camForwardProjectXZ);
         }
 
