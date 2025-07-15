@@ -13,11 +13,16 @@ namespace ShadowMaze.CutSceneSystem
         [SerializeField] private GameObject Cam;
         [SerializeField] private GameObject BattUI;
         [SerializeField] private GameObject SanUI;
+        [SerializeField] private GameObject SanBar;
         [SerializeField] private GameObject skipUI;
         [SerializeField] private Button skipBU;
         [SerializeField] private GameObject playUI;
         [SerializeField] private Button playBU;
-        [SerializeField] private GameObject MFText;
+        [SerializeField] private GameObject MF;
+        [SerializeField] private GameObject settUI;
+        [SerializeField] private Button settBU;
+        [SerializeField] private GameObject exUI;
+        [SerializeField] private Button exBU;
 
         [SerializeField] private GameObject ST;
 
@@ -37,7 +42,8 @@ namespace ShadowMaze.CutSceneSystem
             if (skipUI) skipUI.SetActive(false);
             if (BattUI) BattUI.SetActive(false);
             if (SanUI) SanUI.SetActive(false);
-            if (MFText) MFText.SetActive(false);
+            if (SanBar) SanBar.SetActive(false);
+            if (MF) MF.SetActive(false);
 
             menuCutScene.SetVideoPrepared(() => {
                 menuCutScene.Play();
@@ -63,6 +69,8 @@ namespace ShadowMaze.CutSceneSystem
             hasStarted = true;
 
             playUI.SetActive(false);
+            settUI.SetActive(false);
+            exUI.SetActive(false);
 
             menuCutScene.Stop();
             StartCoroutine(StartCutScene());
@@ -120,7 +128,8 @@ namespace ShadowMaze.CutSceneSystem
 
                 BattUI.SetActive(true);
                 SanUI.SetActive(true);
-                MFText.SetActive(true);
+                SanBar.SetActive(true);
+                MF.SetActive(true);
                 skipUI.SetActive(false);
 
                 GameManager.Instance.SetActivePlayer(true);

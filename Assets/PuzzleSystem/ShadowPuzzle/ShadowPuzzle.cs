@@ -1,3 +1,4 @@
+using ShadowMaze.MyCharacterController;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,9 +24,11 @@ public class ShadowPuzzle : Puzzle
     private List<BoxCollider> colliderInLights = new List<BoxCollider>();
     private List<ShadowBlockObject> shadowBlockObjects = new List<ShadowBlockObject>();
 
+    [SerializeField] private Transform standPosition;
+
     private void Update()
     {
-        Debug.Log(CheckPuzzleComplete());
+        CheckPuzzleComplete();
         foreach (BoxCollider c in colliderInLights)
         {
             if (c.gameObject.TryGetComponent<ShadowBlockObject>(out ShadowBlockObject sb))
@@ -36,21 +39,28 @@ public class ShadowPuzzle : Puzzle
                 }
             }
         }
-        bool f = true;
-        foreach (ShadowBlockObject s in shadowBlockObjects)
+        float dist = (standPosition.position - PlayerController.Instance.transform.position).sqrMagnitude;
+        if (dist < .25f)
         {
-            if (!s.getB())
+            bool f = true;
+            foreach (ShadowBlockObject s in shadowBlockObjects)
             {
-                f = false;
-                break;
+                if (!s.getB())
+                {
+                    f = false;
+                    break;
+                }
             }
+            isFinish = f;
         }
-        isFinish = f;
     }
 
     private void OnDrawGizmos()
     {
         if (_Shapes == null) return;
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(standPosition.position, .5f);
 
         Gizmos.color = Color.green;
         foreach (var shape in _Shapes)
