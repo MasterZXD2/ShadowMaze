@@ -80,7 +80,7 @@ public class PlayerLight : MonoBehaviour
 
                 if (GO.TryGetComponent<Mirror>(out Mirror m))
                 {
-                    m.HitByFlashlight();
+                    m.HitByFlashlight(transform);
                 }
             }
         }
