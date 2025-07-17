@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8393104633141892487}
   - component: {fileID: 7961276007160280069}
   - component: {fileID: -121897592100299578}
+  - component: {fileID: 1658704620407133486}
   m_Layer: 9
   m_Name: box_P
   m_TagString: Enemy
@@ -123,11 +124,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UI: {fileID: 2724836644241498865, guid: 9583650b2d952354e9e74d474754854a, type: 3}
   range: 3
+  _name: null
   _rb: {fileID: 0}
   interactLayerName: Enemy
   raycastMask:
     serializedVersion: 2
     m_Bits: 1
+  _rotation: {x: 0, y: 0, z: 0, w: 0}
   offset: {x: 0, y: 0, z: 0}
   height: 1.5
   far: 2
+--- !u!54 &1658704620407133486
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8032926682005648466}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
