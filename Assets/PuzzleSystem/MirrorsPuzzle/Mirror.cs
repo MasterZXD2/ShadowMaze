@@ -9,28 +9,26 @@ public class Mirror : MonoBehaviour
     [SerializeField] private LayerMask _mirrorLayerMask;
 
     private Renderer _renderer;
-    private bool b = false;
-
-    private void Start()
-    {
-        _renderer = GetComponent<Renderer>();
-    }
-
-    private void Update()
-    {
-        Material[] mats = _renderer.materials;
-        if (b) {
-            mats[0] = neon;
-            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, 100f, _mirrorLayerMask))
+    private bool b { get => _b; set { 
+            _b = value;
+            if (_b && Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, Mathf.Infinity, _mirrorLayerMask))
             {
                 if (hit.transform.TryGetComponent<Mirror>(out Mirror mi))
                 {
                     mi.HitByFlashlight(transform);
                 }
             }
-        }
-        else mats[0] = glass;
-        _renderer.materials = mats;
+        } }
+    private bool _b = false;
+
+    private void Awake()
+    {
+        _renderer = GetComponent<Renderer>();
+    }
+
+    private void Update()
+    {
+        _renderer.material = b ? neon : glass;
     }
 
     private void LateUpdate()
@@ -41,9 +39,8 @@ public class Mirror : MonoBehaviour
     public void HitByFlashlight(Transform lightSource)
     {
         b = CanSeePlayer(lightSource);
-        Debug.Log(b);
     }
-
+    
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
@@ -54,10 +51,10 @@ public class Mirror : MonoBehaviour
     {
         if (!lightSource) return false;
 
-        Vector3 directionToMirror = (transform.position - lightSource.position).normalized;
-        float angle = Vector3.Angle(lightSource.forward, directionToMirror);
+        Vector3 directionToMirror = (lightSource.position - transform.position).normalized;
+        float angle = Vector3.Angle(transform.forward, directionToMirror);
 
-        return angle < 45f; // องศาที่มองเห็นกระจก เช่น 90 องศาครึ่ง
+        return angle < 90f;
     }
 
 }
