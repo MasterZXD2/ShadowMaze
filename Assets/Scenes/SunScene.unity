@@ -4044,6 +4044,11 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!1 &63235458 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1879505820872416, guid: 1ca17f45f73e4428bb52bd46acaa6518, type: 3}
+  m_PrefabInstance: {fileID: 1074507581}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &64265165
 GameObject:
   m_ObjectHideFlags: 0
@@ -52556,6 +52561,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 995160657}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1879505820872416, guid: 1ca17f45f73e4428bb52bd46acaa6518, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1074507602}
     - targetCorrespondingSourceObject: {fileID: 1978989686907152, guid: 1ca17f45f73e4428bb52bd46acaa6518, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1074507595}
@@ -52710,6 +52718,28 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!95 &1074507602
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 63235458}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 44cd3ec2bdeb8ee4293a2cd7b0b39501, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &1074712373
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -62950,7 +62980,7 @@ PlayableDirector:
   m_Enabled: 1
   serializedVersion: 3
   m_PlayableAsset: {fileID: 11400000, guid: 802a108586ad7f44e84b36c7c70fdf3d, type: 2}
-  m_InitialState: 1
+  m_InitialState: 0
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
@@ -87611,7 +87641,7 @@ PlayableDirector:
   m_Enabled: 1
   serializedVersion: 3
   m_PlayableAsset: {fileID: 11400000, guid: a94d5d9e0f8d0324e92622501dfc11ec, type: 2}
-  m_InitialState: 1
+  m_InitialState: 0
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
