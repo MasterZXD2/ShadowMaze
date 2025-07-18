@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Splines;
 using UnityEngine.UIElements;
+using static UnityEngine.EventSystems.EventTrigger;
 
 namespace ShadowMaze.EnemyCharactor
 {
@@ -116,6 +117,8 @@ namespace ShadowMaze.EnemyCharactor
 
         #region Normal Function
         protected virtual void Awake() {
+            EnemyManager.Instance.Add(gameObject);
+
             MaxHealth = Health;
             isCanSeePlayer = true;
             enemyController.enabled = false;
@@ -136,6 +139,11 @@ namespace ShadowMaze.EnemyCharactor
         protected virtual void Update()
         {
             if (!_player || isJump) return;
+            if (astop)
+            {
+                agent.SetDestination(transform.position);
+                return;
+            }
 
             if (!stun)
             {
@@ -683,10 +691,14 @@ namespace ShadowMaze.EnemyCharactor
 
         private void MakeCanSeePlayer() => isCanSeePlayer = true;
 
-        private void die()
+        public void die()
         {
+            EnemyManager.Instance.Remove(gameObject);
             Destroy(gameObject);
         }
+
+        public void pause() => astop = true;
+        public void resume() => astop = false;
 
         /*
         private void disappear()

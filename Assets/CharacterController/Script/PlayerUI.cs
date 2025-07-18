@@ -48,7 +48,7 @@ namespace ShadowMaze.MyCharacterController {
             _resumeBU.onClick.RemoveAllListeners();
             _resumeBU.onClick.AddListener(() =>
             {
-                OnEsc();
+                PlayerController.Instance.OnEsc(true);
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
             });
@@ -68,6 +68,8 @@ namespace ShadowMaze.MyCharacterController {
 
         private void Update()
         {
+            if (_esc) return;
+
             if (_batteryBS.value != _playerStats.Health) _batteryBS.value = Mathf.Lerp(_batteryBS.value, _playerStats.Battery, BBLerpSpeed);
             if (_MFV != _playerStats.memoryFragment) {
                 for (int i = 0; i <= _MFV; i++)

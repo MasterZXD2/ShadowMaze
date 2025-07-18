@@ -446,7 +446,7 @@ GameObject:
   m_Component:
   - component: {fileID: 49411278}
   - component: {fileID: 49411279}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -483,7 +483,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -36078,7 +36078,7 @@ GameObject:
   - component: {fileID: 304890444}
   m_Layer: 0
   m_Name: MenuCam
-  m_TagString: MainUI
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -38751,6 +38751,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 691528601}
+  - component: {fileID: 691528602}
   m_Layer: 0
   m_Name: TheWatchingEyes
   m_TagString: Untagged
@@ -38772,8 +38773,32 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 49411278}
+  - {fileID: 1141602595}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &691528602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 691528600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caddbef88e68af5438573d555d0e1759, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AreaSpawn: {fileID: 49411279}
+  prefabsEnemys:
+  - {fileID: 2458015107672944360, guid: 43f5d33037b44734f9dacad4357df8c7, type: 3}
+  bossPrefabs: {fileID: 6440359506809818186, guid: f6cab5243b288f443841dbf0083d6bc1, type: 3}
+  bossSpawn: {fileID: 1141602595}
+  lightPuzzle: {fileID: 1645790760}
+  minPerSpawn: 1
+  maxPerSpawn: 1
+  _spawnAreaLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &777921360
 GameObject:
   m_ObjectHideFlags: 0
@@ -75514,6 +75539,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 432457712}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1141602594
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1141602595}
+  m_Layer: 0
+  m_Name: bossSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1141602595
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1141602594}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 691528601}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1150176168
 GameObject:
@@ -113055,6 +113111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFinish: 0
   cutsceneTrigger: {fileID: 0}
+  sa: 0
 --- !u!4 &1645790764
 Transform:
   m_ObjectHideFlags: 0
@@ -115529,6 +115586,7 @@ GameObject:
   - component: {fileID: 4622547739705072811}
   - component: {fileID: 3738137526909594793}
   - component: {fileID: 2149850068704743762}
+  - component: {fileID: 8127356682768588884}
   m_Layer: 5
   m_Name: Main
   m_TagString: MainUI
@@ -117915,6 +117973,19 @@ VideoPlayer:
   m_WaitForFirstFrame: 1
   m_FrameReadyEventEnabled: 0
   m_VideoShaders: []
+--- !u!114 &8127356682768588884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322193258562348554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 786f47dbdbca10240b2dbe92448cd51b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currEnemies: []
 --- !u!222 &8161141664558173666
 CanvasRenderer:
   m_ObjectHideFlags: 0

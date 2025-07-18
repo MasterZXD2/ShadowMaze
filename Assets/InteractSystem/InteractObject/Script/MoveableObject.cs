@@ -44,6 +44,17 @@ namespace ShadowMaze.InteractSystem
 
         protected override void Update()
         {
+            if (PlayerController.Instance.astop)
+            {
+                _rb.isKinematic = true;
+                _rb.useGravity = false;
+                return;
+            } else if (!PlayerController.Instance.astop && !pick)
+            {
+                _rb.isKinematic = false;
+                _rb.useGravity = true;
+            }
+
             base.Update();
             if (pick) MoveSelectObj();
         }
@@ -62,8 +73,6 @@ namespace ShadowMaze.InteractSystem
             else
             {
                 gameObject.layer = _normalLayer;
-                _rb.isKinematic = false;
-                _rb.useGravity = true;
                 // Debug.Log($"MoveableObject {gameObject.name} dropped. Layer set to {LayerMask.LayerToName(_normalLayer)}");
                 // การ Unparent จะเกิดขึ้นใน FixedUpdate()
             }

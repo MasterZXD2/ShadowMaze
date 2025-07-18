@@ -34,6 +34,7 @@ namespace ShadowMaze.InteractSystem
         {
             PlayerController player = PlayerController.Instance;
             if (!player || !player._playerInteract) return;
+            if (player.astop) return;
 
             float sqrDist = (player.transform.position - transform.position).sqrMagnitude;
 

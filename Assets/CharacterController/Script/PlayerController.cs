@@ -134,8 +134,8 @@ namespace ShadowMaze.MyCharacterController
 
         public bool _isDead { get; private set; } = false;
         private bool s = false;
-        private bool astop = false;
-        
+        public bool astop { get; private set; } = false;
+
         private PlayerMovementState _lastMovementState = PlayerMovementState.Falling;
 
         #endregion
@@ -146,7 +146,7 @@ namespace ShadowMaze.MyCharacterController
             if (_playerLocomotionInput == null) _playerLocomotionInput = GetComponent<PlayerLocomotionInput>();
             if (_playerState == null) _playerState = GetComponent<PlayerState>();
             if (_characterController == null) _characterController = GetComponent<CharacterController>();
-            
+
             _anitBump = RunSpeed;
             _stepOffset = _characterController.stepOffset;
         }
@@ -270,13 +270,13 @@ namespace ShadowMaze.MyCharacterController
 
         private Vector3 SteepWalls(Vector3 velo)
         {
-            Vector3 normal = CharacterControllerUnils.GetNormalWithSphereCast(_characterController,_groundLayers);
+            Vector3 normal = CharacterControllerUnils.GetNormalWithSphereCast(_characterController, _groundLayers);
             float angle = Vector3.Angle(normal, Vector3.up);
             bool validAngle = angle < _characterController.slopeLimit;
 
             if (!validAngle && _verticalVelo < 0f)
             {
-                velo = Vector3.ProjectOnPlane(velo,normal);
+                velo = Vector3.ProjectOnPlane(velo, normal);
             }
 
             return velo;
@@ -358,7 +358,7 @@ namespace ShadowMaze.MyCharacterController
         private void StartHeadBob()
         {
             Vector3 pos = Vector3.zero;
-            pos.y += Mathf.Lerp(pos.y, Mathf.Sin(Time.time * frequencyHeadBob) * amountHeadBob * 1.4f,smoothHeadBob * Time.deltaTime);
+            pos.y += Mathf.Lerp(pos.y, Mathf.Sin(Time.time * frequencyHeadBob) * amountHeadBob * 1.4f, smoothHeadBob * Time.deltaTime);
             pos.x += Mathf.Lerp(pos.x, Mathf.Cos(Time.time * frequencyHeadBob / 2f) * amountHeadBob * 1.6f, smoothHeadBob * Time.deltaTime);
             cameraHolder.localPosition += pos;
         }
@@ -366,7 +366,7 @@ namespace ShadowMaze.MyCharacterController
         private void StopHeadBob()
         {
             if (cameraHolder.localPosition == _startPos) return;
-            cameraHolder.localPosition = Vector3.Lerp(cameraHolder.localPosition,_startPos,Time.deltaTime);
+            cameraHolder.localPosition = Vector3.Lerp(cameraHolder.localPosition, _startPos, Time.deltaTime);
         }
         #endregion
 
@@ -408,7 +408,7 @@ namespace ShadowMaze.MyCharacterController
 
         private bool IsGroundedWhileGrounded()
         {
-            Vector3 pos = new Vector3(transform.position.x,transform.position.y,transform.position.z);
+            Vector3 pos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
             bool grounded = Physics.CheckSphere(pos, _characterController.radius, _groundLayers, QueryTriggerInteraction.Ignore);
             return grounded;
         }
@@ -430,7 +430,7 @@ namespace ShadowMaze.MyCharacterController
             astop = true;
             _playerLocomotionInput.enabled = false;
             _playerKeyBoardInput.enabled = false;
-            OnEsc();
+            OnEsc(false);
         }
         public void replay() {
             astop = false;
@@ -494,13 +494,15 @@ namespace ShadowMaze.MyCharacterController
             if (astop) return;
         }
 
-        public void OnEsc()
+        public void OnEsc(bool b)
         {
-            if (astop) return;
-            if (Cursor.visible && !_playerUI._esc) return;
+            if (b) _playerUI.OnEsc();
+            if (Cursor.visible && !b && !_playerUI._esc) return;
             if (_playerUI._esc) return;
 
-            _playerUI.OnEsc();
+            if (!b) _playerUI.OnEsc();
+            astop = _playerUI._esc;
+            EnemyManager.Instance.Toggle(astop);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }

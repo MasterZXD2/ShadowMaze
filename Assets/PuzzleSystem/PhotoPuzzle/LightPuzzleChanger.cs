@@ -74,5 +74,6 @@ public class LightPuzzleChanger : Puzzle
     {
         if (isChanged) return;
         lightHitTimer += Time.deltaTime;
+        manager.sa = true;
     }
 }

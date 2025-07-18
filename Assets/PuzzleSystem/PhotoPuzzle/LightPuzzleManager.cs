@@ -8,6 +8,8 @@ public class LightPuzzleManager : Puzzle
 
     [SerializeField] private GameObject cutsceneTrigger; // หรือเรียก Cutscene ตรงนี้ก็ได้
 
+    public bool sa;
+
     public void RegisterPuzzle(LightPuzzleChanger puzzle)
     {
         puzzles.Add(puzzle);
@@ -35,5 +37,10 @@ public class LightPuzzleManager : Puzzle
         }
 
         // หรือใช้ Timeline.Play(), LoadScene, เปิดประตู ฯลฯ
+    }
+
+    private void LateUpdate()
+    {
+        sa = false;
     }
 }
