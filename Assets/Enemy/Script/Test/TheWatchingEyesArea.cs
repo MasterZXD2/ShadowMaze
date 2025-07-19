@@ -4,36 +4,60 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class TheWatchingEyesArea : Singleton<TheWatchingEyesArea>
 {
+    [SerializeField] private BoxCollider Collider;
     [SerializeField] private BoxCollider AreaSpawn;
     [field: SerializeField] private List<GameObject> prefabsEnemys = new List<GameObject>();
     [SerializeField] private GameObject bossPrefabs;
     [SerializeField] private Transform bossSpawn;
-    [SerializeField] private LightPuzzleManager lightPuzzle;
 
     [SerializeField] private float minPerSpawn;
     [SerializeField] private float maxPerSpawn;
 
+    public float inGround = 0f;
     [SerializeField] private LayerMask _spawnAreaLayerMask;
+    [SerializeField] private LayerMask _groundlayerMask;
 
     private List<GameObject> _currEnemies = new List<GameObject>();
     private TheWatchingEyesAI boss;
     private Coroutine _waveCoroutine;
 
     private bool _isPaused = false;
-    private bool _isResuming = false;
     private bool res = false;
 
     private void Start()
     {
         GameObject b = Instantiate(bossPrefabs,transform);
         b.transform.position = bossSpawn.position;
+        if (Physics.Raycast(b.transform.position, Vector3.down, out RaycastHit hit, Mathf.Infinity, _groundlayerMask))
+        {
+            b.transform.position = hit.point - new Vector3(0f, inGround, 0f);
+        }
         EnemyManager.Instance.Add(b);
         boss = b.GetComponent<TheWatchingEyesAI>();
-        Play();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        GameObject go = other.gameObject;
+        if (go.CompareTag("Player")) boss.EnterArea();
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        GameObject go = other.gameObject;
+        if (go.CompareTag("Player")) boss.ExitArea();
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(Collider.bounds.center,Collider.size);
+        Gizmos.DrawWireCube(AreaSpawn.bounds.center, AreaSpawn.size);
     }
 
     public void Play() => _waveCoroutine = StartCoroutine(PlayWaves());

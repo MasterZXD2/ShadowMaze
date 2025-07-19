@@ -21,7 +21,7 @@ public class Mirror : MonoBehaviour
         } }
     private bool _b = false;
 
-    private void Awake()
+    private void Start()
     {
         _renderer = GetComponent<Renderer>();
     }
@@ -29,10 +29,6 @@ public class Mirror : MonoBehaviour
     private void Update()
     {
         _renderer.material = b ? neon : glass;
-    }
-
-    private void LateUpdate()
-    {
         b = false;
     }
 

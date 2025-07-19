@@ -9,6 +9,7 @@ public class LightPuzzleChanger : Puzzle
     private Renderer _renderer;
     private float lightHitTimer = 0f;
     [SerializeField] private float timeToChangeMat = 3f;
+    [SerializeField] private bool isTheWatchingEyes = false;
 
     private bool isChanged = false;
     private bool isTransitioning = false;
@@ -74,6 +75,5 @@ public class LightPuzzleChanger : Puzzle
     {
         if (isChanged) return;
         lightHitTimer += Time.deltaTime;
-        manager.sa = true;
     }
 }
