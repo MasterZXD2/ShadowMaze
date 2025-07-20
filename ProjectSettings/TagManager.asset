@@ -9,6 +9,7 @@ TagManager:
   - bookPuzzle
   - lightPuzzle
   - ShadowPuzzle
+  - GlobalVolume
   layers:
   - Default
   - TransparentFX
