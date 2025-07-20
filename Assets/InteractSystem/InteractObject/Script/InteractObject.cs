@@ -5,26 +5,37 @@ using static UnityEngine.UI.Image;
 
 namespace ShadowMaze.InteractSystem 
 {
+    enum axisMirror { 
+        X,
+        Y,
+        Z
+    }
     public class InteractObject : MonoBehaviour
     {
         [SerializeField] private GameObject UI;
         [SerializeField] protected float range = 2f;
+        [field: SerializeField] private axisMirror axis = axisMirror.Z;
         private GameObject currUI;
         private bool _playerIsInRange = false;
         public string _name = "null";
 
         protected virtual void Start()
         {
+            if (!UI) return;
             currUI = Instantiate(UI, transform);
             currUI.transform.localPosition = Vector3.zero;
             
-            Vector3 scale = currUI.transform.localScale;
-            scale.x = 1 + (1 - transform.localScale.x);
-            currUI.transform.localScale = scale;
+            //Vector3 scale = currUI.transform.localScale;
+            //scale.x = 1 + (1 - transform.localScale.x);
+            currUI.transform.localScale = Vector3.one;
 
             Canvas canvas = currUI.GetComponentInChildren<Canvas>();
 
-            Vector3 uiOffset = -transform.forward * ((transform.localScale.z / 2f) + 0.35f);
+            Vector3 uiOffset = -transform.forward;
+            if (axis == axisMirror.X) uiOffset *= ((transform.localScale.x / 2f) + 0.35f);
+            else if (axis == axisMirror.Y) uiOffset *= ((transform.localScale.y / 2f) + 0.35f);
+            else uiOffset *= ((transform.localScale.z / 2f) + 0.35f);
+
             canvas.transform.position = transform.position + uiOffset;
 
             currUI.SetActive(false);
@@ -32,6 +43,7 @@ namespace ShadowMaze.InteractSystem
 
         protected virtual void Update()
         {
+            if (!UI) return;
             PlayerController player = PlayerController.Instance;
             if (!player || !player._playerInteract) return;
             if (player.astop) return;

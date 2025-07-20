@@ -4,6 +4,8 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.ProBuilder.Shapes;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using static UnityEditor.PlayerSettings;
 
 namespace ShadowMaze.MyCharacterController
@@ -25,7 +27,6 @@ namespace ShadowMaze.MyCharacterController
 
         [Space(10)]
         [Header("Player Components")]
-
 
         public CharacterController _characterController;
         [HideInInspector] public CapsuleCollider capsuleCollider => GetComponent<CapsuleCollider>();
@@ -111,6 +112,11 @@ namespace ShadowMaze.MyCharacterController
         [Header("FlashLight")]
         [SerializeField] private float flashLightTurnSpeed = 20f;
 
+        [SerializeField] private float normalIntensityScreen = .3f;
+        [SerializeField] private float darkIntensityScreen = .5f;
+        [SerializeField] private float changeScreenSpeed = 5f;
+        [SerializeField] private float changeToNorScreen = 2f;
+
         public Camera _plrCamera { get; private set; }
 
         public Vector2 _camRotation = Vector2.zero;
@@ -137,7 +143,11 @@ namespace ShadowMaze.MyCharacterController
         public bool astop { get; private set; } = false;
 
         private PlayerMovementState _lastMovementState = PlayerMovementState.Falling;
-
+        
+        private GameObject _globalVolume;
+        private Volume _volume;
+        private Vignette _vignette;
+        private float _bloomIntensity = .3f;
         #endregion
 
         #region Normal Function
@@ -147,6 +157,7 @@ namespace ShadowMaze.MyCharacterController
             if (_playerState == null) _playerState = GetComponent<PlayerState>();
             if (_characterController == null) _characterController = GetComponent<CharacterController>();
 
+            _bloomIntensity = normalIntensityScreen;
             _anitBump = RunSpeed;
             _stepOffset = _characterController.stepOffset;
         }
@@ -154,6 +165,9 @@ namespace ShadowMaze.MyCharacterController
         private void Start()
         {
             Debug.Log("Spawn");
+            _globalVolume = GameObject.FindGameObjectWithTag("GlobalVolume");
+            _volume = _globalVolume.GetComponent<Volume>();
+            if (_volume.profile.TryGet<Vignette>(out Vignette vig)) _vignette = vig;
             //CameraMode = CamMode.FirstPerson;
             //SetCam();
             //_plrCamera.fieldOfView = normalFOV;
@@ -165,6 +179,7 @@ namespace ShadowMaze.MyCharacterController
         private void Update()
         {
             if (s || astop) return;
+            _vignette.intensity.value = Mathf.Lerp(_vignette.intensity.value, _bloomIntensity, Time.deltaTime * changeScreenSpeed);
             _playerGameObject.transform.position = transform.position;
             MovementState();
             VerticalMovement();
@@ -485,6 +500,17 @@ namespace ShadowMaze.MyCharacterController
             _playerStats.Health -= damage;
             //Debug.Log(Health);
             if (_playerStats.Health <= 0) die();
+        }
+
+        public void MakeScreenDark()
+        {
+            _bloomIntensity = darkIntensityScreen;
+            Invoke(nameof(ResetNormalScreen),changeToNorScreen);
+        }
+
+        private void ResetNormalScreen()
+        {
+            _bloomIntensity = normalIntensityScreen;
         }
         #endregion
 

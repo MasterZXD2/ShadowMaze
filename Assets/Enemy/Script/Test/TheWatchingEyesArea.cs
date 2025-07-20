@@ -18,7 +18,8 @@ public class TheWatchingEyesArea : Singleton<TheWatchingEyesArea>
     [SerializeField] private float minPerSpawn;
     [SerializeField] private float maxPerSpawn;
 
-    public float inGround = 0f;
+    [field: SerializeField] private List<LightPuzzleChanger> lightPuzzles = new List<LightPuzzleChanger>();
+
     [SerializeField] private LayerMask _spawnAreaLayerMask;
     [SerializeField] private LayerMask _groundlayerMask;
 
@@ -35,10 +36,11 @@ public class TheWatchingEyesArea : Singleton<TheWatchingEyesArea>
         b.transform.position = bossSpawn.position;
         if (Physics.Raycast(b.transform.position, Vector3.down, out RaycastHit hit, Mathf.Infinity, _groundlayerMask))
         {
-            b.transform.position = hit.point - new Vector3(0f, inGround, 0f);
+            b.transform.position = hit.point;
         }
         EnemyManager.Instance.Add(b);
         boss = b.GetComponent<TheWatchingEyesAI>();
+        boss.lightPuzzles = lightPuzzles;
     }
 
     private void OnTriggerEnter(Collider other)

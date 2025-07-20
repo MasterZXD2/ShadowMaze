@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6440359506809818186
+--- !u!1 &311606952365042199
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,49 +8,46 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3117595646330881466}
-  - component: {fileID: 2585687342975855386}
-  - component: {fileID: 7989010564033467443}
-  - component: {fileID: 8861180220503383112}
-  - component: {fileID: -190870970576744555}
-  - component: {fileID: 6791796195981305360}
+  - component: {fileID: 8754511471140273226}
+  - component: {fileID: 3444175151804067569}
+  - component: {fileID: 8708085263500472725}
   m_Layer: 9
-  m_Name: BossTheWatchingEyes
-  m_TagString: Enemy
+  m_Name: Capsule (1)
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3117595646330881466
+--- !u!4 &8754511471140273226
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6440359506809818186}
+  m_GameObject: {fileID: 311606952365042199}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1181.69, y: 2.35, z: -980.115}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 3117595646330881466}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &2585687342975855386
+--- !u!33 &3444175151804067569
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6440359506809818186}
+  m_GameObject: {fileID: 311606952365042199}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &7989010564033467443
+--- !u!23 &8708085263500472725
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6440359506809818186}
+  m_GameObject: {fileID: 311606952365042199}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -89,30 +86,83 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &8861180220503383112
-CapsuleCollider:
+--- !u!1 &6440359506809818186
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3117595646330881466}
+  - component: {fileID: 6791796195981305360}
+  - component: {fileID: -733183495314529291}
+  m_Layer: 9
+  m_Name: BossTheWatchingEyes
+  m_TagString: Enemy
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3117595646330881466
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6440359506809818186}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!143 &-190870970576744555
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1183.0907, y: -3.58, z: -986.63745}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8754511471140273226}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6791796195981305360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6440359506809818186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d17b44e0e50b81b46ac60b6b9e21907f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _characterController: {fileID: -733183495314529291}
+  enemyState: {fileID: 0}
+  enemyObject: {fileID: 311606952365042199}
+  enemyShadow: {fileID: 6413615613594754224, guid: 52123020848451e4aa42005ef8e17807, type: 3}
+  shadowWall: {fileID: 278721712192736658, guid: cede646d56f3f5f418d140f2dad6a669, type: 3}
+  Health: 100
+  MaxHealth: 100
+  AttackDamage: 20
+  AttackCD: 1
+  EnemyModelRotationSpeed: 10
+  Drag: 0.1
+  MovingThreshold: 0.01
+  WalkAcceleration: 50
+  WalkSpeed: 2.75
+  DashForce: 15
+  DashCD: 3
+  dashDuration: 0.2
+  DashChange: 50
+  lightPuzzles: []
+  DarkScreenChange: 2
+  WallShadowChange: 0.5
+  StayChange: 0.1
+  stayTime: 1
+  outSpeed: 100
+  outRange: 2.5
+  attackRange: 1.5
+  inGround: 5
+  _groundlayerMask:
+    serializedVersion: 2
+    m_Bits: 65
+--- !u!143 &-733183495314529291
 CharacterController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -137,26 +187,3 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6791796195981305360
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6440359506809818186}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d17b44e0e50b81b46ac60b6b9e21907f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _characterController: {fileID: -190870970576744555}
-  enemyState: {fileID: 0}
-  enemyShadow: {fileID: 6413615613594754224, guid: 52123020848451e4aa42005ef8e17807, type: 3}
-  EnemyModelRotationSpeed: 10
-  Drag: 0.1
-  MovingThreshold: 0.01
-  WalkAcceleration: 50
-  WalkSpeed: 2.75
-  _groundlayerMask:
-    serializedVersion: 2
-    m_Bits: 65

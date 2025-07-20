@@ -15,7 +15,9 @@ public class LightPuzzleChanger : Puzzle
     private bool isTransitioning = false;
     private float transitionProgress = 0f;
 
+    private int hit = 0;
     private Material runtimeMat;
+    private TheWatchingEyesAI boss;
 
     private void Awake()
     {
@@ -36,7 +38,7 @@ public class LightPuzzleChanger : Puzzle
     private void Update()
     {
         if (isChanged) return;
-
+        if (boss && hit == 3) lightHitTimer += Time.deltaTime;
         float progress = Mathf.Clamp01(lightHitTimer / timeToChangeMat);
 
         Color from = grayscaleMat.color;
@@ -46,11 +48,16 @@ public class LightPuzzleChanger : Puzzle
         if (lightHitTimer >= timeToChangeMat)
         {
             isChanged = true;
+            isFinish = true;
             _renderer.material = normalMat;
             transitionProgress = 0f;
             lightHitTimer = 0f;
+
+            manager.ReportCompleted(this);
+            if (boss) boss.Health -= boss.MaxHealth / boss.lightPuzzles.Count;
         }
 
+        hit = 0;
         /*
         if (isTransitioning && runtimeMat != null && normalMat != null)
         {
@@ -70,10 +77,15 @@ public class LightPuzzleChanger : Puzzle
         }
         */
     }
-
     public void HitByFlashlight()
     {
         if (isChanged) return;
-        lightHitTimer += Time.deltaTime;
+        if (!boss) lightHitTimer += Time.deltaTime;
+        else hit++;
+    }
+
+    public void setToBossTWE(TheWatchingEyesAI twe)
+    {
+        boss = twe;
     }
 }

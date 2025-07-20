@@ -1,15 +1,22 @@
+using ShadowMaze.InteractSystem;
 using ShadowMaze.MyCharacterController;
 using UnityEngine;
+using UnityEngine.Rendering;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
-public class Mirror : MonoBehaviour
+public class Mirror : InteractObject
 {
     [SerializeField] private Material glass;
     [SerializeField] private Material neon;
     [SerializeField] private LayerMask _mirrorLayerMask;
+    [SerializeField] private bool canMove = false;
+    [SerializeField] private float rotationSpeed = 5;
 
     private Renderer _renderer;
-    private bool b { get => _b; set { 
+    private bool b
+    {
+        get => _b; set
+        {
             _b = value;
             if (_b && Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, Mathf.Infinity, _mirrorLayerMask))
             {
@@ -17,17 +24,27 @@ public class Mirror : MonoBehaviour
                 {
                     mi.HitByFlashlight(transform);
                 }
+                if (hit.transform.TryGetComponent<LightPuzzleChanger>(out LightPuzzleChanger lpc))
+                {
+                    lpc.HitByFlashlight();
+                }
             }
-        } }
+        }
+    }
     private bool _b = false;
+    private Quaternion _rotation;
 
-    private void Start()
+    protected override void Start()
     {
+        _rotation = transform.rotation;
+        base.Start();
         _renderer = GetComponent<Renderer>();
     }
 
-    private void Update()
+    protected override void Update()
     {
+        transform.rotation = Quaternion.Lerp(transform.rotation, _rotation, rotationSpeed * Time.deltaTime);
+        base.Update();
         _renderer.material = b ? neon : glass;
         b = false;
     }
@@ -36,11 +53,18 @@ public class Mirror : MonoBehaviour
     {
         b = CanSeePlayer(lightSource);
     }
-    
-    private void OnDrawGizmos()
+
+    protected override void OnDrawGizmos()
     {
+        base.OnDrawGizmos();
         Gizmos.color = Color.green;
         Gizmos.DrawRay(transform.position,transform.forward);
+        Gizmos.color = Color.black;
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, Mathf.Infinity, _mirrorLayerMask))
+        {
+            Gizmos.DrawLine(transform.position,hit.point);
+            Gizmos.DrawSphere(hit.point, .2f);
+        }
     }
 
     private bool CanSeePlayer(Transform lightSource)
@@ -53,5 +77,10 @@ public class Mirror : MonoBehaviour
         return angle < 90f;
     }
 
+    public override void Interact()
+    {
+        if (!canMove) return;
+        _rotation = transform.rotation * Quaternion.Euler(0f,5f,0f);
+    }
 }
 
