@@ -18,6 +18,7 @@ public class TheWatchingEyesArea : Singleton<TheWatchingEyesArea>
     [SerializeField] private float minPerSpawn;
     [SerializeField] private float maxPerSpawn;
 
+    [SerializeField] private GameObject mirrorParent;
     [field: SerializeField] private List<LightPuzzleChanger> lightPuzzles = new List<LightPuzzleChanger>();
 
     [SerializeField] private LayerMask _spawnAreaLayerMask;
@@ -41,6 +42,7 @@ public class TheWatchingEyesArea : Singleton<TheWatchingEyesArea>
         EnemyManager.Instance.Add(b);
         boss = b.GetComponent<TheWatchingEyesAI>();
         boss.lightPuzzles = lightPuzzles;
+        boss.mirrorParent = mirrorParent;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -133,13 +135,14 @@ public class TheWatchingEyesArea : Singleton<TheWatchingEyesArea>
     public void pause()
     {
         _isPaused = true;
+        boss.pause();
     }
 
     public void resume()
     {
         if (!_isPaused)
             return;
-
+        boss.resume();
         _isPaused = false;
     }
 

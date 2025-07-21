@@ -12,7 +12,10 @@ public class Mirror : InteractObject
     [SerializeField] private bool canMove = false;
     [SerializeField] private float rotationSpeed = 5;
 
+    private TheWatchingEyesAI boss;
     private Renderer _renderer;
+    private Mirror m;
+    private Mirror pm;
     private bool b
     {
         get => _b; set
@@ -22,12 +25,18 @@ public class Mirror : InteractObject
             {
                 if (hit.transform.TryGetComponent<Mirror>(out Mirror mi))
                 {
-                    mi.HitByFlashlight(transform);
+                    if (pm != null) if (pm == m) return;
+                    m = mi;
+                    mi.HitByFlashlight(transform, false);
                 }
                 if (hit.transform.TryGetComponent<LightPuzzleChanger>(out LightPuzzleChanger lpc))
                 {
                     lpc.HitByFlashlight();
                 }
+            } else
+            {
+                pm = null;
+                m = null;
             }
         }
     }
@@ -49,9 +58,16 @@ public class Mirror : InteractObject
         b = false;
     }
 
-    public void HitByFlashlight(Transform lightSource)
+    public void HitByFlashlight(Transform lightSource,bool bi)
     {
-        b = CanSeePlayer(lightSource);
+        if (!bi)
+        {
+            if (lightSource.TryGetComponent<Mirror>(out Mirror mi))
+            {
+                pm = mi;
+            }
+        }
+        b = CanSeePlayer(lightSource,bi);
     }
 
     protected override void OnDrawGizmos()
@@ -67,9 +83,10 @@ public class Mirror : InteractObject
         }
     }
 
-    private bool CanSeePlayer(Transform lightSource)
+    private bool CanSeePlayer(Transform lightSource,bool bi)
     {
         if (!lightSource) return false;
+        if (canMove && bi) return false;
 
         Vector3 directionToMirror = (lightSource.position - transform.position).normalized;
         float angle = Vector3.Angle(transform.forward, directionToMirror);
@@ -80,7 +97,13 @@ public class Mirror : InteractObject
     public override void Interact()
     {
         if (!canMove) return;
+        boss.MirrorInteract(this);
         _rotation = transform.rotation * Quaternion.Euler(0f,5f,0f);
+    }
+
+    public void setToBossTWE(TheWatchingEyesAI twe)
+    {
+        boss = twe;
     }
 }
 

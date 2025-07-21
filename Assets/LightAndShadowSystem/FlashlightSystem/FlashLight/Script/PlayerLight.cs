@@ -3,6 +3,7 @@ using ShadowMaze.InteractSystem;
 using ShadowMaze.MyCharacterController;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class PlayerLight : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public class PlayerLight : MonoBehaviour
     private Light _light;
     private bool _flashLightOn = false;
     private float _flickerTimer;
+    private bool astop;
 
     private void Awake()
     {
@@ -33,7 +35,7 @@ public class PlayerLight : MonoBehaviour
 
     private void Update()
     {
-        if (!_light) return;
+        if (!_light || astop) return;
         if (_playerStats.Battery <= 0f) {
             if (_light.intensity != 0) _light.intensity = Mathf.MoveTowards(_light.intensity, 0f, OnOffSpeed * Time.deltaTime);
             else _flashLightOn = false;
@@ -66,6 +68,11 @@ public class PlayerLight : MonoBehaviour
                             psei.HitByFlashlight();
                         }
                     }
+
+                    if (GO.TryGetComponent<TheWatchingEyesAI>(out TheWatchingEyesAI twe))
+                    {
+                        twe.HitByFlashlight();
+                    }
                 }
 
                 if (GO.TryGetComponent<LightPuzzleChanger>(out LightPuzzleChanger lpc))
@@ -78,10 +85,10 @@ public class PlayerLight : MonoBehaviour
                     bp.HitByFlashlight();
                 }
 
-                if (GO.TryGetComponent<Mirror>(out Mirror m))
+                /*if (GO.TryGetComponent<Mirror>(out Mirror m))
                 {
-                    m.HitByFlashlight(transform);
-                }
+                    m.HitByFlashlight(transform, true);
+                }*/
             }
         }
 
@@ -151,5 +158,13 @@ public class PlayerLight : MonoBehaviour
         }
 
         return detectedObjects;
+    }
+    public void pause() => astop = true;
+    public void resume() => astop = false;
+
+    public void rToggle(bool b)
+    {
+        if (b) pause();
+        else resume();
     }
 }

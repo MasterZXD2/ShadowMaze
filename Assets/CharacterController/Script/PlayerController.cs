@@ -116,6 +116,7 @@ namespace ShadowMaze.MyCharacterController
         [SerializeField] private float darkIntensityScreen = .5f;
         [SerializeField] private float changeScreenSpeed = 5f;
         [SerializeField] private float changeToNorScreen = 2f;
+        [SerializeField] private float changeColorScreenSpeed = 10f;
 
         public Camera _plrCamera { get; private set; }
 
@@ -148,6 +149,8 @@ namespace ShadowMaze.MyCharacterController
         private Volume _volume;
         private Vignette _vignette;
         private float _bloomIntensity = .3f;
+        private Color _colorNor;
+        private Color _bloomColor;
         #endregion
 
         #region Normal Function
@@ -168,6 +171,8 @@ namespace ShadowMaze.MyCharacterController
             _globalVolume = GameObject.FindGameObjectWithTag("GlobalVolume");
             _volume = _globalVolume.GetComponent<Volume>();
             if (_volume.profile.TryGet<Vignette>(out Vignette vig)) _vignette = vig;
+            _colorNor = _vignette.color.value;
+            _bloomColor = _colorNor;
             //CameraMode = CamMode.FirstPerson;
             //SetCam();
             //_plrCamera.fieldOfView = normalFOV;
@@ -180,6 +185,7 @@ namespace ShadowMaze.MyCharacterController
         {
             if (s || astop) return;
             _vignette.intensity.value = Mathf.Lerp(_vignette.intensity.value, _bloomIntensity, Time.deltaTime * changeScreenSpeed);
+            _vignette.color.value = Color.Lerp(_vignette.color.value, _bloomColor, Time.deltaTime * changeColorScreenSpeed);
             _playerGameObject.transform.position = transform.position;
             MovementState();
             VerticalMovement();
@@ -502,6 +508,18 @@ namespace ShadowMaze.MyCharacterController
             if (_playerStats.Health <= 0) die();
         }
 
+        public void takeSanity(float damage)
+        {
+            _playerStats.Sanity -= damage;
+            _bloomColor = Color.red;
+            Invoke(nameof(ResetColorScreen),.5f);
+        }
+
+        private void ResetColorScreen()
+        {
+            _bloomColor = _colorNor;
+        }
+
         public void MakeScreenDark()
         {
             _bloomIntensity = darkIntensityScreen;
@@ -528,6 +546,7 @@ namespace ShadowMaze.MyCharacterController
 
             if (!b) _playerUI.OnEsc();
             astop = _playerUI._esc;
+            _playerLight.rToggle(astop);
             EnemyManager.Instance.Toggle(astop);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;

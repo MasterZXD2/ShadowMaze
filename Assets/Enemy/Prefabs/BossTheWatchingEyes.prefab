@@ -151,10 +151,16 @@ MonoBehaviour:
   dashDuration: 0.2
   DashChange: 50
   lightPuzzles: []
-  DarkScreenChange: 2
+  mirrorParent: {fileID: 0}
+  DarkScreenChange: 2.5
   WallShadowChange: 0.5
   StayChange: 0.1
-  stayTime: 1
+  TeChange: 5
+  BChange: 3
+  TeRange: 2
+  BD: 2.5
+  deB: 3
+  stayTime: 1.2
   outSpeed: 100
   outRange: 2.5
   attackRange: 1.5

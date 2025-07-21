@@ -32,7 +32,7 @@ public class EnemyManager : Singleton<EnemyManager>
 
     private void pause()
     {
-        TheWatchingEyesArea.Instance.pause();
+        if (TheWatchingEyesArea.Instance) TheWatchingEyesArea.Instance.pause();
         foreach (GameObject enemy in currEnemies)
         {
             if (enemy != null)
@@ -46,7 +46,7 @@ public class EnemyManager : Singleton<EnemyManager>
 
     private void resume()
     {
-        TheWatchingEyesArea.Instance.resume();
+        if (TheWatchingEyesArea.Instance) TheWatchingEyesArea.Instance.resume();
         foreach (GameObject enemy in currEnemies)
         {
             if (enemy != null)

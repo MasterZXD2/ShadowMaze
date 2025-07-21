@@ -1,6 +1,7 @@
 using ShadowMaze.EnemyCharactor;
 using ShadowMaze.MyCharacterController;
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class TheWatchingEyesAI : MonoBehaviour
@@ -39,10 +40,16 @@ public class TheWatchingEyesAI : MonoBehaviour
     [Range(0, 100)] public float DashChange = 50f;
 
     public List<LightPuzzleChanger> lightPuzzles = new List<LightPuzzleChanger>();
+    public GameObject mirrorParent;
 
     [Range(0, 100)] public float DarkScreenChange = 50f;
     [Range(0, 100)] public float WallShadowChange = 50f;
     [Range(0, 100)] public float StayChange = 50f;
+    [Range(0, 100)] public float TeChange = 50f;
+    [Range(0, 100)] public float BChange = 50f;
+    [SerializeField] private float TeRange = 1f;
+    [SerializeField] private float BD = 2f;
+    [SerializeField] private float deB = 1f;
 
     [SerializeField] private float stayTime = 1f;
     [SerializeField] private float outSpeed = 5f;
@@ -50,7 +57,7 @@ public class TheWatchingEyesAI : MonoBehaviour
     [SerializeField] private float attackRange = .5f;
     [SerializeField] private float inGround = 0f;
     [SerializeField] private LayerMask _groundlayerMask;
-    public bool isDash {  get; private set; }
+    public bool isDash { get; private set; }
     public bool isAttack { get; private set; }
     public bool isMovement { get; private set; }
     public bool Sprint { get; private set; }
@@ -66,18 +73,29 @@ public class TheWatchingEyesAI : MonoBehaviour
     private int finishs = 0;
     private bool staying = false;
 
+    private Mirror mirror;
+    private bool inter = false;
+    private bool unB = false;
+    private float Btime = 0f;
+    private bool astop = false;
+
     private void Start()
     {
-        _shadow = Instantiate(enemyShadow,transform);
+        _shadow = Instantiate(enemyShadow, transform);
         _rendererSha = _shadow.GetComponent<Renderer>();
         foreach (LightPuzzleChanger changer in lightPuzzles)
         {
             changer.setToBossTWE(this);
         }
+        foreach (Mirror mirror in mirrorParent.GetComponentsInChildren<Mirror>())
+        {
+            mirror.setToBossTWE(this);
+        }
     }
 
     private void Update()
     {
+        if (astop) return;
         foreach (LightPuzzleChanger changer in lightPuzzles)
         {
             if (changer.isFinish) finishs++;
@@ -88,7 +106,7 @@ public class TheWatchingEyesAI : MonoBehaviour
             _shadow.transform.position = hit.point + hit.normal * .1f;
         }
 
-        if(isDash)
+        if (isDash)
         {
             // พุ่งไปในทิศทาง dash
             _characterController.Move(dashDir * DashForce * Time.deltaTime);
@@ -98,12 +116,29 @@ public class TheWatchingEyesAI : MonoBehaviour
             {
                 isDash = false;
             }
+            finishs = 0;
+            mirror = null;
+            inter = false;
 
             return;
         }
 
         if (!inArea) return;
-        Transform player = PlayerController.Instance.transform;
+        PlayerController _player = PlayerController.Instance;
+        Transform player = _player.transform;
+
+        if (unB)
+        {
+            enemyObject.transform.position = Vector3.Lerp(enemyObject.transform.position, transform.position, Time.deltaTime * outSpeed);
+
+            _player._playerStats.Battery -= deB * Time.deltaTime;
+            Btime -= Time.deltaTime;
+            if (Btime <= 0f)
+            {
+                unB = false;
+            }
+            return;
+        }
 
         Vector3 pos = transform.position;
         float dist = (transform.position - player.position).sqrMagnitude;
@@ -122,54 +157,67 @@ public class TheWatchingEyesAI : MonoBehaviour
         }
         enemyObject.transform.position = pos;
 
-        if (finishs >= 1)
-        {
-            if (Random.Range(0f, 100f) < StayChange) Stay();
-            if (Random.Range(0f,100f) < DarkScreenChange)
+        if (Random.Range(0f, 100f) < .5f) {
+            if (finishs >= 1)
             {
-                PlayerController.Instance.MakeScreenDark();
+                if (Random.Range(0f, 100f) < StayChange) Stay(stayTime);
+                if (Random.Range(0f, 100f) < DarkScreenChange)
+                {
+                    PlayerController.Instance.MakeScreenDark();
+                }
+                if (Random.Range(0f, 100f) < WallShadowChange)
+                {
+                    GameObject wall = Instantiate(shadowWall, transform.parent);
+
+                    Vector3 dirToPlayer = (player.position - transform.position).normalized;
+                    float distToPlayer = Vector3.Distance(transform.position, player.position) + 1.2f;
+
+                    // กำหนดตำแหน่งให้เริ่มกลางระหว่างศัตรูกับผู้เล่น
+                    wall.transform.position = transform.position + dirToPlayer * (distToPlayer * 0.5f);
+
+                    // หมุนกำแพงให้หันไปทางผู้เล่น
+                    wall.transform.rotation = Quaternion.LookRotation(dirToPlayer);
+
+                    // ล็อคไม่ให้เอียง (ถ้าใช้ LookRotation แล้วมันเอียง)
+                    Vector3 euler = wall.transform.eulerAngles;
+                    wall.transform.rotation = Quaternion.Euler(0f, euler.y, 0f);
+
+                    // ปรับขนาดกำแพงให้ยาวพอ
+                    wall.transform.localScale = new Vector3(0.2f, 20f, distToPlayer);
+                }
             }
-            if (Random.Range(0f,100f) < WallShadowChange)
+            if (finishs >= 2)
             {
-                GameObject wall = Instantiate(shadowWall, transform.parent);
-
-                Vector3 dirToPlayer = (player.position - transform.position).normalized;
-                float distToPlayer = Vector3.Distance(transform.position, player.position) + 1.2f;
-
-                // กำหนดตำแหน่งให้เริ่มกลางระหว่างศัตรูกับผู้เล่น
-                wall.transform.position = transform.position + dirToPlayer * (distToPlayer * 0.5f);
-
-                // หมุนกำแพงให้หันไปทางผู้เล่น
-                wall.transform.rotation = Quaternion.LookRotation(dirToPlayer);
-
-                // ล็อคไม่ให้เอียง (ถ้าใช้ LookRotation แล้วมันเอียง)
-                Vector3 euler = wall.transform.eulerAngles;
-                wall.transform.rotation = Quaternion.Euler(0f, euler.y, 0f);
-
-                // ปรับขนาดกำแพงให้ยาวพอ
-                wall.transform.localScale = new Vector3(0.2f, 20f, distToPlayer);
+                if (Random.Range(0f, 100f) < BChange) {
+                    unB = true;
+                    Btime = BD;
+                }
             }
         }
-        if (finishs >= 2)
+        if (finishs >= 2 && inter)
         {
-
-        }
-        if (finishs >= 3)
-        {
-
+            if (Random.Range(0f, 100f) < TeChange)
+            {
+                Stay(.5f);
+                float rx = Random.Range(-TeRange, TeRange);
+                float rz = Random.Range(-TeRange, TeRange);
+                transform.position = mirror.gameObject.transform.position + new Vector3(rx, 0f, rz);
+            }
         }
 
         if (!staying) LateralMovement();
         finishs = 0;
+        mirror = null;
+        inter = false;
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position,outRange);
-        
+        Gizmos.DrawWireSphere(transform.position, outRange);
+
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position,attackRange);
+        Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 
     public void EnterArea()
@@ -180,6 +228,31 @@ public class TheWatchingEyesAI : MonoBehaviour
     public void ExitArea()
     {
         inArea = false;
+    }
+
+    public void MirrorInteract(Mirror m)
+    {
+        inter = true;
+        mirror = m;
+    }
+
+    public void HitByFlashlight()
+    {
+        unB = false;
+    }
+    public void pause() {
+        astop = true;
+        foreach (LightPuzzleChanger changer in lightPuzzles)
+        {
+            changer.pause();
+        }
+    }
+    public void resume() {
+        astop = false;
+        foreach (LightPuzzleChanger changer in lightPuzzles)
+        {
+            changer.resume();
+        }
     }
 
     private void LateralMovement()
@@ -235,16 +308,16 @@ public class TheWatchingEyesAI : MonoBehaviour
     {
         if (!isAttack)
         {
-            PlayerController.Instance._playerStats.Sanity -= AttackDamage;
+            PlayerController.Instance.takeSanity(AttackDamage);
             isAttack = true;
             Invoke(nameof(ResetAtteck), AttackCD);
         }
     }
 
-    private void Stay()
+    private void Stay(float t)
     {
         staying = true;
-        Invoke(nameof(ResetStay), stayTime);
+        Invoke(nameof(ResetStay), t);
     }
 
     private void ResetStay() => staying = false;

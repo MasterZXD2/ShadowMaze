@@ -440,7 +440,8 @@ namespace ShadowMaze.EnemyCharactor
 
             if (!isAttack)
             {
-                PlayerController.Instance._playerStats.Sanity -= AttackDamage;
+                //PlayerController.Instance._playerStats.Sanity -= AttackDamage;
+                PlayerController.Instance.takeSanity(AttackDamage);
                 isAttack = true;
                 Invoke(nameof(ResetAtteck), AttackCD);
             }

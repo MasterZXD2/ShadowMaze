@@ -18,6 +18,7 @@ public class LightPuzzleChanger : Puzzle
     private int hit = 0;
     private Material runtimeMat;
     private TheWatchingEyesAI boss;
+    private bool astop;
 
     private void Awake()
     {
@@ -37,7 +38,7 @@ public class LightPuzzleChanger : Puzzle
 
     private void Update()
     {
-        if (isChanged) return;
+        if (isChanged || astop) return;
         if (boss && hit == 3) lightHitTimer += Time.deltaTime;
         float progress = Mathf.Clamp01(lightHitTimer / timeToChangeMat);
 
@@ -88,4 +89,8 @@ public class LightPuzzleChanger : Puzzle
     {
         boss = twe;
     }
+
+    public void pause() => astop = true;
+    public void resume() => astop = false;
 }
+
