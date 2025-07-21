@@ -360,6 +360,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UI: {fileID: 2724836644241498865, guid: 9583650b2d952354e9e74d474754854a, type: 3}
   range: 1
+  axis: 2
   _name: null
   _rb: {fileID: 4420596}
   interactLayerName: PlrInteractObject
@@ -16110,6 +16111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UI: {fileID: 2724836644241498865, guid: 9583650b2d952354e9e74d474754854a, type: 3}
   range: 2
+  axis: 2
   _name: null
   _rb: {fileID: 0}
   interactLayerName: PlrInteractObject
@@ -41847,6 +41849,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UI: {fileID: 2724836644241498865, guid: 9583650b2d952354e9e74d474754854a, type: 3}
   range: 0.7
+  axis: 2
   _name: null
   _rb: {fileID: 742440717}
   interactLayerName: PlrInteractObject
@@ -44915,6 +44918,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UI: {fileID: 2724836644241498865, guid: 9583650b2d952354e9e74d474754854a, type: 3}
   range: 1
+  axis: 2
   _name: null
   _rb: {fileID: 821728091}
   interactLayerName: PlrInteractObject
@@ -56418,6 +56422,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UI: {fileID: 2724836644241498865, guid: 9583650b2d952354e9e74d474754854a, type: 3}
   range: 2
+  axis: 2
   _name: null
   _rb: {fileID: 0}
   interactLayerName: PlrInteractObject
@@ -71634,6 +71639,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UI: {fileID: 2724836644241498865, guid: 9583650b2d952354e9e74d474754854a, type: 3}
   range: 2
+  axis: 2
   _name: null
   _rb: {fileID: 0}
   interactLayerName: PlrInteractObject
@@ -85516,6 +85522,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UI: {fileID: 2724836644241498865, guid: 9583650b2d952354e9e74d474754854a, type: 3}
   range: 2
+  axis: 2
   _name: null
   _rb: {fileID: 0}
   interactLayerName: PlrInteractObject
@@ -87989,6 +87996,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UI: {fileID: 2724836644241498865, guid: 9583650b2d952354e9e74d474754854a, type: 3}
   range: 2
+  axis: 2
   _name: null
   _rb: {fileID: 0}
   interactLayerName: PlrInteractObject
@@ -88814,6 +88822,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UI: {fileID: 2724836644241498865, guid: 9583650b2d952354e9e74d474754854a, type: 3}
   range: 2
+  axis: 2
   _name: null
   _rb: {fileID: 0}
   interactLayerName: PlrInteractObject
@@ -93257,6 +93266,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UI: {fileID: 2724836644241498865, guid: 9583650b2d952354e9e74d474754854a, type: 3}
   range: 2
+  axis: 2
   _name: null
   _rb: {fileID: 0}
   interactLayerName: PlrInteractObject
@@ -93662,6 +93672,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UI: {fileID: 2724836644241498865, guid: 9583650b2d952354e9e74d474754854a, type: 3}
   range: 2
+  axis: 2
   _name: null
   _rb: {fileID: 0}
   interactLayerName: PlrInteractObject
@@ -96918,6 +96929,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UI: {fileID: 2724836644241498865, guid: 9583650b2d952354e9e74d474754854a, type: 3}
   range: 2
+  axis: 2
   _name: null
   _rb: {fileID: 0}
   interactLayerName: PlrInteractObject
@@ -109119,6 +109131,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UI: {fileID: 2724836644241498865, guid: 9583650b2d952354e9e74d474754854a, type: 3}
   range: 2
+  axis: 2
   _name: null
   _rb: {fileID: 0}
   interactLayerName: PlrInteractObject
