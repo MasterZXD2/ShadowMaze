@@ -327,6 +327,42 @@ namespace ShadowMaze.MyCharacterController
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""One"",
+                    ""type"": ""Button"",
+                    ""id"": ""949a6d7d-bc80-42ae-b0b3-8f15ce8eaf1f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Two"",
+                    ""type"": ""Button"",
+                    ""id"": ""9b01ec36-2f6e-47f2-81fc-bf8bb7e05765"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Three"",
+                    ""type"": ""Button"",
+                    ""id"": ""e038bd1e-8bd5-4a45-9094-5e0029940b07"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Four"",
+                    ""type"": ""Button"",
+                    ""id"": ""101192da-c8cb-4f1d-8f21-61faa556ff2b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -406,6 +442,50 @@ namespace ShadowMaze.MyCharacterController
                     ""action"": ""Esc"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""851ad8c0-0065-441f-b235-1ffac04a56c5"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""One"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""57453094-9798-48c9-84b1-4692831e63e3"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Two"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b39af8ac-3b97-4876-b74e-f7299a5c2bb9"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Three"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ebce11ce-6e37-4976-a8b5-6fa6f78124c7"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Four"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -429,6 +509,10 @@ namespace ShadowMaze.MyCharacterController
             m_PlayerKeyBoardMap_FlashLight = m_PlayerKeyBoardMap.FindAction("FlashLight", throwIfNotFound: true);
             m_PlayerKeyBoardMap_Interact = m_PlayerKeyBoardMap.FindAction("Interact", throwIfNotFound: true);
             m_PlayerKeyBoardMap_Esc = m_PlayerKeyBoardMap.FindAction("Esc", throwIfNotFound: true);
+            m_PlayerKeyBoardMap_One = m_PlayerKeyBoardMap.FindAction("One", throwIfNotFound: true);
+            m_PlayerKeyBoardMap_Two = m_PlayerKeyBoardMap.FindAction("Two", throwIfNotFound: true);
+            m_PlayerKeyBoardMap_Three = m_PlayerKeyBoardMap.FindAction("Three", throwIfNotFound: true);
+            m_PlayerKeyBoardMap_Four = m_PlayerKeyBoardMap.FindAction("Four", throwIfNotFound: true);
         }
 
         ~@PlayerControls()
@@ -668,6 +752,10 @@ namespace ShadowMaze.MyCharacterController
         private readonly InputAction m_PlayerKeyBoardMap_FlashLight;
         private readonly InputAction m_PlayerKeyBoardMap_Interact;
         private readonly InputAction m_PlayerKeyBoardMap_Esc;
+        private readonly InputAction m_PlayerKeyBoardMap_One;
+        private readonly InputAction m_PlayerKeyBoardMap_Two;
+        private readonly InputAction m_PlayerKeyBoardMap_Three;
+        private readonly InputAction m_PlayerKeyBoardMap_Four;
         /// <summary>
         /// Provides access to input actions defined in input action map "PlayerKeyBoardMap".
         /// </summary>
@@ -707,6 +795,22 @@ namespace ShadowMaze.MyCharacterController
             /// Provides access to the underlying input action "PlayerKeyBoardMap/Esc".
             /// </summary>
             public InputAction @Esc => m_Wrapper.m_PlayerKeyBoardMap_Esc;
+            /// <summary>
+            /// Provides access to the underlying input action "PlayerKeyBoardMap/One".
+            /// </summary>
+            public InputAction @One => m_Wrapper.m_PlayerKeyBoardMap_One;
+            /// <summary>
+            /// Provides access to the underlying input action "PlayerKeyBoardMap/Two".
+            /// </summary>
+            public InputAction @Two => m_Wrapper.m_PlayerKeyBoardMap_Two;
+            /// <summary>
+            /// Provides access to the underlying input action "PlayerKeyBoardMap/Three".
+            /// </summary>
+            public InputAction @Three => m_Wrapper.m_PlayerKeyBoardMap_Three;
+            /// <summary>
+            /// Provides access to the underlying input action "PlayerKeyBoardMap/Four".
+            /// </summary>
+            public InputAction @Four => m_Wrapper.m_PlayerKeyBoardMap_Four;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -754,6 +858,18 @@ namespace ShadowMaze.MyCharacterController
                 @Esc.started += instance.OnEsc;
                 @Esc.performed += instance.OnEsc;
                 @Esc.canceled += instance.OnEsc;
+                @One.started += instance.OnOne;
+                @One.performed += instance.OnOne;
+                @One.canceled += instance.OnOne;
+                @Two.started += instance.OnTwo;
+                @Two.performed += instance.OnTwo;
+                @Two.canceled += instance.OnTwo;
+                @Three.started += instance.OnThree;
+                @Three.performed += instance.OnThree;
+                @Three.canceled += instance.OnThree;
+                @Four.started += instance.OnFour;
+                @Four.performed += instance.OnFour;
+                @Four.canceled += instance.OnFour;
             }
 
             /// <summary>
@@ -786,6 +902,18 @@ namespace ShadowMaze.MyCharacterController
                 @Esc.started -= instance.OnEsc;
                 @Esc.performed -= instance.OnEsc;
                 @Esc.canceled -= instance.OnEsc;
+                @One.started -= instance.OnOne;
+                @One.performed -= instance.OnOne;
+                @One.canceled -= instance.OnOne;
+                @Two.started -= instance.OnTwo;
+                @Two.performed -= instance.OnTwo;
+                @Two.canceled -= instance.OnTwo;
+                @Three.started -= instance.OnThree;
+                @Three.performed -= instance.OnThree;
+                @Three.canceled -= instance.OnThree;
+                @Four.started -= instance.OnFour;
+                @Four.performed -= instance.OnFour;
+                @Four.canceled -= instance.OnFour;
             }
 
             /// <summary>
@@ -925,6 +1053,34 @@ namespace ShadowMaze.MyCharacterController
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnEsc(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "One" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnOne(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Two" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnTwo(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Three" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnThree(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Four" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnFour(InputAction.CallbackContext context);
         }
     }
 }

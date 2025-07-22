@@ -151,6 +151,8 @@ namespace ShadowMaze.MyCharacterController
         private float _bloomIntensity = .3f;
         private Color _colorNor;
         private Color _bloomColor;
+        private Vector3 gotot;
+        private bool bgotot;
         #endregion
 
         #region Normal Function
@@ -184,6 +186,12 @@ namespace ShadowMaze.MyCharacterController
         private void Update()
         {
             if (s || astop) return;
+            if (bgotot)
+            {
+                transform.position = gotot;
+                bgotot = false;
+                return;
+            }
             _vignette.intensity.value = Mathf.Lerp(_vignette.intensity.value, _bloomIntensity, Time.deltaTime * changeScreenSpeed);
             _vignette.color.value = Color.Lerp(_vignette.color.value, _bloomColor, Time.deltaTime * changeColorScreenSpeed);
             _playerGameObject.transform.position = transform.position;
@@ -529,6 +537,12 @@ namespace ShadowMaze.MyCharacterController
         private void ResetNormalScreen()
         {
             _bloomIntensity = normalIntensityScreen;
+        }
+
+        public void TelTo(Transform t)
+        {
+            gotot = t.position;
+            bgotot = true;
         }
         #endregion
 

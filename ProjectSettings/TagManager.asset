@@ -10,6 +10,9 @@ TagManager:
   - lightPuzzle
   - ShadowPuzzle
   - GlobalVolume
+  - Dissolve
+  - CinemachineTarget
+  - TPPOG
   layers:
   - Default
   - TransparentFX

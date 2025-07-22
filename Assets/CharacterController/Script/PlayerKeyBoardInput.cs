@@ -1,3 +1,5 @@
+using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,8 +9,14 @@ namespace ShadowMaze.MyCharacterController
     {
         [SerializeField] private PlayerController _plrController;
         [SerializeField] private PlayerLight _light;
+        private GameObject par;
 
         public bool interact { get; private set; } = false;
+
+        private void Start()
+        {
+            par = GameObject.FindGameObjectWithTag("TPPOG");
+        }
 
         private void LateUpdate()
         {
@@ -74,6 +82,26 @@ namespace ShadowMaze.MyCharacterController
         public void OnEsc(InputAction.CallbackContext context)
         {
             if (context.started) _plrController.OnEsc(false);
+        }
+
+        public void OnOne(InputAction.CallbackContext context)
+        {
+            if (context.started) _plrController.TelTo(par.GetComponentsInChildren<Transform>()[1]);
+        }
+
+        public void OnTwo(InputAction.CallbackContext context)
+        {
+            if (context.started) _plrController.TelTo(par.GetComponentsInChildren<Transform>()[2]);
+        }
+
+        public void OnThree(InputAction.CallbackContext context)
+        {
+            if (context.started) _plrController.TelTo(par.GetComponentsInChildren<Transform>()[3]);
+        }
+
+        public void OnFour(InputAction.CallbackContext context)
+        {
+            if (context.started) _plrController.TelTo(par.GetComponentsInChildren<Transform>()[4]);
         }
     }
 
