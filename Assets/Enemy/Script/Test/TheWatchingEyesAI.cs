@@ -86,7 +86,7 @@ public class TheWatchingEyesAI : MonoBehaviour
     private bool unB = false;
     private float Btime = 0f;
     private bool astop = false;
-
+    private bool isTeleporting = false;
     private void Start()
     {
         _shadow = Instantiate(enemyShadow, transform);
@@ -209,11 +209,7 @@ public class TheWatchingEyesAI : MonoBehaviour
         {
             if (Random.Range(0f, 100f) < TeChange)
             {
-                Stay(teleportVFX.duration);
-                teleportVFX.PlayEffect();
-                float rx = Random.Range(-TeRange, TeRange);
-                float rz = Random.Range(-TeRange, TeRange);
-                transform.position = mirror.gameObject.transform.position + new Vector3(rx, 0f, rz);
+                StartCoroutine(Teleport(mirror));
             }
         }
 
@@ -222,7 +218,24 @@ public class TheWatchingEyesAI : MonoBehaviour
         mirror = null;
         inter = false;
     }
+    public System.Collections.IEnumerator Teleport(Mirror mirror)
+    {
+        if (isTeleporting) yield break;
 
+        isTeleporting = true;
+        teleportVFX.Invert = false;
+        Stay(teleportVFX.duration);
+        teleportVFX.PlayEffect();
+        yield return new WaitForSeconds(teleportVFX.duration);
+
+        float rx = Random.Range(-TeRange, TeRange);
+        float rz = Random.Range(-TeRange, TeRange);
+        transform.position = mirror.gameObject.transform.position + new Vector3(rx, 0f, rz);
+        teleportVFX.Invert = true;
+        teleportVFX.PlayEffect();
+        yield return new WaitForSeconds(teleportVFX.duration);
+        isTeleporting = false;
+    }
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
