@@ -173,7 +173,7 @@ VisualEffect:
       - m_Value: {x: 1, y: 0, z: 0, w: 0}
         m_Name: Mask Right
         m_Overridden: 1
-      - m_Value: {x: 0.01, y: 0.01, z: 0.01, w: 0}
+      - m_Value: {x: 1, y: 1.5, z: 2.5, w: 0}
         m_Name: Mask Scale
         m_Overridden: 1
       - m_Value: {x: 0, y: 1, z: 0, w: 0}
@@ -310,7 +310,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1.5, z: 2.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5854491007637040148}
@@ -406,6 +406,8 @@ MonoBehaviour:
   BChange: 3
   burrowingVFX: {fileID: 377597864541043993, guid: ab0e553bae455574a85862f647731183, type: 3}
   risingVFX: {fileID: 7170201406508337228, guid: 44d633eb5daa4a043843b6d6829d8bb1, type: 3}
+  teleportVFX: {fileID: 5358174511045816655}
+  teleportVFXDuration: 2
   TeRange: 2
   BD: 2.5
   deB: 3
@@ -453,7 +455,7 @@ GameObject:
   - component: {fileID: 5854491007637040148}
   - component: {fileID: 5358174511045816655}
   m_Layer: 1
-  m_Name: GameObject
+  m_Name: Teleport_FadeOut
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2197,15 +2199,15 @@ MonoBehaviour:
   resetOnInitial: 1
   useInstancedMaterials: 1
   isFinished: 1
-  effectStateTest: 0.311
+  effectStateTest: 1
   usePositionTransform: 0
-  initialPosition: {x: 0, y: 1, z: 0}
+  initialPosition: {x: 0, y: 0, z: 0}
   finalPosition: {x: 0, y: -1, z: 0}
   useScaleTransform: 1
   initialScale: {x: 0, y: 0, z: 0}
-  finalScale: {x: 1, y: 1.2, z: 1}
+  finalScale: {x: 1, y: 1.5, z: 2.5}
   useRotationTransform: 0
-  initialRotation: {x: 0, y: 0, z: 0}
+  initialRotation: {x: -0, y: 0, z: 0}
   finalRotation: {x: 0, y: 0, z: 0}
   propertiesScaleRate: 1
   invert: 0
