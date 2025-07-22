@@ -41,8 +41,7 @@ public class TheWatchingEyesArea : Singleton<TheWatchingEyesArea>
         }
         EnemyManager.Instance.Add(b);
         boss = b.GetComponent<TheWatchingEyesAI>();
-        boss.lightPuzzles = lightPuzzles;
-        boss.mirrorParent = mirrorParent;
+        boss.set(lightPuzzles, mirrorParent);
     }
 
     private void OnTriggerEnter(Collider other)

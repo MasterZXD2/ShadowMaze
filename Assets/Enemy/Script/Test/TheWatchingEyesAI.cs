@@ -92,14 +92,6 @@ public class TheWatchingEyesAI : MonoBehaviour
         _shadow = Instantiate(enemyShadow, transform);
         _rendererSha = _shadow.GetComponent<Renderer>();
         teleportVFX.duration = teleportVFXDuration;
-        foreach (LightPuzzleChanger changer in lightPuzzles)
-        {
-            changer.setToBossTWE(this);
-        }
-        foreach (Mirror mirror in mirrorParent.GetComponentsInChildren<Mirror>())
-        {
-            mirror.setToBossTWE(this);
-        }
     }
 
     private void Update()
@@ -275,6 +267,17 @@ public class TheWatchingEyesAI : MonoBehaviour
         }
     }
 
+    public void set(List<LightPuzzleChanger> lis, GameObject mgo) 
+    {
+        foreach (LightPuzzleChanger changer in lis)
+        {
+            changer.setToBossTWE(this);
+        }
+        foreach (Mirror mirror in mgo.GetComponentsInChildren<Mirror>())
+        {
+            mirror.setToBossTWE(this);
+        }
+    }
     private void LateralMovement()
     {
         //bool isGrounded = _enemyState.InGroundedState();
