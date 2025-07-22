@@ -1,3 +1,5 @@
+using INab.Common;
+using NaughtyAttributes;
 using ShadowMaze.EnemyCharactor;
 using ShadowMaze.MyCharacterController;
 using System.Collections.Generic;
@@ -47,6 +49,12 @@ public class TheWatchingEyesAI : MonoBehaviour
     [Range(0, 100)] public float StayChange = 50f;
     [Range(0, 100)] public float TeChange = 50f;
     [Range(0, 100)] public float BChange = 50f;
+
+    [Foldout("VFX"),SerializeField] private GameObject burrowingVFX;
+    [Foldout("VFX"),SerializeField] private GameObject risingVFX;
+    [Foldout("VFX"), SerializeField] private InteractiveEffect teleportVFX;
+    [Foldout("VFX"), SerializeField] private float teleportVFXDuration = 2f;
+
     [SerializeField] private float TeRange = 1f;
     [SerializeField] private float BD = 2f;
     [SerializeField] private float deB = 1f;
@@ -83,6 +91,7 @@ public class TheWatchingEyesAI : MonoBehaviour
     {
         _shadow = Instantiate(enemyShadow, transform);
         _rendererSha = _shadow.GetComponent<Renderer>();
+        teleportVFX.duration = teleportVFXDuration;
         foreach (LightPuzzleChanger changer in lightPuzzles)
         {
             changer.setToBossTWE(this);
@@ -108,7 +117,7 @@ public class TheWatchingEyesAI : MonoBehaviour
 
         if (isDash)
         {
-            // ¾Øè§ä»ã¹·ÔÈ·Ò§ dash
+            // ï¿½ï¿½ï¿½ï¿½ã¹·ï¿½È·Ò§ dash
             _characterController.Move(dashDir * DashForce * Time.deltaTime);
             dashTimeRemaining -= Time.deltaTime;
 
@@ -144,6 +153,11 @@ public class TheWatchingEyesAI : MonoBehaviour
         float dist = (transform.position - player.position).sqrMagnitude;
         if (dist <= outRange * outRange)
         {
+            if(_rendererSha.enabled)
+            {
+                GameObject vfx = Instantiate(risingVFX, transform.position- new Vector3(0, _characterController.height / 2, 0), Quaternion.identity);
+                Stay(vfx.GetComponent<ParticleSystem>().main.duration); 
+            }
             _rendererSha.enabled = false;
             pos = Vector3.Lerp(enemyObject.transform.position, transform.position, Time.deltaTime * outSpeed);
             if (dist <= attackRange * attackRange) AttackPlayer();
@@ -151,6 +165,11 @@ public class TheWatchingEyesAI : MonoBehaviour
         {
             if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit0, Mathf.Infinity, _groundlayerMask))
             {
+                if (!_rendererSha.enabled)
+                {
+                    GameObject vfx = Instantiate(burrowingVFX, enemyObject.transform.position - new Vector3(0, _characterController.height / 2, 0), Quaternion.identity);
+                    Stay(vfx.GetComponent<ParticleSystem>().main.duration);
+                }
                 _rendererSha.enabled = true;
                 pos = Vector3.Lerp(enemyObject.transform.position, hit0.point - new Vector3(0f, inGround + .5f, 0f), Time.deltaTime * outSpeed);
             }
@@ -172,17 +191,17 @@ public class TheWatchingEyesAI : MonoBehaviour
                     Vector3 dirToPlayer = (player.position - transform.position).normalized;
                     float distToPlayer = Vector3.Distance(transform.position, player.position) + 1.2f;
 
-                    // ¡ÓË¹´µÓáË¹è§ãËéàÃÔèÁ¡ÅÒ§ÃÐËÇèÒ§ÈÑµÃÙ¡Ñº¼ÙéàÅè¹
+                    // ï¿½ï¿½Ë¹ï¿½ï¿½ï¿½ï¿½Ë¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò§ï¿½ï¿½ï¿½ï¿½ï¿½Ò§ï¿½Ñµï¿½Ù¡Ñºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     wall.transform.position = transform.position + dirToPlayer * (distToPlayer * 0.5f);
 
-                    // ËÁØ¹¡Óá¾§ãËéËÑ¹ä»·Ò§¼ÙéàÅè¹
+                    // ï¿½ï¿½Ø¹ï¿½ï¿½á¾§ï¿½ï¿½ï¿½ï¿½Ñ¹ä»·Ò§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     wall.transform.rotation = Quaternion.LookRotation(dirToPlayer);
 
-                    // ÅçÍ¤äÁèãËéàÍÕÂ§ (¶éÒãªé LookRotation áÅéÇÁÑ¹àÍÕÂ§)
+                    // ï¿½ï¿½Í¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â§ (ï¿½ï¿½ï¿½ï¿½ï¿½ LookRotation ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½Â§)
                     Vector3 euler = wall.transform.eulerAngles;
                     wall.transform.rotation = Quaternion.Euler(0f, euler.y, 0f);
 
-                    // »ÃÑº¢¹Ò´¡Óá¾§ãËéÂÒÇ¾Í
+                    // ï¿½ï¿½Ñºï¿½ï¿½Ò´ï¿½ï¿½á¾§ï¿½ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½
                     wall.transform.localScale = new Vector3(0.2f, 20f, distToPlayer);
                 }
             }
@@ -198,7 +217,8 @@ public class TheWatchingEyesAI : MonoBehaviour
         {
             if (Random.Range(0f, 100f) < TeChange)
             {
-                Stay(.5f);
+                Stay(teleportVFX.duration);
+                teleportVFX.PlayEffect();
                 float rx = Random.Range(-TeRange, TeRange);
                 float rz = Random.Range(-TeRange, TeRange);
                 transform.position = mirror.gameObject.transform.position + new Vector3(rx, 0f, rz);
@@ -316,6 +336,7 @@ public class TheWatchingEyesAI : MonoBehaviour
 
     private void Stay(float t)
     {
+        Debug.Log("Stay for " + t + " seconds");
         staying = true;
         Invoke(nameof(ResetStay), t);
     }
