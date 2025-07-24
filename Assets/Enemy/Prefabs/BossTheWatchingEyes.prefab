@@ -413,7 +413,7 @@ MonoBehaviour:
   deB: 3
   stayTime: 1.2
   outSpeed: 100
-  outRange: 2.5
+  outRange: 3
   attackRange: 1.5
   inGround: 5
   _groundlayerMask:

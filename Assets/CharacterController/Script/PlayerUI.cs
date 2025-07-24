@@ -1,4 +1,5 @@
 ﻿using TMPro;
+using UnityEditor.ShaderGraph;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -74,7 +75,7 @@ namespace ShadowMaze.MyCharacterController {
             if (_MFV != _playerStats.memoryFragment) {
                 for (int i = 0; i <= _MFV; i++)
                 {
-                    if (i < 3) _MF.transform.Find(i.ToString()).GetComponent<Image>().color = new Color(0.621405f, 0.3820755f,1f);
+                    if (i < 3) _MF.transform.Find(i.ToString()).Find("C").GetComponent<RawImage>().color = new Color(1,1,1,1);
                 }
                 _MFV = _playerStats.memoryFragment;
                 //_memoryFragmentText.text = $"memory fragment {_MFV.ToString()}/3";
