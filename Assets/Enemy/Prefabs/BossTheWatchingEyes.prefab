@@ -398,7 +398,7 @@ MonoBehaviour:
   dashDuration: 0.2
   DashChange: 50
   lightPuzzles: []
-  mirrorParent: {fileID: 0}
+  SkillChange: 1
   DarkScreenChange: 2.5
   WallShadowChange: 0.5
   StayChange: 0.1

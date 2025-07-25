@@ -16,7 +16,7 @@ namespace ShadowMaze.InteractSystem
         [SerializeField] protected float range = 2f;
         [field: SerializeField] private axisMirror axis = axisMirror.Z;
         private GameObject currUI;
-        private bool _playerIsInRange = false;
+        protected bool _playerIsInRange = false;
         public string _name = "null";
 
         protected virtual void Start()

@@ -93,6 +93,10 @@ namespace ShadowMaze.MyCharacterController
         [field: SerializeField] private CamMode CameraMode = CamMode.FirstPerson;
 
         [Space(10)]
+        [Header("Cam Settings")]
+        [SerializeField] private float camCheckRange = 0.5f;
+        [SerializeField] private float camFarRange = 0.3f;
+
         [Header("FOV Settings")]
         [SerializeField] private float normalFOV = 65f;
         [SerializeField] private float runFOV = 80f;
@@ -134,6 +138,7 @@ namespace ShadowMaze.MyCharacterController
         private float _stepOffset;
 
         private float _toggleSpeed = 3f;
+        private Vector3 _startCamPos;
         private Vector3 _startPos;
 
         private bool _leftClick = false;
@@ -153,6 +158,8 @@ namespace ShadowMaze.MyCharacterController
         private Color _bloomColor;
         private Vector3 gotot;
         private bool bgotot;
+        private Vector3 _collisionOffset = Vector3.zero;
+        private Vector3 _headBobOffset = Vector3.zero;
         #endregion
 
         #region Normal Function
@@ -179,6 +186,7 @@ namespace ShadowMaze.MyCharacterController
             //SetCam();
             //_plrCamera.fieldOfView = normalFOV;
             _startPos = cameraHolder.localPosition;
+            _startCamPos = _plrCamera.transform.localPosition;
             //Cursor.lockState = CursorLockMode.Locked;
             //Cursor.visible = false;
         }
@@ -195,6 +203,7 @@ namespace ShadowMaze.MyCharacterController
             _vignette.intensity.value = Mathf.Lerp(_vignette.intensity.value, _bloomIntensity, Time.deltaTime * changeScreenSpeed);
             _vignette.color.value = Color.Lerp(_vignette.color.value, _bloomColor, Time.deltaTime * changeColorScreenSpeed);
             _playerGameObject.transform.position = transform.position;
+            CameraMovement();
             MovementState();
             VerticalMovement();
             LateralMovement();
@@ -212,9 +221,12 @@ namespace ShadowMaze.MyCharacterController
 
         private void OnDrawGizmos()
         {
-            Gizmos.color = Color.red;
+            Gizmos.color = Color.white;
             Vector3 pos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
             Gizmos.DrawWireSphere(pos, _characterController.radius);
+            if (!_plrCamera) return;
+            Gizmos.color = Color.blue;
+            Gizmos.DrawRay(_plrCamera.transform.position, _plrCamera.transform.forward);
         }
 
         #endregion
@@ -246,6 +258,21 @@ namespace ShadowMaze.MyCharacterController
                 _playerState.Set(lateralState);
                 _characterController.stepOffset = _stepOffset;
             }
+        }
+
+        private void CameraMovement()
+        {
+            Transform cam = _plrCamera.transform;
+            if(Physics.Raycast(cam.position, cam.forward,out RaycastHit hit, camCheckRange, _groundLayers)){
+                Vector3 offsetDir = -cam.forward.normalized; // ย้อนกลับจากกล้อง
+                _collisionOffset = offsetDir * camFarRange;
+            }
+            else
+            {
+                _collisionOffset = Vector3.zero; // ไม่มีสิ่งกีดขวาง กลับไปปกติ
+            }
+
+            cameraHolder.localPosition = _collisionOffset + _headBobOffset;
         }
 
         private void VerticalMovement()
@@ -389,13 +416,14 @@ namespace ShadowMaze.MyCharacterController
             Vector3 pos = Vector3.zero;
             pos.y += Mathf.Lerp(pos.y, Mathf.Sin(Time.time * frequencyHeadBob) * amountHeadBob * 1.4f, smoothHeadBob * Time.deltaTime);
             pos.x += Mathf.Lerp(pos.x, Mathf.Cos(Time.time * frequencyHeadBob / 2f) * amountHeadBob * 1.6f, smoothHeadBob * Time.deltaTime);
-            cameraHolder.localPosition += pos;
+
+            _headBobOffset += pos;
         }
 
         private void StopHeadBob()
         {
-            if (cameraHolder.localPosition == _startPos) return;
-            cameraHolder.localPosition = Vector3.Lerp(cameraHolder.localPosition, _startPos, Time.deltaTime);
+            if (_headBobOffset == _startPos) return;
+            _headBobOffset = Vector3.Lerp(_headBobOffset, _startPos, Time.deltaTime * smoothHeadBob);
         }
         #endregion
 
@@ -409,7 +437,7 @@ namespace ShadowMaze.MyCharacterController
 
         private bool IsGrounded()
         {
-            Vector3 center = transform.position + capsuleCollider.center;
+            /*Vector3 center = transform.position + capsuleCollider.center;
             float radius = capsuleCollider.radius * 0.95f;
             float height = capsuleCollider.height * 0.5f - radius;
 
@@ -432,7 +460,9 @@ namespace ShadowMaze.MyCharacterController
                     return true;
                 }
             }
-            return false;
+            return false;*/
+            bool grounded = _playerState.InGroundedState() ? IsGroundedWhileGrounded() : IsGroundedWhileAirborne();
+            return grounded;
         }
 
         private bool IsGroundedWhileGrounded()

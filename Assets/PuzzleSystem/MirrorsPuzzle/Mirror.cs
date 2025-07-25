@@ -12,6 +12,7 @@ public class Mirror : InteractObject
     [SerializeField] private bool canMove = false;
     [SerializeField] private float rotationSpeed = 5;
 
+    private bool _rotate = false;
     private TheWatchingEyesAI boss;
     private Renderer _renderer;
     private Mirror m;
@@ -52,8 +53,20 @@ public class Mirror : InteractObject
 
     protected override void Update()
     {
-        transform.rotation = Quaternion.Lerp(transform.rotation, _rotation, rotationSpeed * Time.deltaTime);
         base.Update();
+        if (!_playerIsInRange && _rotate) _rotate = false;
+        if (_rotate)
+        {
+            Transform rp = PlayerController.Instance.transform;
+
+            Vector3 dir = (rp.position - transform.position);
+            dir.y = 0f; // หันเฉพาะแนว Y
+            if (dir.sqrMagnitude > 0.01f)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(dir.normalized);
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            }
+        }
         _renderer.material = b ? neon : glass;
         b = false;
     }
@@ -97,8 +110,8 @@ public class Mirror : InteractObject
     public override void Interact()
     {
         if (!canMove) return;
-        boss.MirrorInteract(this);
-        _rotation = transform.rotation * Quaternion.Euler(0f,5f,0f);
+        if (!_rotate && boss) boss.MirrorInteract(this);
+        _rotate = !_rotate;
     }
 
     public void setToBossTWE(TheWatchingEyesAI twe)

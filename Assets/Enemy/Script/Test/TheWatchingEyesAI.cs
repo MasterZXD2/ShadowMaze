@@ -42,8 +42,8 @@ public class TheWatchingEyesAI : MonoBehaviour
     [Range(0, 100)] public float DashChange = 50f;
 
     public List<LightPuzzleChanger> lightPuzzles = new List<LightPuzzleChanger>();
-    public GameObject mirrorParent;
 
+    [Range(0, 100)] public float SkillChange = 50f;
     [Range(0, 100)] public float DarkScreenChange = 50f;
     [Range(0, 100)] public float WallShadowChange = 50f;
     [Range(0, 100)] public float StayChange = 50f;
@@ -168,7 +168,7 @@ public class TheWatchingEyesAI : MonoBehaviour
         }
         enemyObject.transform.position = pos;
 
-        if (Random.Range(0f, 100f) < .5f) {
+        if (Random.Range(0f, 100f) < SkillChange) {
             if (finishs >= 1)
             {
                 if (Random.Range(0f, 100f) < StayChange) Stay(stayTime);
@@ -282,7 +282,8 @@ public class TheWatchingEyesAI : MonoBehaviour
 
     public void set(List<LightPuzzleChanger> lis, GameObject mgo) 
     {
-        foreach (LightPuzzleChanger changer in lis)
+        lightPuzzles = lis;
+        foreach (LightPuzzleChanger changer in lightPuzzles)
         {
             changer.setToBossTWE(this);
         }
