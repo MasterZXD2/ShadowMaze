@@ -138,7 +138,6 @@ namespace ShadowMaze.MyCharacterController
         private float _stepOffset;
 
         private float _toggleSpeed = 3f;
-        private Vector3 _startCamPos;
         private Vector3 _startPos;
 
         private bool _leftClick = false;
@@ -186,7 +185,6 @@ namespace ShadowMaze.MyCharacterController
             //SetCam();
             //_plrCamera.fieldOfView = normalFOV;
             _startPos = cameraHolder.localPosition;
-            _startCamPos = _plrCamera.transform.localPosition;
             //Cursor.lockState = CursorLockMode.Locked;
             //Cursor.visible = false;
         }
@@ -203,7 +201,7 @@ namespace ShadowMaze.MyCharacterController
             _vignette.intensity.value = Mathf.Lerp(_vignette.intensity.value, _bloomIntensity, Time.deltaTime * changeScreenSpeed);
             _vignette.color.value = Color.Lerp(_vignette.color.value, _bloomColor, Time.deltaTime * changeColorScreenSpeed);
             _playerGameObject.transform.position = transform.position;
-            CameraMovement();
+
             MovementState();
             VerticalMovement();
             LateralMovement();
@@ -264,8 +262,12 @@ namespace ShadowMaze.MyCharacterController
         {
             Transform cam = _plrCamera.transform;
             if(Physics.Raycast(cam.position, cam.forward,out RaycastHit hit, camCheckRange, _groundLayers)){
-                Vector3 offsetDir = -cam.forward.normalized; // ย้อนกลับจากกล้อง
-                _collisionOffset = offsetDir * camFarRange;
+                float dis = (hit.point - cam.position).magnitude;
+                if (dis < camCheckRange)
+                {
+                    Vector3 offsetDir = -cam.forward.normalized;
+                    _collisionOffset = offsetDir * camFarRange;
+                }
             }
             else
             {
@@ -417,13 +419,13 @@ namespace ShadowMaze.MyCharacterController
             pos.y += Mathf.Lerp(pos.y, Mathf.Sin(Time.time * frequencyHeadBob) * amountHeadBob * 1.4f, smoothHeadBob * Time.deltaTime);
             pos.x += Mathf.Lerp(pos.x, Mathf.Cos(Time.time * frequencyHeadBob / 2f) * amountHeadBob * 1.6f, smoothHeadBob * Time.deltaTime);
 
-            _headBobOffset += pos;
+            cameraHolder.localPosition += pos;
         }
 
         private void StopHeadBob()
         {
-            if (_headBobOffset == _startPos) return;
-            _headBobOffset = Vector3.Lerp(_headBobOffset, _startPos, Time.deltaTime * smoothHeadBob);
+            if (cameraHolder.localPosition == _startPos) return;
+            cameraHolder.localPosition = Vector3.Lerp(cameraHolder.localPosition, _startPos, Time.deltaTime * smoothHeadBob);
         }
         #endregion
 

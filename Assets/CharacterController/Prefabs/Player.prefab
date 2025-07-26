@@ -828,7 +828,7 @@ MonoBehaviour:
   fovTransitionSpeed: 4
   cameraHolder: {fileID: 8355330131040135230}
   amountHeadBob: 0.01
-  frequencyHeadBob: 10
+  frequencyHeadBob: 30
   smoothHeadBob: 10
   _groundLayers:
     serializedVersion: 2
