@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0e9c07c85b3d9d84898e3998abbee29d
+guid: 3d2217f4a213c9b44baa886fbb07de4b
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - MN Lon2
+  - KC Nightmare
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
