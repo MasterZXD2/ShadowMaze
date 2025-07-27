@@ -1,3 +1,4 @@
+using ShadowMaze.MyCharacterController;
 using System;
 using System.Collections;
 using System.Net.Http;
@@ -74,6 +75,12 @@ namespace ShadowMaze.CutSceneSystem
                 return;
             }
 
+            PlayerController player = PlayerController.Instance;
+            if (player)
+            {
+                player._playerUI.Off();
+            }
+
             isPaused = false;
             isPlaying = true;
             videoPlayer.Play();
@@ -138,6 +145,12 @@ namespace ShadowMaze.CutSceneSystem
                 yield return null;
             }
 
+            PlayerController player = PlayerController.Instance;
+            if (player)
+            {
+                player._playerUI.On();
+            }
+
             isPlaying = false;
             isPaused = false;
 
@@ -178,6 +191,13 @@ namespace ShadowMaze.CutSceneSystem
             {
                 isPlaying = false;
                 isPaused = false;
+
+                PlayerController player = PlayerController.Instance;
+                if (player)
+                {
+                    player._playerUI.On();
+                }
+
             }
 
             onClipEnd?.Invoke();

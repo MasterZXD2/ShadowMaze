@@ -35,7 +35,7 @@ namespace ShadowMaze.MyCharacterController
         [SerializeField] private PlayerLight _playerLight;
         [SerializeField] private PlayerState _playerState;
         public PlayerStats _playerStats;
-        [SerializeField] private PlayerUI _playerUI;
+        public PlayerUI _playerUI;
         [SerializeField] private GameObject _playerGameObject;
         public PlayerInteract _playerInteract;
 

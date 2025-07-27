@@ -8,7 +8,7 @@ public class StortyEyang : MonoBehaviour
     void OnTriggerEnter(Collider other){
         
         if(other.gameObject.CompareTag("Player")){
-            StartCoroutine(TextStory());
+            //StartCoroutine(TextStory());
         }
     }
     IEnumerator TextStory(){

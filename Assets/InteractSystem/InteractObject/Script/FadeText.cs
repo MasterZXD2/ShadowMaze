@@ -9,7 +9,7 @@ public class FadeText : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(FadeInText());
+        //StartCoroutine(FadeInText());
     }
 
     IEnumerator FadeInText()

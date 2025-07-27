@@ -1,4 +1,5 @@
 ﻿using TMPro;
+using UnityEditor.Rendering;
 using UnityEditor.ShaderGraph;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,6 +26,8 @@ namespace ShadowMaze.MyCharacterController {
         private int _MFV = 0;
         public bool _esc = false;
 
+        private bool b = false;
+
         private void SetupUI()
         {
             _mainUI = GameObject.FindGameObjectWithTag("MainUI");
@@ -42,6 +45,7 @@ namespace ShadowMaze.MyCharacterController {
 
         private void Start()
         {
+            b = true;
             _normalSanitySize = _sanityHeart.transform.localScale.x;
             _beatSanitySize = _normalSanitySize * 1.15f;
 
@@ -71,7 +75,10 @@ namespace ShadowMaze.MyCharacterController {
         {
             if (_esc) return;
 
-            if (_batteryBS.value != _playerStats.Health) _batteryBS.value = Mathf.Lerp(_batteryBS.value, _playerStats.Battery, BBLerpSpeed);
+            if (_batteryBS.value != _playerStats.Battery) { 
+                if (!b) _playerStats.Battery = _batteryBS.value;
+                else _batteryBS.value = Mathf.Lerp(_batteryBS.value, _playerStats.Battery, BBLerpSpeed);
+            }
             if (_MFV != _playerStats.memoryFragment) {
                 for (int i = 0; i <= _MFV; i++)
                 {
@@ -91,6 +98,30 @@ namespace ShadowMaze.MyCharacterController {
 
                 _sanityHeart.transform.localScale = new Vector3(scaleFactor, scaleFactor, 1f);
             }
+        }
+        public void On()
+        {
+            b = true;
+            _batteryBar.SetActive(true);
+            _sanityHeart.SetActive(true);
+            _sanityBar.SetActive(true);
+            _MF.SetActive(true);
+        }
+
+        public void Off()
+        {
+            b = false;
+            _batteryBar.SetActive(false);
+            _sanityHeart.SetActive(false);
+            _sanityBar.SetActive(false);
+            _MF.SetActive(false);
+        }
+        
+        public void Toggle()
+        {
+            b = !b;
+            if (b) On();
+            else Off();
         }
 
         public void OnEsc()

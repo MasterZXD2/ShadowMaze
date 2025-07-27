@@ -1,4 +1,5 @@
-﻿using ShadowMaze.EnemyCharactor;
+﻿using ShadowMaze.CutSceneSystem;
+using ShadowMaze.EnemyCharactor;
 using ShadowMaze.MyCharacterController;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,6 +22,8 @@ public class TheWatchingEyesArea : Singleton<TheWatchingEyesArea>
     [SerializeField] private GameObject mirrorParent;
     [field: SerializeField] private List<LightPuzzleChanger> lightPuzzles = new List<LightPuzzleChanger>();
 
+    [SerializeField] private CutScene cutScene;
+
     [SerializeField] private LayerMask _spawnAreaLayerMask;
     [SerializeField] private LayerMask _groundlayerMask;
 
@@ -42,6 +45,18 @@ public class TheWatchingEyesArea : Singleton<TheWatchingEyesArea>
         EnemyManager.Instance.Add(b);
         boss = b.GetComponent<TheWatchingEyesAI>();
         boss.set(lightPuzzles, mirrorParent);
+
+        cutScene.Prepare();
+        cutScene.Stop();
+    }
+
+    private void Update()
+    {
+        if (boss.Health <= 0)
+        {
+            cutScene.Play();
+            Destroy(boss.gameObject);
+        }
     }
 
     private void OnTriggerEnter(Collider other)

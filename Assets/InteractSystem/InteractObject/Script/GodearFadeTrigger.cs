@@ -1,19 +1,30 @@
+using ShadowMaze.CutSceneSystem;
+using ShadowMaze.MyCharacterController;
+using System.Collections;
+using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
-using System.Collections;
 
 public class GodearFadeTrigger : MonoBehaviour
 {
     public TextMeshProUGUI textMeshPro;
     public AudioSource storyAudio;
+    public CutScene cutScene;
     public float fadeDuration = 1.5f;
     public float holdDuration = 3f;
     private bool hasTriggered = false;
+    private bool holdf = false;
+    private bool playf = false;
 
     void Start()
     {
         // เริ่มด้วยข้อความโปร่งใส
         SetAlpha(0f);
+
+        cutScene.SetVideoCamera(PlayerController.Instance._plrCamera);
+
+        cutScene.Prepare();
+        cutScene.Stop();
     }
 
     void OnTriggerEnter(Collider other)
@@ -21,14 +32,21 @@ public class GodearFadeTrigger : MonoBehaviour
         if (other.CompareTag("Player") && !hasTriggered)
         {
             hasTriggered = true;
-            StartCoroutine(ShowTextWithFade());
+            StartCoroutine(Play());
         }
+    }
+
+    IEnumerator Play() {
+        StartCoroutine(ShowTextWithFade());
+        cutScene.Play();
+        yield return new WaitUntil(() => !cutScene.IsPlaying && holdf);
+        Destroy(gameObject);
     }
 
     IEnumerator ShowTextWithFade()
     {
         storyAudio.Play();
-
+        textMeshPro.gameObject.SetActive(true);
         // Fade In
         yield return StartCoroutine(FadeText(0f, 1f, fadeDuration));
 
@@ -38,7 +56,7 @@ public class GodearFadeTrigger : MonoBehaviour
         // Fade Out
         yield return StartCoroutine(FadeText(1f, 0f, fadeDuration));
 
-        Destroy(gameObject); // ลบ Trigger ออก
+        holdf = true;
     }
 
     IEnumerator FadeText(float startAlpha, float endAlpha, float duration)
