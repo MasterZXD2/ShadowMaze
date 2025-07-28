@@ -142,6 +142,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 913980130213307607}
   enemyState: {fileID: 5749896092012567166}
+  enemyModel: {fileID: 0}
   Health: 100
   MaxHealth: 100
   attackRange: 1.8
@@ -168,14 +169,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   flashlightStunDuration: 3
-  cubeFormDuration: 5
-  enemyMeshRenderer: {fileID: 1726616875948492991}
   enemyController: {fileID: 760087186483012213}
-  cubeFormPrefab: {fileID: 7677901736339717805, guid: bbf19f84d2f00774d908cf5cf93551c1, type: 3}
+  enemyMeshRenderer: {fileID: 1726616875948492991}
   cubeFormDuration: 5
-  enemyMeshRenderer: {fileID: 0}
-  enemyController: {fileID: 0}
-  cubeFormPrefab: {fileID: 0}
+  cubeFormPrefab: {fileID: 7677901736339717805, guid: bbf19f84d2f00774d908cf5cf93551c1, type: 3}
 --- !u!143 &760087186483012213
 CharacterController:
   m_ObjectHideFlags: 0

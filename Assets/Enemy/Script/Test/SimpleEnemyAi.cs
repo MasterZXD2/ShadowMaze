@@ -19,6 +19,7 @@ namespace ShadowMaze.EnemyCharactor
         [Header("Enemy Components")]
         [SerializeField] protected NavMeshAgent agent;
         [SerializeField] protected EnemyState enemyState;
+        [SerializeField] private GameObject enemyModel;
 
         [Space(10)]
         [Header("Stats")]
@@ -104,6 +105,7 @@ namespace ShadowMaze.EnemyCharactor
         protected Vector3 _lastGTPosition;
         protected bool isLPP = false;
         private bool isPH = false;
+        private Vector3 _offset = Vector3.zero;
 
         protected bool InMemeoryFragmentArea = false;
         protected bool astop = false;
@@ -122,11 +124,13 @@ namespace ShadowMaze.EnemyCharactor
             MaxHealth = Health;
             isCanSeePlayer = true;
             enemyController.enabled = false;
+            if (!agent) agent = GetComponent<NavMeshAgent>();
             agent.enabled = true;
         }
 
         private void Start()
         {
+            if (enemyModel) _offset = enemyModel.transform.position - transform.position;
             spawnPoint = transform.position;
 
             _player = PlayerController.Instance.gameObject.transform;
@@ -139,6 +143,11 @@ namespace ShadowMaze.EnemyCharactor
         protected virtual void Update()
         {
             if (!_player || isJump) return;
+            if (enemyModel)
+            {
+                enemyModel.transform.position = transform.position + _offset;
+                enemyModel.transform.rotation = transform.rotation;
+            }
             if (astop)
             {
                 agent.SetDestination(transform.position);
