@@ -15,6 +15,7 @@ namespace ShadowMaze.EnemyCharactor
         [SerializeField] private Renderer enemyMeshRenderer; // MeshRenderer ของแคปซูล (ศัตรู)
         [SerializeField] private float cubeFormDuration = 5f; // ระยะเวลาที่อยู่ในร่างกล่องก่อนกลับเป็นศัตรู (ถ้าไม่โดนไฟฉายส่อง)
         [SerializeField] private GameObject cubeFormPrefab; // Prefab ของกล่องที่จะใช้แปลงร่าง
+        [SerializeField] private Vector3 sceOffset = Vector3.one;
 
         private GameObject currentCubeFormInstance; // ตัวแปรเก็บ Instance ของกล่องที่ถูกสร้างขึ้นมา
         private float cubeFormTimer = 0f; // นับเวลาที่อยู่ในร่างกล่อง (เพื่อกลับร่างเดิม)
@@ -88,6 +89,9 @@ namespace ShadowMaze.EnemyCharactor
             {
                 // สร้างกล่องที่ตำแหน่งและ Rotation ปัจจุบันของ EnemyAI (แคปซูล)
                 currentCubeFormInstance = Instantiate(cubeFormPrefab, transform.position, transform.rotation, transform);
+                Vector3 s = currentCubeFormInstance.transform.localScale;
+                for (int i = 0; i < 3; i++) s[i] *= sceOffset[i];
+                currentCubeFormInstance.transform.localScale = s;
                 currentCubeFormInstance.tag = gameObject.tag;
                 currentCubeFormInstance.layer = gameObject.layer;
                 // *** ลบบรรทัดนี้: ไม่ให้ EnemyAI เป็น Parent ของกล่องอีกต่อไป ***
