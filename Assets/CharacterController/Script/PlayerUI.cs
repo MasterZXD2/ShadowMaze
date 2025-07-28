@@ -19,6 +19,7 @@ namespace ShadowMaze.MyCharacterController {
         private GameObject _resumeUI;
         private Button _resumeBU;
         private GameObject _MF;
+        private GameObject _FMF;
 
         private float _normalSanitySize = 1f;
         private float _beatSanitySize = 1.3f;
@@ -39,6 +40,7 @@ namespace ShadowMaze.MyCharacterController {
             _resumeUI = _mainUI.transform.Find("Resume").gameObject;
             _resumeBU = _resumeUI.GetComponent<Button>();
             _MF = _mainUI.transform.Find("MFUI").gameObject;
+            _FMF = _mainUI.transform.Find("FullMF").gameObject;
         }
 
         private void Awake() => SetupUI();
@@ -49,6 +51,7 @@ namespace ShadowMaze.MyCharacterController {
             _normalSanitySize = _sanityHeart.transform.localScale.x;
             _beatSanitySize = _normalSanitySize * 1.15f;
 
+            _FMF.SetActive(false);
             _resumeUI.SetActive(false);
             _resumeBU.onClick.RemoveAllListeners();
             _resumeBU.onClick.AddListener(() =>
@@ -79,7 +82,7 @@ namespace ShadowMaze.MyCharacterController {
                 if (!b) _playerStats.Battery = _batteryBS.value;
                 else _batteryBS.value = Mathf.Lerp(_batteryBS.value, _playerStats.Battery, BBLerpSpeed);
             }
-            if (_MFV != _playerStats.memoryFragment) {
+            if (_MFV != _playerStats.memoryFragment && b) {
                 for (int i = 0; i <= _MFV; i++)
                 {
                     if (i < 3) _MF.transform.Find(i.ToString()).Find("C").GetComponent<RawImage>().color = new Color(1,1,1,1);
@@ -99,6 +102,15 @@ namespace ShadowMaze.MyCharacterController {
                 _sanityHeart.transform.localScale = new Vector3(scaleFactor, scaleFactor, 1f);
             }
         }
+
+        public void FullMF()
+        {
+            if (_MFV == 3)
+            {
+                _FMF.SetActive(true);
+            }
+        }
+
         public void On()
         {
             b = true;

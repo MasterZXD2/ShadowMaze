@@ -363,6 +363,15 @@ namespace ShadowMaze.MyCharacterController
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Five"",
+                    ""type"": ""Button"",
+                    ""id"": ""85a3c766-3d9e-486e-b23f-549ba3a98090"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -486,6 +495,17 @@ namespace ShadowMaze.MyCharacterController
                     ""action"": ""Four"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3b956b6e-57bf-40c5-ac2e-4341ac762833"",
+                    ""path"": ""<Keyboard>/5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Five"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -513,6 +533,7 @@ namespace ShadowMaze.MyCharacterController
             m_PlayerKeyBoardMap_Two = m_PlayerKeyBoardMap.FindAction("Two", throwIfNotFound: true);
             m_PlayerKeyBoardMap_Three = m_PlayerKeyBoardMap.FindAction("Three", throwIfNotFound: true);
             m_PlayerKeyBoardMap_Four = m_PlayerKeyBoardMap.FindAction("Four", throwIfNotFound: true);
+            m_PlayerKeyBoardMap_Five = m_PlayerKeyBoardMap.FindAction("Five", throwIfNotFound: true);
         }
 
         ~@PlayerControls()
@@ -756,6 +777,7 @@ namespace ShadowMaze.MyCharacterController
         private readonly InputAction m_PlayerKeyBoardMap_Two;
         private readonly InputAction m_PlayerKeyBoardMap_Three;
         private readonly InputAction m_PlayerKeyBoardMap_Four;
+        private readonly InputAction m_PlayerKeyBoardMap_Five;
         /// <summary>
         /// Provides access to input actions defined in input action map "PlayerKeyBoardMap".
         /// </summary>
@@ -811,6 +833,10 @@ namespace ShadowMaze.MyCharacterController
             /// Provides access to the underlying input action "PlayerKeyBoardMap/Four".
             /// </summary>
             public InputAction @Four => m_Wrapper.m_PlayerKeyBoardMap_Four;
+            /// <summary>
+            /// Provides access to the underlying input action "PlayerKeyBoardMap/Five".
+            /// </summary>
+            public InputAction @Five => m_Wrapper.m_PlayerKeyBoardMap_Five;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -870,6 +896,9 @@ namespace ShadowMaze.MyCharacterController
                 @Four.started += instance.OnFour;
                 @Four.performed += instance.OnFour;
                 @Four.canceled += instance.OnFour;
+                @Five.started += instance.OnFive;
+                @Five.performed += instance.OnFive;
+                @Five.canceled += instance.OnFive;
             }
 
             /// <summary>
@@ -914,6 +943,9 @@ namespace ShadowMaze.MyCharacterController
                 @Four.started -= instance.OnFour;
                 @Four.performed -= instance.OnFour;
                 @Four.canceled -= instance.OnFour;
+                @Five.started -= instance.OnFive;
+                @Five.performed -= instance.OnFive;
+                @Five.canceled -= instance.OnFive;
             }
 
             /// <summary>
@@ -1081,6 +1113,13 @@ namespace ShadowMaze.MyCharacterController
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnFour(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Five" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnFive(InputAction.CallbackContext context);
         }
     }
 }

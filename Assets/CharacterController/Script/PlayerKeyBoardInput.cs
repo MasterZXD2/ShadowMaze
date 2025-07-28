@@ -103,6 +103,11 @@ namespace ShadowMaze.MyCharacterController
         {
             if (context.started) _plrController.TelTo(par.GetComponentsInChildren<Transform>()[4]);
         }
+
+        public void OnFive(InputAction.CallbackContext context)
+        {
+            if (context.started) _plrController.TelTo(par.GetComponentsInChildren<Transform>()[5]);
+        }
     }
 
 }

@@ -50,14 +50,14 @@ namespace ShadowMaze.InteractSystem
 
             float sqrDist = (player.transform.position - transform.position).sqrMagnitude;
 
-            if (sqrDist < range * range)
+            if (sqrDist < range * range && CanPlayerSee(player.transform))
             {
-                if (!_playerIsInRange && !player._playerInteract._interactObject)
-                {
+                 if (!_playerIsInRange && !player._playerInteract._interactObject)
+                 {
                     player._playerInteract.SetInteractObject(this, currUI);
                     _playerIsInRange = true;
                     currUI.SetActive(true);
-                }
+                 }
             }
             else
             {
@@ -69,6 +69,19 @@ namespace ShadowMaze.InteractSystem
                 }
             }
         }
+
+        private bool CanPlayerSee(Transform player)
+        {
+            Camera cam = Camera.main;
+            if (cam == null) return false;
+
+            Vector3 toObject = (transform.position - cam.transform.position).normalized;
+            float dot = Vector3.Dot(cam.transform.forward, toObject);
+
+            // dot ~ 1.0 = กล้องมองตรงไปที่วัตถุ, dot ~ 0.0 = มองด้านข้าง
+            return dot > 0.9f; // ปรับความแม่นตามต้องการ
+        }
+
 
         public virtual void Interact()
         {
