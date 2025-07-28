@@ -1,9 +1,13 @@
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Video;
 
 public class TimelineTrigger : MonoBehaviour
 {
     public PlayableDirector timelineToPlay;
+
+    private bool isPlaying = false;
+    public bool IsPlaying => isPlaying;
 
     private void Start()
     {
@@ -33,6 +37,7 @@ public class TimelineTrigger : MonoBehaviour
         if (timelineToPlay != null)
         {
             timelineToPlay.Play();
+            isPlaying = true;   
         }
         else
         {
@@ -42,6 +47,7 @@ public class TimelineTrigger : MonoBehaviour
 
     private void OnTimelineStopped(PlayableDirector director)
     {
+        isPlaying = false;
         gameObject.SetActive(false);
     }
 

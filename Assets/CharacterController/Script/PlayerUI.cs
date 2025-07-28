@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.Collections;
+using TMPro;
 using UnityEditor.Rendering;
 using UnityEditor.ShaderGraph;
 using UnityEngine;
@@ -10,6 +11,7 @@ namespace ShadowMaze.MyCharacterController {
         [SerializeField] private PlayerStats _playerStats;
         [SerializeField] private float BBLerpSpeed = 0.05f;
         [SerializeField] private float SSLerpSpeed = 0.05f;
+        private TimelineTrigger trigger;
         private GameObject _mainUI;
         private GameObject _batteryBar;
         private Slider _batteryBS;
@@ -41,6 +43,7 @@ namespace ShadowMaze.MyCharacterController {
             _resumeBU = _resumeUI.GetComponent<Button>();
             _MF = _mainUI.transform.Find("MFUI").gameObject;
             _FMF = _mainUI.transform.Find("FullMF").gameObject;
+            trigger = GameObject.FindGameObjectWithTag("CrystalAnimation").GetComponent<TimelineTrigger>();
         }
 
         private void Awake() => SetupUI();
@@ -88,6 +91,7 @@ namespace ShadowMaze.MyCharacterController {
                     if (i < 3) _MF.transform.Find(i.ToString()).Find("C").GetComponent<RawImage>().color = new Color(1,1,1,1);
                 }
                 _MFV = _playerStats.memoryFragment;
+                if (_MFV >= 3) StartCoroutine(FullMF());
                 //_memoryFragmentText.text = $"memory fragment {_MFV.ToString()}/3";
             }
 
@@ -103,12 +107,12 @@ namespace ShadowMaze.MyCharacterController {
             }
         }
 
-        public void FullMF()
+        private IEnumerator FullMF()
         {
-            if (_MFV == 3)
-            {
-                _FMF.SetActive(true);
-            }
+            trigger.PlayTimeline();
+            yield return new WaitUntil(() => !trigger.IsPlaying);
+            _FMF.SetActive(true);
+            _MF.SetActive(false);
         }
 
         public void On()
