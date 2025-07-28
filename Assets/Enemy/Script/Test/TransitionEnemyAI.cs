@@ -12,7 +12,7 @@ namespace ShadowMaze.EnemyCharactor
     public class TransitionEnemyAI : SimpleEnemyAi
     {
         #region Class Veriables
-        [SerializeField] private MeshRenderer enemyMeshRenderer; // MeshRenderer ของแคปซูล (ศัตรู)
+        [SerializeField] private Renderer enemyMeshRenderer; // MeshRenderer ของแคปซูล (ศัตรู)
         [SerializeField] private float cubeFormDuration = 5f; // ระยะเวลาที่อยู่ในร่างกล่องก่อนกลับเป็นศัตรู (ถ้าไม่โดนไฟฉายส่อง)
         [SerializeField] private GameObject cubeFormPrefab; // Prefab ของกล่องที่จะใช้แปลงร่าง
 
