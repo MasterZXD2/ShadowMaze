@@ -27,6 +27,7 @@ namespace ShadowMaze.MyCharacterController
 
         private void UpdataAnimationState()
         {
+            float speed = new Vector2(PlayerController.Instance._characterController.velocity.x, PlayerController.Instance._characterController.velocity.z).magnitude;
             if (PlayerState.Instance.CurrPlayerMovementState == PlayerMovementState.Walking)
             {
                 _animator.SetBool("IsRunning", false);
@@ -42,6 +43,7 @@ namespace ShadowMaze.MyCharacterController
                 _animator.SetBool("IsRunning", false);
                 _animator.SetBool("IsWalking", false);
             }
+            _animator.SetFloat("Speed", speed);
             
         }
 

@@ -41,10 +41,20 @@ public class SoundTrigger : MonoBehaviour
         switch (soundType)
         {
             case SoundType.BGM:
-                SoundManager.Instance.PlayBGM(soundClip);
+                if (TryGetComponent<AudioSource>(out AudioSource source))
+                {
+                    source.clip = soundClip;
+                    source.Play();
+                }
+                else SoundManager.Instance.PlayBGM(soundClip);
                 break;
             case SoundType.SFX:
-                SoundManager.Instance.PlaySFX(soundClip);
+                if (TryGetComponent<AudioSource>(out AudioSource sfxSource))
+                {
+                    sfxSource.clip = soundClip;
+                    sfxSource.Play();
+                }
+                else SoundManager.Instance.PlaySFX(soundClip);
                 break;
         }
     }
