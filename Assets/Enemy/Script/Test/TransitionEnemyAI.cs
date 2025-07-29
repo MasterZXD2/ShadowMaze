@@ -153,10 +153,11 @@ namespace ShadowMaze.EnemyCharactor
             if (enemyController) enemyController.enabled = false;
             //if (agent) agent.enabled = false;
         }
-        private void DelayedRespawn() => respawn(spawnPoint);
+        private void DelayedRespawn() => StartCoroutine(respawn(spawnPoint));
 
-        private void respawn(Vector3 point)
+        private IEnumerator respawn(Vector3 point)
         {
+            yield return new WaitUntil(() => !EnemyManager.Instance._b);
             transform.position = spawnPoint;
             agent.Warp(transform.position);
             agent.SetDestination(transform.position);

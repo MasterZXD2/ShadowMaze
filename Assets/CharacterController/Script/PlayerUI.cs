@@ -3,6 +3,7 @@ using TMPro;
 using UnityEditor.Rendering;
 using UnityEditor.ShaderGraph;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace ShadowMaze.MyCharacterController {
@@ -11,6 +12,7 @@ namespace ShadowMaze.MyCharacterController {
         [SerializeField] private PlayerStats _playerStats;
         [SerializeField] private float BBLerpSpeed = 0.05f;
         [SerializeField] private float SSLerpSpeed = 0.05f;
+        [SerializeField] private string StartScene = "StartScene";
         private TimelineTrigger trigger;
         private GameObject _mainUI;
         private GameObject _batteryBar;
@@ -22,6 +24,11 @@ namespace ShadowMaze.MyCharacterController {
         private Button _resumeBU;
         private GameObject _MF;
         private GameObject _FMF;
+        private GameObject _GO;
+        private GameObject _quitUI;
+        private Button _quitBU;
+        private GameObject _retryUI;
+        private Button _retryBU;
 
         private float _normalSanitySize = 1f;
         private float _beatSanitySize = 1.3f;
@@ -44,6 +51,11 @@ namespace ShadowMaze.MyCharacterController {
             _MF = _mainUI.transform.Find("MFUI").gameObject;
             _FMF = _mainUI.transform.Find("FullMF").gameObject;
             trigger = GameObject.FindGameObjectWithTag("CrystalAnimation").GetComponent<TimelineTrigger>();
+            _GO = _mainUI.transform.Find("GO").gameObject;
+            _quitUI = _mainUI.transform.Find("QGO").gameObject;
+            _quitBU = _quitUI.GetComponent<Button>();
+            _retryUI = _mainUI.transform.Find("ReGO").gameObject;
+            _retryBU = _retryUI.GetComponent<Button>();
         }
 
         private void Awake() => SetupUI();
@@ -62,6 +74,22 @@ namespace ShadowMaze.MyCharacterController {
                 PlayerController.Instance.OnEsc(true);
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
+            });
+
+            _GO.SetActive(false);
+            _quitUI.SetActive(false);
+            _retryUI.SetActive(false);
+            _quitBU.onClick.RemoveAllListeners();
+            _retryBU.onClick.RemoveAllListeners();
+            _quitBU.onClick.AddListener(() => { 
+                Application.Quit();
+#if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+#endif
+            });
+            _retryBU.onClick.AddListener(() => {
+                Destroy(PlayerController.Instance.gameObject);
+                SceneManager.LoadScene(StartScene);
             });
 
             if (_batteryBS)
@@ -160,6 +188,13 @@ namespace ShadowMaze.MyCharacterController {
             _batteryBS.maxValue = _playerStats.MaxBattery;
             //_sanityBS.minValue = 0;
             //_sanityBS.maxValue = _playerStats.MaxSanity;
+        }
+
+        public void GameOver()
+        {
+            _GO.SetActive(true);
+            _quitUI.SetActive(true);
+            _retryUI.SetActive(true);
         }
     }
 

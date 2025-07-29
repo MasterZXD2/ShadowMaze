@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyManager : Singleton<EnemyManager>
 {
     public List<GameObject> currEnemies = new List<GameObject>();
-    private bool _b = false;
+    public bool _b { get; private set; } = false;
 
     public void Add(GameObject GO)
     {

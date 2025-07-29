@@ -149,7 +149,7 @@ namespace ShadowMaze.MyCharacterController
         public bool cutScene { get; private set; } = false;
 
         private PlayerMovementState _lastMovementState = PlayerMovementState.Falling;
-        
+
         private GameObject _globalVolume;
         private Volume _volume;
         private Vignette _vignette;
@@ -192,7 +192,7 @@ namespace ShadowMaze.MyCharacterController
 
         private void Update()
         {
-            if (s || astop) return;
+            if (s || astop || _isDead) return;
             MovementState();
             if (cutScene) return;
             if (bgotot)
@@ -208,13 +208,13 @@ namespace ShadowMaze.MyCharacterController
             VerticalMovement();
             LateralMovement();
             StopHeadBob();
-            if (_isDead) return;
+
             _playerGameObject.transform.rotation = transform.rotation;
         }
 
         private void LateUpdate()
         {
-            if (s || astop || cutScene) return;
+            if (s || astop || cutScene || _isDead) return;
             JumpPressed = false;
             RotationCamera();
         }
@@ -263,7 +263,7 @@ namespace ShadowMaze.MyCharacterController
         private void CameraMovement()
         {
             Transform cam = _plrCamera.transform;
-            if(Physics.Raycast(cam.position, cam.forward,out RaycastHit hit, camCheckRange, _groundLayers)){
+            if (Physics.Raycast(cam.position, cam.forward, out RaycastHit hit, camCheckRange, _groundLayers)) {
                 float dis = (hit.point - cam.position).magnitude;
                 if (dis < camCheckRange)
                 {
@@ -540,10 +540,19 @@ namespace ShadowMaze.MyCharacterController
 
             _playerLocomotionInput.enabled = false;
             _playerKeyBoardInput.enabled = false;
-            _playerUI.die();
+            //_playerUI.die();
             _playerStats.die();
-            CameraMode = CamMode.ThirdPerson;
-            SetCam();
+
+            _playerLight.rToggle(true);
+            EnemyManager.Instance.Toggle(true);
+            StopMovement();
+            _playerUI.Off();
+            _playerUI.GameOver();
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
+            //CameraMode = CamMode.ThirdPerson;
+            //SetCam();
         }
 
         public void takeDamage(float damage)
@@ -558,7 +567,8 @@ namespace ShadowMaze.MyCharacterController
         {
             _playerStats.Sanity -= damage;
             _bloomColor = Color.red;
-            Invoke(nameof(ResetColorScreen),.5f);
+            Invoke(nameof(ResetColorScreen), .5f);
+            if (_playerStats.Sanity <= 0) die();
         }
 
         private void ResetColorScreen()
@@ -569,7 +579,7 @@ namespace ShadowMaze.MyCharacterController
         public void MakeScreenDark()
         {
             _bloomIntensity = darkIntensityScreen;
-            Invoke(nameof(ResetNormalScreen),changeToNorScreen);
+            Invoke(nameof(ResetNormalScreen), changeToNorScreen);
         }
 
         private void ResetNormalScreen()
@@ -592,7 +602,7 @@ namespace ShadowMaze.MyCharacterController
 
         public void OnEsc(bool b)
         {
-            if (cutScene) return;
+            if (cutScene || _isDead) return;
             if (b) _playerUI.OnEsc();
             if (Cursor.visible && !b && !_playerUI._esc) return;
             if (_playerUI._esc) return;
