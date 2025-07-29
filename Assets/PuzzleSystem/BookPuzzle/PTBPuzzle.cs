@@ -3,7 +3,6 @@ using ShadowMaze.MyCharacterController;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class PTBPuzzle : Puzzle
 {
@@ -135,8 +134,8 @@ public class PTBPuzzle : Puzzle
 
         if (bookOpen)
         {
-            UnityEngine.Cursor.lockState = CursorLockMode.None;
-            UnityEngine.Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
 
         ImageUI.gameObject.SetActive(bookOpen);
