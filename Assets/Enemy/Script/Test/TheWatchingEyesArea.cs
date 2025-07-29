@@ -6,10 +6,12 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
+using UnityEngine.SceneManagement;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class TheWatchingEyesArea : Singleton<TheWatchingEyesArea>
 {
+    [SerializeField] private string StartScene = "StartScene";
     [SerializeField] private BoxCollider Collider;
     [SerializeField] private BoxCollider AreaSpawn;
     [field: SerializeField] private List<GameObject> prefabsEnemys = new List<GameObject>();
@@ -36,6 +38,7 @@ public class TheWatchingEyesArea : Singleton<TheWatchingEyesArea>
 
     private void Start()
     {
+        cutScene.SetVideoCamera(Camera.main);
         GameObject b = Instantiate(bossPrefabs,transform);
         b.transform.position = bossSpawn.position;
         if (Physics.Raycast(b.transform.position, Vector3.down, out RaycastHit hit, Mathf.Infinity, _groundlayerMask))
@@ -48,6 +51,11 @@ public class TheWatchingEyesArea : Singleton<TheWatchingEyesArea>
 
         cutScene.Prepare();
         cutScene.Stop();
+        cutScene.SetVideoEnd(() =>
+        {
+            Destroy(PlayerController.Instance.gameObject);
+            SceneManager.LoadScene(StartScene);
+        });
     }
 
     private void Update()
@@ -55,7 +63,7 @@ public class TheWatchingEyesArea : Singleton<TheWatchingEyesArea>
         if (boss.Health <= 0)
         {
             cutScene.Play();
-            Destroy(boss.gameObject);
+            boss.pause();
         }
     }
 
@@ -74,8 +82,8 @@ public class TheWatchingEyesArea : Singleton<TheWatchingEyesArea>
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawWireCube(Collider.bounds.center,Collider.size);
-        Gizmos.DrawWireCube(AreaSpawn.bounds.center, AreaSpawn.size);
+        if (Collider) Gizmos.DrawWireCube(Collider.bounds.center,Collider.size);
+        if (AreaSpawn) Gizmos.DrawWireCube(AreaSpawn.bounds.center, AreaSpawn.size);
     }
 
     public void Play() => _waveCoroutine = StartCoroutine(PlayWaves());
