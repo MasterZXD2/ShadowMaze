@@ -1,3 +1,4 @@
+using ShadowMaze.MyCharacterController;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Video;
@@ -37,7 +38,13 @@ public class TimelineTrigger : MonoBehaviour
         if (timelineToPlay != null)
         {
             timelineToPlay.Play();
-            isPlaying = true;   
+            isPlaying = true;
+
+            PlayerController player = PlayerController.Instance;
+            if (player)
+            {
+                player.OnCutScene(true);
+            }
         }
         else
         {
@@ -48,6 +55,11 @@ public class TimelineTrigger : MonoBehaviour
     private void OnTimelineStopped(PlayableDirector director)
     {
         isPlaying = false;
+        PlayerController player = PlayerController.Instance;
+        if (player)
+        {
+            player.OnCutScene(false);
+        }
         gameObject.SetActive(false);
     }
 

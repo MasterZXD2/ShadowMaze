@@ -78,7 +78,7 @@ namespace ShadowMaze.CutSceneSystem
             PlayerController player = PlayerController.Instance;
             if (player)
             {
-                player._playerUI.Off();
+                player.OnCutScene(true);
             }
 
             isPaused = false;
@@ -148,7 +148,7 @@ namespace ShadowMaze.CutSceneSystem
             PlayerController player = PlayerController.Instance;
             if (player)
             {
-                player._playerUI.On();
+                player.OnCutScene(false);
             }
 
             isPlaying = false;
@@ -195,7 +195,7 @@ namespace ShadowMaze.CutSceneSystem
                 PlayerController player = PlayerController.Instance;
                 if (player)
                 {
-                    player._playerUI.On();
+                    player.OnCutScene(false);
                 }
 
             }

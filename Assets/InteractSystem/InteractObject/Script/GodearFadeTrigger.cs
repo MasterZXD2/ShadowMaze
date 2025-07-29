@@ -37,9 +37,9 @@ public class GodearFadeTrigger : MonoBehaviour
     }
 
     IEnumerator Play() {
-        StartCoroutine(ShowTextWithFade());
+        //StartCoroutine(ShowTextWithFade());
         cutScene.Play();
-        yield return new WaitUntil(() => !cutScene.IsPlaying && holdf);
+        yield return new WaitUntil(() => !cutScene.IsPlaying);
         Destroy(gameObject);
     }
 

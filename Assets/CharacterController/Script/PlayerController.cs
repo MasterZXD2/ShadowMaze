@@ -146,6 +146,7 @@ namespace ShadowMaze.MyCharacterController
         public bool _isDead { get; private set; } = false;
         private bool s = false;
         public bool astop { get; private set; } = false;
+        public bool cutScene { get; private set; } = false;
 
         private PlayerMovementState _lastMovementState = PlayerMovementState.Falling;
         
@@ -192,6 +193,8 @@ namespace ShadowMaze.MyCharacterController
         private void Update()
         {
             if (s || astop) return;
+            MovementState();
+            if (cutScene) return;
             if (bgotot)
             {
                 transform.position = gotot;
@@ -202,7 +205,6 @@ namespace ShadowMaze.MyCharacterController
             _vignette.color.value = Color.Lerp(_vignette.color.value, _bloomColor, Time.deltaTime * changeColorScreenSpeed);
             _playerGameObject.transform.position = transform.position;
 
-            MovementState();
             VerticalMovement();
             LateralMovement();
             StopHeadBob();
@@ -212,7 +214,7 @@ namespace ShadowMaze.MyCharacterController
 
         private void LateUpdate()
         {
-            if (s || astop) return;
+            if (s || astop || cutScene) return;
             JumpPressed = false;
             RotationCamera();
         }
@@ -325,7 +327,11 @@ namespace ShadowMaze.MyCharacterController
 
             if ((_playerState.CurrPlayerMovementState == PlayerMovementState.Walking || _playerState.CurrPlayerMovementState == PlayerMovementState.Running) && _characterController.isGrounded) StartHeadBob();
         }
-
+        private void StopMovement()
+        {
+            //_characterController.Move(Vector3.zero);
+            _playerState.Set(PlayerMovementState.Idling);
+        }
         private Vector3 SteepWalls(Vector3 velo)
         {
             Vector3 normal = CharacterControllerUnils.GetNormalWithSphereCast(_characterController, _groundLayers);
@@ -586,16 +592,29 @@ namespace ShadowMaze.MyCharacterController
 
         public void OnEsc(bool b)
         {
+            if (cutScene) return;
             if (b) _playerUI.OnEsc();
             if (Cursor.visible && !b && !_playerUI._esc) return;
             if (_playerUI._esc) return;
 
             if (!b) _playerUI.OnEsc();
             astop = _playerUI._esc;
+            StopMovement();
             _playerLight.rToggle(astop);
             EnemyManager.Instance.Toggle(astop);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+        }
+
+        public void OnCutScene(bool b)
+        {
+            cutScene = b; 
+            _playerLight.rToggle(b);
+            EnemyManager.Instance.Toggle(b);
+            StopMovement();
+
+            if (b) _playerUI.Off();
+            else _playerUI.On();
         }
 
         public void OnJump(bool b)

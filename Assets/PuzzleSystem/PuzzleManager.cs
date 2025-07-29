@@ -16,6 +16,10 @@ public class PuzzleManager : Puzzle
         }
         if (t) { 
             isFinish = true;
+            foreach(Puzzle puzzle in puzzleList)
+            {
+                puzzle.OnFinish();
+            }
             if (timelineTrigger)
             {
                 timelineTrigger.PlayTimeline();

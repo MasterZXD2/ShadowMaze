@@ -118,26 +118,27 @@ namespace ShadowMaze.MyCharacterController {
         public void On()
         {
             b = true;
-            _batteryBar.SetActive(true);
-            _sanityHeart.SetActive(true);
-            _sanityBar.SetActive(true);
-            _MF.SetActive(true);
+            e();
         }
 
         public void Off()
         {
             b = false;
-            _batteryBar.SetActive(false);
-            _sanityHeart.SetActive(false);
-            _sanityBar.SetActive(false);
-            _MF.SetActive(false);
+            e();
         }
         
         public void Toggle()
         {
             b = !b;
-            if (b) On();
-            else Off();
+            e();
+        }
+
+        private void e()
+        {
+            _batteryBar.SetActive(b);
+            _sanityHeart.SetActive(b);
+            _sanityBar.SetActive(b);
+            _MF.SetActive(b);
         }
 
         public void OnEsc()

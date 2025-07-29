@@ -3,6 +3,7 @@ using ShadowMaze.MyCharacterController;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class PTBPuzzle : Puzzle
 {
@@ -26,6 +27,7 @@ public class PTBPuzzle : Puzzle
 
     private int _pagesIndex = 0;
     private int i = 0;
+    private List<GameObject> _books = new List<GameObject>();
 
     protected virtual void Start()
     {
@@ -84,21 +86,39 @@ public class PTBPuzzle : Puzzle
         }
 
         i = 0;
+        List<GameObject> books = new List<GameObject>();
         for (int j = 0; j < placePoints.Count; j++)
         {
             GameObject go = placePoints[j];
             Collider[] colliders = Physics.OverlapSphere(go.transform.position, chenkRange);
             foreach (Collider collider in colliders)
             {
-                if (collider.gameObject.TryGetComponent<BookPuzzleObject>(out BookPuzzleObject bp))
+                GameObject GO = collider.gameObject;
+                if (GO.TryGetComponent<BookPuzzleObject>(out BookPuzzleObject bp))
                 {
-                    if (bp.Name == placeNames[j]) i++;
+                    if (bp.Name == placeNames[j]) { 
+                        i++;
+                        books.Add(GO);
+                    }
                 }
             }
         }
 
-        if (i >= placePoints.Count) isFinish = true;
-        else isFinish = false;
+        if (i >= placePoints.Count)
+        {
+            isFinish = true;
+            _books = books;
+        }
+        else { 
+            isFinish = false;
+            _books.Clear();
+        }
+    }
+
+    public override void OnFinish() {
+        foreach (GameObject go in _books) { 
+            Destroy(go);
+        }
     }
 
     private void OnDrawGizmos()
@@ -115,8 +135,8 @@ public class PTBPuzzle : Puzzle
 
         if (bookOpen)
         {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            UnityEngine.Cursor.lockState = CursorLockMode.None;
+            UnityEngine.Cursor.visible = true;
         }
 
         ImageUI.gameObject.SetActive(bookOpen);
