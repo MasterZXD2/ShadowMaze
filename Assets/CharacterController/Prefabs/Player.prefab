@@ -44,10 +44,10 @@ Light:
   serializedVersion: 11
   m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0
-  m_Range: 18
-  m_SpotAngle: 111.73497
-  m_InnerSpotAngle: 73.99095
+  m_Intensity: 8
+  m_Range: 4
+  m_SpotAngle: 116.508354
+  m_InnerSpotAngle: 78.76428
   m_CookieSize: 10
   m_Shadows:
     m_Type: 2
@@ -436,7 +436,7 @@ MonoBehaviour:
     SplineCurvature: 0.5
   RecenteringTarget: 2
   HorizontalAxis:
-    Value: -74.251434
+    Value: 50.150635
     Center: 0
     Range: {x: -180, y: 180}
     Wrap: 1
@@ -446,7 +446,7 @@ MonoBehaviour:
       Time: 2
     Restrictions: 0
   VerticalAxis:
-    Value: -9.9826145
+    Value: -10
     Center: 17.5
     Range: {x: -10, y: 45}
     Wrap: 0
@@ -833,9 +833,9 @@ MonoBehaviour:
   _groundLayers:
     serializedVersion: 2
     m_Bits: 64
-  flashLightTurnSpeed: 20
-  normalIntensityScreen: 0.3
-  darkIntensityScreen: 0.5
+  flashLightTurnSpeed: 5
+  normalIntensityScreen: 0.4
+  darkIntensityScreen: 1
   changeScreenSpeed: 5
   changeToNorScreen: 2
   changeColorScreenSpeed: 10
@@ -908,6 +908,7 @@ MonoBehaviour:
   _playerStats: {fileID: 261899133957030099}
   BBLerpSpeed: 0.05
   SSLerpSpeed: 0.05
+  StartScene: StartScene
   _esc: 0
 --- !u!114 &261899133957030099
 MonoBehaviour:
@@ -963,7 +964,7 @@ MonoBehaviour:
   flickerSpeed: 5
   baseFlickerSpeed: 1
   minIntensity: 5
-  maxIntensity: 6
+  maxIntensity: 10
   lowBatteryThreshold: 20
   FlashLight: {fileID: 2022027908763691823}
 --- !u!114 &5599670264407384861
