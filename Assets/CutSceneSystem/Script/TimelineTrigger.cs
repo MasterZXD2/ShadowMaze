@@ -6,7 +6,7 @@ using UnityEngine.Video;
 public class TimelineTrigger : MonoBehaviour
 {
     public PlayableDirector timelineToPlay;
-
+    [SerializeField] private bool stopPlayer = true;
     private bool isPlaying = false;
     public bool IsPlaying => isPlaying;
 
@@ -43,7 +43,7 @@ public class TimelineTrigger : MonoBehaviour
             PlayerController player = PlayerController.Instance;
             if (player)
             {
-                player.OnCutScene(true);
+                if (stopPlayer) player.OnCutScene(true);
             }
         }
         else
@@ -58,7 +58,7 @@ public class TimelineTrigger : MonoBehaviour
         PlayerController player = PlayerController.Instance;
         if (player)
         {
-            player.OnCutScene(false);
+            if (stopPlayer) player.OnCutScene(false);
         }
         gameObject.SetActive(false);
     }
