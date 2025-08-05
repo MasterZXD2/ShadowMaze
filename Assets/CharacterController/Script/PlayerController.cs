@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.ProBuilder.Shapes;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-using static UnityEditor.PlayerSettings;
 
 namespace ShadowMaze.MyCharacterController
 {

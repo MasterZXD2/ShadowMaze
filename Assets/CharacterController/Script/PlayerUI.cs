@@ -1,7 +1,5 @@
 ﻿using System.Collections;
 using TMPro;
-using UnityEditor.Rendering;
-using UnityEditor.ShaderGraph;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -50,7 +48,8 @@ namespace ShadowMaze.MyCharacterController {
             _resumeBU = _resumeUI.GetComponent<Button>();
             _MF = _mainUI.transform.Find("MFUI").gameObject;
             _FMF = _mainUI.transform.Find("FullMF").gameObject;
-            trigger = GameObject.FindGameObjectWithTag("CrystalAnimation").GetComponent<TimelineTrigger>();
+            GameObject g = GameObject.FindGameObjectWithTag("CrystalAnimation");
+            if (g) trigger = g.GetComponent<TimelineTrigger>();
             _GO = _mainUI.transform.Find("GO").gameObject;
             _quitUI = _mainUI.transform.Find("QGO").gameObject;
             _quitBU = _quitUI.GetComponent<Button>();

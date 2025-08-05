@@ -7,7 +7,6 @@ using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
 using UnityEngine.SceneManagement;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class TheWatchingEyesArea : Singleton<TheWatchingEyesArea>
 {

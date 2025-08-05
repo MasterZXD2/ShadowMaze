@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Splines;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 namespace ShadowMaze.EnemyCharactor
 {

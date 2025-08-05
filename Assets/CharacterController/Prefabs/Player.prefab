@@ -832,11 +832,11 @@ MonoBehaviour:
   smoothHeadBob: 10
   _groundLayers:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 65
   flashLightTurnSpeed: 5
   normalIntensityScreen: 0.4
-  darkIntensityScreen: 1
-  changeScreenSpeed: 5
+  darkIntensityScreen: 5
+  changeScreenSpeed: 1
   changeToNorScreen: 2
   changeColorScreenSpeed: 10
   _camRotation: {x: 0, y: 0}

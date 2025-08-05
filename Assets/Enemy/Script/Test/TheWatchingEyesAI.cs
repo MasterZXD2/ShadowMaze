@@ -3,7 +3,6 @@ using NaughtyAttributes;
 using ShadowMaze.EnemyCharactor;
 using ShadowMaze.MyCharacterController;
 using System.Collections.Generic;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class TheWatchingEyesAI : MonoBehaviour
@@ -91,7 +90,7 @@ public class TheWatchingEyesAI : MonoBehaviour
     {
         _shadow = Instantiate(enemyShadow, transform);
         _rendererSha = _shadow.GetComponent<Renderer>();
-        teleportVFX.duration = teleportVFXDuration;
+        if (teleportVFX) teleportVFX.duration = teleportVFXDuration;
     }
 
     private void Update()

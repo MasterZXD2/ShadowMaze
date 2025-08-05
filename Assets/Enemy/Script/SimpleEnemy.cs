@@ -3,10 +3,6 @@ using ShadowMaze.MyCharacterController;
 using System;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Rendering;
-using static Unity.Cinemachine.CinemachineOrbitalTransposer;
-using static UnityEditor.SceneView;
-using static UnityEngine.UI.Image;
 
 namespace ShadowMaze.EnemyCharactor
 {
