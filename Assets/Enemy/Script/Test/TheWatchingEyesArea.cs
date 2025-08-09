@@ -34,10 +34,11 @@ public class TheWatchingEyesArea : Singleton<TheWatchingEyesArea>
 
     private bool _isPaused = false;
     private bool res = false;
+    private bool die = false; 
 
     private void Start()
     {
-        cutScene.SetVideoCamera(Camera.main);
+        cutScene.SetVideoCamera(PlayerController.Instance._plrCamera);
         GameObject b = Instantiate(bossPrefabs,transform);
         b.transform.position = bossSpawn.position;
         if (Physics.Raycast(b.transform.position, Vector3.down, out RaycastHit hit, Mathf.Infinity, _groundlayerMask))
@@ -59,8 +60,9 @@ public class TheWatchingEyesArea : Singleton<TheWatchingEyesArea>
 
     private void Update()
     {
-        if (boss.Health <= 0)
+        if (boss.Health <= 0 && !die)
         {
+            die = true;
             cutScene.Play();
             boss.pause();
         }
