@@ -169,6 +169,7 @@ namespace ShadowMaze.MyCharacterController
         private bool bgotot;
         private Vector3 _collisionOffset = Vector3.zero;
         private Vector3 _headBobOffset = Vector3.zero;
+        private bool backwardOnly;
         #endregion
 
         #region Normal Function
@@ -219,6 +220,7 @@ namespace ShadowMaze.MyCharacterController
             StopHeadBob();
 
             _playerGameObject.transform.rotation = transform.rotation;
+            backwardOnly = false;
         }
 
         private void LateUpdate()
@@ -319,7 +321,7 @@ namespace ShadowMaze.MyCharacterController
             Vector3 camRightXZ = new Vector3(_plrCamera.transform.right.x, 0f, _plrCamera.transform.right.z).normalized;
             Vector3 moveDir = camRightXZ * _playerLocomotionInput.MovementInput.x + camForwardXZ * _playerLocomotionInput.MovementInput.y;
 
-            Vector3 moveDelta = moveDir * Acceleration * Time.deltaTime;
+            Vector3 moveDelta = backwardOnly ? (moveDir.sqrMagnitude == 0) ? transform.forward * -Acceleration * Time.deltaTime : moveDir * -Acceleration * Time.deltaTime : moveDir * Acceleration * Time.deltaTime;
             Vector3 newVelo = _characterController.velocity + moveDelta;
 
             float DragMagnitude = isGrounded ? Drag : InAirDrag;
@@ -353,6 +355,10 @@ namespace ShadowMaze.MyCharacterController
             }
 
             return velo;
+        }
+        public void BackStep()
+        {
+            backwardOnly = true;
         }
         #endregion
 

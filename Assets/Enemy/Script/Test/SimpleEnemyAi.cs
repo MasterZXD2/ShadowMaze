@@ -10,7 +10,7 @@ using static UnityEngine.EventSystems.EventTrigger;
 
 namespace ShadowMaze.EnemyCharactor
 {
-    public class SimpleEnemyAi : MonoBehaviour
+    public class SimpleEnemyAi : WhatToFear
     {
         #region Class Veriables
         [Header("Enemy Config")]
@@ -96,7 +96,6 @@ namespace ShadowMaze.EnemyCharactor
         private int rotationDirection = 1; // 1 = ขวา, -1 = ซ้าย
 
         private bool isPlayerInSight, isPlayerInAttack;
-        protected Transform _player;
         private Vector3 _GTPosition;
         protected bool _positionSet;
         protected bool isAttack;
@@ -128,21 +127,22 @@ namespace ShadowMaze.EnemyCharactor
             agent.enabled = true;
         }
 
-        private void Start()
+        protected override void Start()
         {
             if (enemyModel) _offset = enemyModel.transform.position - transform.position;
             spawnPoint = transform.position;
 
-            _player = PlayerController.Instance.gameObject.transform;
+            FindPlayer();
             if (!agent) agent = GetComponent<NavMeshAgent>();
 
             WalkSpeed = agent.speed * 1.1f;
             WalkAcceleration = agent.acceleration * 5;
         }
 
-        protected virtual void Update()
+        protected override void Update()
         {
             if (!_player || isJump) return;
+            PlayerCheck();
             if (enemyModel)
             {
                 enemyModel.transform.position = transform.position + _offset;
@@ -202,8 +202,10 @@ namespace ShadowMaze.EnemyCharactor
             isCurrentlyHitByFlashlight = false;
         }
 
-        private void OnDrawGizmos()
+        protected override void OnDrawGizmos()
         {
+            base.OnDrawGizmos();
+
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, attackRange);
 
