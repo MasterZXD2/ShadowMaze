@@ -1,6 +1,7 @@
-using ShadowMaze.CutSceneSystem;
+ using ShadowMaze.CutSceneSystem;
 using ShadowMaze.InteractSystem;
 using System;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.ProBuilder.Shapes;
@@ -17,6 +18,13 @@ namespace ShadowMaze.MyCharacterController
         ThirdPerson
     }
     #endregion
+
+    [System.Serializable]
+    public class WTF
+    {
+        public string name;
+        public bool can = true;
+    }
 
     [DefaultExecutionOrder(-1)]
     public class PlayerController : Singleton<PlayerController>
@@ -120,6 +128,8 @@ namespace ShadowMaze.MyCharacterController
         [SerializeField] private float changeScreenSpeed = 5f;
         [SerializeField] private float changeToNorScreen = 2f;
         [SerializeField] private float changeColorScreenSpeed = 10f;
+
+        public List<WTF> wTFs;
 
         public Camera _plrCamera { get; private set; }
 
