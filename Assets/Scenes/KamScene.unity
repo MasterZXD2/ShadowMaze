@@ -3978,6 +3978,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 23263814861213666, guid: b02e8c6b664343468e56953893975d45, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
     - target: {fileID: 199840302513922326, guid: b02e8c6b664343468e56953893975d45, type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
@@ -5559,6 +5563,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spawnPoint: {fileID: 1656989904}
   _player: {fileID: 5317513966196724232, guid: 17135688c901ddd408690eb9c659466a, type: 3}
+  ct: 0.5
   isTest: 1
 --- !u!4 &1498787679
 Transform:
@@ -6341,6 +6346,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 23778480073971822, guid: 892c93da21484fc5ad1ed1307b979e29, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 1820381188804116, guid: 892c93da21484fc5ad1ed1307b979e29, type: 3}
