@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using ShadowMaze.MyCharacterController;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PuzzleManager : Puzzle
 {
     [field: SerializeField] private List<Puzzle> puzzleList;
     public TimelineTrigger timelineTrigger;
+    public string _name;
 
     private void Update()
     {
@@ -24,6 +26,14 @@ public class PuzzleManager : Puzzle
             {
                 timelineTrigger.PlayTimeline();
             }
+
+            PlayerController.Instance.wTFs.ForEach((WTF w) =>
+            {
+                if (w._name == _name)
+                {
+                    w.can = false;
+                }
+            });
         }
     }
 }

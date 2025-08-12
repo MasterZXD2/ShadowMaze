@@ -839,6 +839,9 @@ MonoBehaviour:
   changeScreenSpeed: 1
   changeToNorScreen: 2
   changeColorScreenSpeed: 10
+  wTFs:
+  - _name: GGEZ
+    can: 1
   _camRotation: {x: 0, y: 0}
 --- !u!114 &9004511922639230726
 MonoBehaviour:

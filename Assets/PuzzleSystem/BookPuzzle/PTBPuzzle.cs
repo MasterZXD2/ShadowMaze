@@ -115,6 +115,7 @@ public class PTBPuzzle : Puzzle
     }
 
     public override void OnFinish() {
+        base.OnFinish();
         foreach (GameObject go in _books) { 
             Destroy(go);
         }

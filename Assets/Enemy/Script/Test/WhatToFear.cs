@@ -4,7 +4,7 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class WhatToFear : MonoBehaviour
 {
-    public string name;
+    public string _name;
     protected float playerRange = 2f;
     protected bool PlayerInRange;
     protected Transform _player;
@@ -27,7 +27,7 @@ public class WhatToFear : MonoBehaviour
         PlayerInRange = dist <= playerRange;
         if (PlayerInRange)
         {
-            PlayerController.Instance.BackStep();
+            PlayerController.Instance.BackStep(_name);
         }
     }
 

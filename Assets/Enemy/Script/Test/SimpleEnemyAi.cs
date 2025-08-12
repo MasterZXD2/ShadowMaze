@@ -751,7 +751,7 @@ namespace ShadowMaze.EnemyCharactor
         }
         */
 
-        public void HitByFlashlight() => isCurrentlyHitByFlashlight = true;
+        public virtual void HitByFlashlight(bool b = false) => isCurrentlyHitByFlashlight = true;
         
         public void InArea(string name)
         {

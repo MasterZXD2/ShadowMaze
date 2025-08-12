@@ -22,7 +22,7 @@ namespace ShadowMaze.MyCharacterController
     [System.Serializable]
     public class WTF
     {
-        public string name;
+        public string _name;
         public bool can = true;
     }
 
@@ -356,9 +356,16 @@ namespace ShadowMaze.MyCharacterController
 
             return velo;
         }
-        public void BackStep()
+        public void BackStep(string n)
         {
-            backwardOnly = true;
+            foreach (WTF item in wTFs)
+            {
+                if (item._name == n)
+                {
+                    backwardOnly = item.can;
+                    break;
+                }
+            }
         }
         #endregion
 

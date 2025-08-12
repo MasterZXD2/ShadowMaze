@@ -1,3 +1,4 @@
+using ShadowMaze.EnemyCharactor;
 using UnityEngine;
 
 namespace ShadowMaze.InteractSystem
@@ -30,6 +31,10 @@ namespace ShadowMaze.InteractSystem
                     if (collider.gameObject.TryGetComponent<Mirror>(out Mirror m))
                     {
                         m.HitByFlashlight(transform, true);
+                    }
+                    if (collider.gameObject.TryGetComponent<ShadowEnemyAI>(out ShadowEnemyAI enemy))
+                    {
+                        enemy.HitByFlashlight(true);
                     }
                 }
 
