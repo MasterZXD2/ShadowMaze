@@ -545,6 +545,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spawnPoint: {fileID: 0}
   _player: {fileID: 5317513966196724232, guid: 17135688c901ddd408690eb9c659466a, type: 3}
+  ct: 0.5
   isTest: 0
 --- !u!1 &3409158993994297566
 GameObject:

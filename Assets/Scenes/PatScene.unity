@@ -5556,6 +5556,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spawnPoint: {fileID: 2083433679}
   _player: {fileID: 5317513966196724232, guid: 17135688c901ddd408690eb9c659466a, type: 3}
+  ct: 0.5
   isTest: 1
 --- !u!114 &88206684
 MonoBehaviour:
@@ -24722,7 +24723,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -56768,6 +56770,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timelineToPlay: {fileID: 1443910203}
+  stopPlayer: 1
 --- !u!1 &1446375548
 GameObject:
   m_ObjectHideFlags: 0
