@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public struct rendObj
 {
     public Renderer renderer;
-    public Color color;
+    public List<Color> colors;
+    public List<Material> materials;
 }
 
 public class MFObjArea : MonoBehaviour
@@ -20,12 +22,37 @@ public class MFObjArea : MonoBehaviour
         foreach (GameObject item in mObjects)
         {
             Renderer r = item.GetComponent<Renderer>();
-            Color c = r.material.color;
-            rendObjs.Add(new rendObj { renderer = r, color = c });
+            
+            Material[] mats = r.materials;
+            for (int i = 0; i < mats.Length; i++)
+            {
+                mats[i] = new Material(mats[i]);
+            }
+            r.materials = mats;
 
-            Color _c = c;
-            _c.a = 0f;
-            r.material.color = _c;
+            // เก็บข้อมูลเดิม
+            rendObj ro = new rendObj
+            {
+                renderer = r,
+                colors = new List<Color>(),
+                materials = new List<Material>()
+            };
+
+            for (int i = 0; i < r.materials.Length; i++)
+            {
+                ro.colors.Add(r.materials[i].color);
+                ro.materials.Add(r.materials[i]);
+            }
+
+            rendObjs.Add(ro);
+
+            // ตั้งค่าโปร่งใส
+            for (int i = 0; i < r.materials.Length; i++)
+            {
+                Color _c = r.materials[i].color;
+                _c.a = 0f;
+                r.materials[i].color = _c;
+            }
         }
     }
 
@@ -47,45 +74,41 @@ public class MFObjArea : MonoBehaviour
         }
     }
 
-    IEnumerator FadeIn(rendObj obj)
+    IEnumerator Fade(rendObj obj, float startAlpha, float endAlpha, float duration)
     {
         float elapsedTime = 0f;
 
-        while (elapsedTime < fadeDuration)
+        while (elapsedTime < duration)
         {
-            float alpha = Mathf.Lerp(0f, 1f, elapsedTime / fadeDuration);
-            Color newColor = obj.color;
-            newColor.a = alpha;
-            obj.renderer.material.color = newColor;
+            float alpha = Mathf.Lerp(startAlpha, endAlpha, elapsedTime / duration);
+
+            for (int i = 0; i < obj.colors.Count; i++)
+            {
+                Color newColor = obj.colors[i];
+                newColor.a = alpha;
+                obj.materials[i].color = newColor;
+            }
 
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        // ให้มั่นใจว่า alpha = 1 สุดท้าย
-        Color finalColor = obj.color;
-        finalColor.a = 1f;
-        obj.renderer.material.color = finalColor;
+        // Ensure final alpha is exactly endAlpha
+        for (int i = 0; i < obj.colors.Count; i++)
+        {
+            Color finalColor = obj.colors[i];
+            finalColor.a = endAlpha;
+            obj.materials[i].color = finalColor;
+        }
+    }
+
+    IEnumerator FadeIn(rendObj obj)
+    {
+        yield return Fade(obj, 0f, 1f, fadeDuration);
     }
 
     IEnumerator FadeOut(rendObj obj)
     {
-        float elapsedTime = 0f;
-
-        while (elapsedTime < fadeDuration)
-        {
-            float alpha = Mathf.Lerp(1f, 0f, elapsedTime / fadeDuration);
-            Color newColor = obj.color;
-            newColor.a = alpha;
-            obj.renderer.material.color = newColor;
-
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        // ให้มั่นใจว่า alpha = 1 สุดท้าย
-        Color finalColor = obj.color;
-        finalColor.a = 0f;
-        obj.renderer.material.color = finalColor;
+        yield return Fade(obj, 1f, 0f, fadeDuration);
     }
 }
