@@ -1,6 +1,7 @@
- using ShadowMaze.CutSceneSystem;
+﻿using ShadowMaze.CutSceneSystem;
 using ShadowMaze.InteractSystem;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -170,6 +171,9 @@ namespace ShadowMaze.MyCharacterController
         private Vector3 _collisionOffset = Vector3.zero;
         private Vector3 _headBobOffset = Vector3.zero;
         private bool backwardOnly;
+
+        private float shakeTimer = 0f;
+        private bool _shakeCam = false;
         #endregion
 
         #region Normal Function
@@ -284,7 +288,7 @@ namespace ShadowMaze.MyCharacterController
             }
             else
             {
-                _collisionOffset = Vector3.zero; // �������觡մ��ҧ ��Ѻ任���
+                _collisionOffset = Vector3.zero; // ไม่มีสิ่งกีดขวาง กลับไปปกติ
             }
 
             cameraHolder.localPosition = _collisionOffset + _headBobOffset;
@@ -356,16 +360,22 @@ namespace ShadowMaze.MyCharacterController
 
             return velo;
         }
-        public void BackStep(string n)
+
+        public bool isFearPLayer(string n)
         {
             foreach (WTF item in wTFs)
             {
                 if (item._name == n)
                 {
-                    backwardOnly = item.can;
-                    break;
+                    return item.can;
                 }
             }
+            return false;
+        }
+        
+        public void BackStep(bool b)
+        {
+            backwardOnly = b;
         }
         #endregion
 
@@ -454,6 +464,41 @@ namespace ShadowMaze.MyCharacterController
         {
             if (cameraHolder.localPosition == _startPos) return;
             cameraHolder.localPosition = Vector3.Lerp(cameraHolder.localPosition, _startPos, Time.deltaTime * smoothHeadBob);
+        }
+
+        public void ShakeCamera(float duration, float maxMagnitude)
+        {
+            if (_shakeCam) return;
+            _shakeCam = true;
+            StopAllCoroutines(); // กันซ้อน
+            StartCoroutine(ShakeRoutine(duration, maxMagnitude));
+        }
+
+        private IEnumerator ShakeRoutine(float duration, float maxMagnitude)
+        {
+            shakeTimer = 0f;
+            while (shakeTimer < duration)
+            {
+                float normalizedTime = shakeTimer / duration; // 0 → 1
+                                                           // กำหนดความแรง: ขึ้นจาก 0 → สูงสุด → 0
+                float strengthFactor = Mathf.Sin(normalizedTime * Mathf.PI);
+
+                float magnitude = Mathf.Lerp(0, maxMagnitude, strengthFactor);
+
+                Vector3 offset = new Vector3(
+                    UnityEngine.Random.Range(-1f, 1f),
+                    UnityEngine.Random.Range(-1f, 1f),
+                    0
+                ) * magnitude;
+
+                cameraHolder.localPosition = _startPos + offset;
+
+                shakeTimer += Time.deltaTime;
+                yield return null;
+            }
+
+            cameraHolder.localPosition = _startPos;
+            _shakeCam = false;
         }
         #endregion
 

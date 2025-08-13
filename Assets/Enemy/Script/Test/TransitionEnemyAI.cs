@@ -19,9 +19,16 @@ namespace ShadowMaze.EnemyCharactor
 
         private GameObject currentCubeFormInstance; // ตัวแปรเก็บ Instance ของกล่องที่ถูกสร้างขึ้นมา
         private float cubeFormTimer = 0f; // นับเวลาที่อยู่ในร่างกล่อง (เพื่อกลับร่างเดิม)
+        private bool isD = false;
         #endregion
 
         #region Normal Function
+
+        protected override void Update()
+        {
+            if (isD) return;
+            base.Update();
+        }
 
         #endregion
 
@@ -138,6 +145,7 @@ namespace ShadowMaze.EnemyCharactor
 
         private void disappear()
         {
+            isD = true;
             agent.SetDestination(transform.position);
 
             _positionSet = false;
@@ -157,6 +165,7 @@ namespace ShadowMaze.EnemyCharactor
         private IEnumerator respawn(Vector3 point)
         {
             yield return new WaitUntil(() => !EnemyManager.Instance._b);
+            isD = false;
             transform.position = spawnPoint;
             agent.Warp(transform.position);
             agent.SetDestination(transform.position);

@@ -111827,6 +111827,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _name: GGEZ
+  fearRange: 2
 --- !u!1 &1243969243
 GameObject:
   m_ObjectHideFlags: 0
@@ -112032,6 +112033,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _name: 
+  fearRange: 2
   agent: {fileID: 1244810001}
   enemyState: {fileID: 1244810003}
   enemyModel: {fileID: 0}
@@ -118863,6 +118865,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4101096466195343468, guid: 43f5d33037b44734f9dacad4357df8c7, type: 3}
+      propertyPath: _name
+      value: GGEZ
+      objectReference: {fileID: 0}
+    - target: {fileID: 4101096466195343468, guid: 43f5d33037b44734f9dacad4357df8c7, type: 3}
+      propertyPath: fearRange
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -119189,6 +119199,10 @@ PrefabInstance:
     - target: {fileID: 5236140539226328193, guid: 0859cb5777794be45a0c7765625a0538, type: 3}
       propertyPath: m_Layer
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5236140539226328193, guid: 0859cb5777794be45a0c7765625a0538, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -121319,6 +121333,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _name: 
+  fearRange: 2
   agent: {fileID: 7608625954402797845}
   enemyState: {fileID: 3095069020765747132}
   enemyModel: {fileID: 0}

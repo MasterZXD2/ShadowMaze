@@ -5,7 +5,7 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 public class WhatToFear : MonoBehaviour
 {
     public string _name;
-    protected float playerRange = 2f;
+    public float fearRange = 2f;
     protected bool PlayerInRange;
     protected Transform _player;
     
@@ -24,16 +24,20 @@ public class WhatToFear : MonoBehaviour
     protected virtual void PlayerCheck()
     {
         float dist = Vector3.Distance(transform.position, _player.position);
-        PlayerInRange = dist <= playerRange;
+        PlayerInRange = dist <= fearRange;
         if (PlayerInRange)
         {
-            PlayerController.Instance.BackStep(_name);
+            bool n = PlayerController.Instance.isFearPLayer(_name);
+            if (n) {
+                PlayerController.Instance.BackStep(n);
+                PlayerController.Instance.ShakeCamera(1f, 0.1f);
+            }
         }
     }
 
     protected virtual void OnDrawGizmos()
     {
         Gizmos.color = Color.gray;
-        Gizmos.DrawWireSphere(transform.position, playerRange);
+        Gizmos.DrawWireSphere(transform.position, fearRange);
     }
 }
