@@ -12,6 +12,7 @@ public class StraightPath : MonoBehaviour
     {
         source = sound.GetComponent<AudioSource>();
 
+        source.mute = true;
         source.rolloffMode = AudioRolloffMode.Linear; // เลือกแบบ Linear หรือ Logarithmic ก็ได้
         source.minDistance = 2f;  // ระยะที่ยังคงดังเท่าเดิม
         source.maxDistance = 15f; // เกินนี้จะเงียบลง
@@ -22,12 +23,17 @@ public class StraightPath : MonoBehaviour
         if (!plrInZone) return;
         if (PlayerController.Instance.IsMovinglaterally())
         {
-            offset += Vector3.forward * 2f * Time.deltaTime;
+            source.mute = false;
+            if (Vector3.Distance(PlayerController.Instance.transform.position,sound.transform.position) > 2f)
+            {
+                offset += Vector3.forward * -2f * Time.deltaTime;
+            }
             Play(PlayerController.Instance.transform);
         }
         else
         {
             offset = Vector3.zero;
+            source.mute = true;
         }
     }
 
