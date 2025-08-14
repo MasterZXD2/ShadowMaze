@@ -503,7 +503,7 @@ namespace ShadowMaze.MyCharacterController
         #endregion
 
         #region Check Function
-        private bool IsMovinglaterally()
+        public bool IsMovinglaterally()
         {
             Vector3 lateralVelo = new Vector3(_characterController.velocity.x, 0f, _characterController.velocity.z);
 
