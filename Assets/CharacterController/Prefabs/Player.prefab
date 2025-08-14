@@ -44,8 +44,8 @@ Light:
   serializedVersion: 11
   m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 8
-  m_Range: 4
+  m_Intensity: 15
+  m_Range: 9
   m_SpotAngle: 116.508354
   m_InnerSpotAngle: 78.76428
   m_CookieSize: 10
@@ -436,7 +436,7 @@ MonoBehaviour:
     SplineCurvature: 0.5
   RecenteringTarget: 2
   HorizontalAxis:
-    Value: 50.150635
+    Value: 25.916357
     Center: 0
     Range: {x: -180, y: 180}
     Wrap: 1
@@ -805,9 +805,9 @@ MonoBehaviour:
   Drag: 15
   MovingThreshold: 0.01
   WalkAcceleration: 50
-  WalkSpeed: 2.75
+  WalkSpeed: 2
   RunAcceleration: 80
-  RunSpeed: 4.25
+  RunSpeed: 3.5
   Gravity: 10
   TerminalVelo: 10
   JumpSpeed: 0.1
@@ -964,10 +964,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 65
   OnOffSpeed: 2
-  flickerSpeed: 5
+  flickerSpeed: 1
   baseFlickerSpeed: 1
   minIntensity: 5
-  maxIntensity: 10
+  maxIntensity: 20
   lowBatteryThreshold: 20
   FlashLight: {fileID: 2022027908763691823}
 --- !u!114 &5599670264407384861
