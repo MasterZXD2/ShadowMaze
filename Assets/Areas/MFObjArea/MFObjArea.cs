@@ -15,10 +15,15 @@ public class MFObjArea : MonoBehaviour
 {
     [field: SerializeField] private List<GameObject> mObjects;
     [SerializeField] private float fadeDuration;
+    [SerializeField] private Transform spawnTrans;
+    [SerializeField] private GameObject enemy;
+    [SerializeField] private Transform _goto;
     private List<rendObj> rendObjs = new List<rendObj>();
+    private bool _s = false;
 
     private void Start()
     {
+        /*
         foreach (GameObject item in mObjects)
         {
             Renderer r = item.GetComponent<Renderer>();
@@ -54,24 +59,32 @@ public class MFObjArea : MonoBehaviour
                 r.materials[i].color = _c;
             }
         }
+        */
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
+        if (_s) return;
+        _s = true;
+        Spawn();
+        /*
         foreach (rendObj obj in rendObjs)
         {
             StartCoroutine(FadeIn(obj));
         }
+        */
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (!other.CompareTag("Player")) return;
+        /*
         foreach (rendObj obj in rendObjs)
         {
             StartCoroutine(FadeOut(obj));
         }
+        */
     }
 
     IEnumerator Fade(rendObj obj, float startAlpha, float endAlpha, float duration)
@@ -110,5 +123,13 @@ public class MFObjArea : MonoBehaviour
     IEnumerator FadeOut(rendObj obj)
     {
         yield return Fade(obj, 1f, 0f, fadeDuration);
+    }
+
+    private void Spawn()
+    {
+        GameObject go = Instantiate(enemy);
+        StraightEnemyAI aI = go.GetComponent<StraightEnemyAI>();
+        aI.SetToGo(_goto);
+        aI.TP(spawnTrans.position);
     }
 }
