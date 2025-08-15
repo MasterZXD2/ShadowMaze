@@ -41845,7 +41845,7 @@ Transform:
   m_GameObject: {fileID: 1041677679}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.86, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -56222,6 +56222,79 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: fae28b7fb6ecb1141871fef0934b4842, type: 3}
   m_PrefabInstance: {fileID: 1539854285}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1542234839
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4481808511919345658, guid: d40a57e8d72f6e8498252c6baecefa42, type: 3}
+      propertyPath: m_Name
+      value: Lower Sound
+      objectReference: {fileID: 0}
+    - target: {fileID: 6989737937340712896, guid: d40a57e8d72f6e8498252c6baecefa42, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 983.15765
+      objectReference: {fileID: 0}
+    - target: {fileID: 6989737937340712896, guid: d40a57e8d72f6e8498252c6baecefa42, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 280.3443
+      objectReference: {fileID: 0}
+    - target: {fileID: 6989737937340712896, guid: d40a57e8d72f6e8498252c6baecefa42, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 892.9193
+      objectReference: {fileID: 0}
+    - target: {fileID: 6989737937340712896, guid: d40a57e8d72f6e8498252c6baecefa42, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6989737937340712896, guid: d40a57e8d72f6e8498252c6baecefa42, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6989737937340712896, guid: d40a57e8d72f6e8498252c6baecefa42, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6989737937340712896, guid: d40a57e8d72f6e8498252c6baecefa42, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6989737937340712896, guid: d40a57e8d72f6e8498252c6baecefa42, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6989737937340712896, guid: d40a57e8d72f6e8498252c6baecefa42, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6989737937340712896, guid: d40a57e8d72f6e8498252c6baecefa42, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7532604922593751572, guid: d40a57e8d72f6e8498252c6baecefa42, type: 3}
+      propertyPath: m_Center.z
+      value: -4.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 8979624155144070054, guid: d40a57e8d72f6e8498252c6baecefa42, type: 3}
+      propertyPath: m_Resource
+      value: 
+      objectReference: {fileID: 8300000, guid: 429abb7f1af997d41881f989116b02c4, type: 3}
+    - target: {fileID: 8979624155144070054, guid: d40a57e8d72f6e8498252c6baecefa42, type: 3}
+      propertyPath: MaxDistance
+      value: 10.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8979624155144070054, guid: d40a57e8d72f6e8498252c6baecefa42, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 429abb7f1af997d41881f989116b02c4, type: 3}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d40a57e8d72f6e8498252c6baecefa42, type: 3}
 --- !u!1 &1546246242 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 148094, guid: 17167dc6dc844dad8cef726ac45a016a, type: 3}
@@ -86581,7 +86654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ac10e27ade77a345af662e9b7957d5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayName: Press
+  displayName: Press E
   interactUI: {fileID: 3359917468942484366, guid: 189427bb59c865841a95660f8ebe5874, type: 3}
   interactPoint: {fileID: 1041677680}
 --- !u!135 &2076901977
@@ -90202,3 +90275,4 @@ SceneRoots:
   - {fileID: 917675844}
   - {fileID: 1271999410}
   - {fileID: 2076901981}
+  - {fileID: 1542234839}
