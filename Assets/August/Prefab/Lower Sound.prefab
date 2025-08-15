@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7113220302901087938
+--- !u!1 &4481808511919345658
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4432985331045861112}
-  - component: {fileID: 3750541302573134636}
-  - component: {fileID: 1430344877346683347}
-  - component: {fileID: 2313620554166526622}
+  - component: {fileID: 6989737937340712896}
+  - component: {fileID: 7532604922593751572}
+  - component: {fileID: 5718500754693437675}
+  - component: {fileID: 8979624155144070054}
   m_Layer: 0
-  m_Name: 3D Sound Area
+  m_Name: Lower Sound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4432985331045861112
+--- !u!4 &6989737937340712896
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7113220302901087938}
+  m_GameObject: {fileID: 4481808511919345658}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 983.86, y: 280.37, z: 883.35}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &3750541302573134636
+--- !u!65 &7532604922593751572
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7113220302901087938}
+  m_GameObject: {fileID: 4481808511919345658}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -55,30 +55,30 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.32, y: 1.55, z: 3.8}
   m_Center: {x: -8.24, y: 0.09, z: 4.85}
---- !u!114 &1430344877346683347
+--- !u!114 &5718500754693437675
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7113220302901087938}
+  m_GameObject: {fileID: 4481808511919345658}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 956bfc471ce3fc44488452dbaf46e366, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!82 &2313620554166526622
+--- !u!82 &8979624155144070054
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7113220302901087938}
+  m_GameObject: {fileID: 4481808511919345658}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 429abb7f1af997d41881f989116b02c4, type: 3}
-  m_Resource: {fileID: 8300000, guid: 429abb7f1af997d41881f989116b02c4, type: 3}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -99,49 +99,22 @@ AudioSource:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0.08695652
-      value: 1
-      inSlope: -11.504599
-      outSlope: -11.504599
+      time: 0.0793958
+      value: 0
+      inSlope: 0.36913013
+      outSlope: 0.36913013
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.19690041
-      value: 0.50564575
-      inSlope: -2.0286162
-      outSlope: -2.0286162
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.91969615
-      outWeight: 0.82854396
-    - serializedVersion: 3
-      time: 0.36315355
-      value: 0.2951355
-      inSlope: -0.7190374
-      outSlope: -0.7190374
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.6841623
-      value: 0.06858826
-      inSlope: -0.17975935
-      outSlope: -0.17975935
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
+      outWeight: 0.19919886
     - serializedVersion: 3
       time: 1
-      value: 0
-      inSlope: -0.0869913
-      outSlope: -0.0869913
+      value: 0.99282455
+      inSlope: 3.3771174
+      outSlope: 3.3771174
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.0877516
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
