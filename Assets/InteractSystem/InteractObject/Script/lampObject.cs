@@ -28,13 +28,44 @@ namespace ShadowMaze.InteractSystem
                 Collider[] colliders = Physics.OverlapSphere(transform.position, checkRange, _puzzlelayerMask);
                 foreach (Collider collider in colliders)
                 {
-                    if (collider.gameObject.TryGetComponent<Mirror>(out Mirror m))
+                    GameObject GO = collider.gameObject;
+                    if (GO.CompareTag("Enemy"))
+                    {
+                        if (GO.TryGetComponent<SimpleEnemyAi>(out SimpleEnemyAi sei))
+                        {
+                            if (GO.TryGetComponent<ShadowEnemyAI>(out ShadowEnemyAI enemy))
+                            {
+                                enemy.HitByFlashlight(true);
+                            }
+                            else
+                            {
+                                sei.HitByFlashlight();
+                            }
+                        }
+                        else if (GO.transform.parent.CompareTag("Enemy"))
+                        {
+                            if (GO.transform.parent.TryGetComponent<SimpleEnemyAi>(out SimpleEnemyAi psei))
+                            {
+                                if (GO.transform.parent.TryGetComponent<ShadowEnemyAI>(out ShadowEnemyAI enem))
+                                {
+                                    enem.HitByFlashlight(true);
+                                }
+                                else
+                                {
+                                    psei.HitByFlashlight();
+                                }
+                            }
+                        }
+
+                        if (GO.TryGetComponent<TheWatchingEyesAI>(out TheWatchingEyesAI twe))
+                        {
+                            twe.HitByFlashlight();
+                        }
+                    }
+
+                    if (GO.TryGetComponent<Mirror>(out Mirror m))
                     {
                         m.HitByFlashlight(transform, true);
-                    }
-                    if (collider.gameObject.TryGetComponent<ShadowEnemyAI>(out ShadowEnemyAI enemy))
-                    {
-                        enemy.HitByFlashlight(true);
                     }
                 }
 

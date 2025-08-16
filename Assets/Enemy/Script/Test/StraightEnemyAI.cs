@@ -2,7 +2,7 @@ using ShadowMaze.EnemyCharactor;
 using UnityEngine;
 using UnityEngine.Splines;
 
-public class StraightEnemyAI : SimpleEnemyAi
+public class StraightEnemyAI : TransitionEnemyAI
 {
     [SerializeField] private Transform togo;
     private bool walkto = true;

@@ -2,6 +2,7 @@
 using ShadowMaze.MyCharacterController;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Splines;
@@ -12,7 +13,7 @@ namespace ShadowMaze.EnemyCharactor
     public class TransitionEnemyAI : SimpleEnemyAi
     {
         #region Class Veriables
-        [SerializeField] private Renderer enemyMeshRenderer; // MeshRenderer ของแคปซูล (ศัตรู)
+        [SerializeField] private List<Renderer> enemyMeshRenderers; // MeshRenderer ของแคปซูล (ศัตรู)
         [SerializeField] private float cubeFormDuration = 5f; // ระยะเวลาที่อยู่ในร่างกล่องก่อนกลับเป็นศัตรู (ถ้าไม่โดนไฟฉายส่อง)
         [SerializeField] private GameObject cubeFormPrefab; // Prefab ของกล่องที่จะใช้แปลงร่าง
         [SerializeField] private Vector3 sceOffset = Vector3.one;
@@ -156,7 +157,12 @@ namespace ShadowMaze.EnemyCharactor
 
             astop = true;
 
-            if (enemyMeshRenderer) enemyMeshRenderer.enabled = false;
+            if (enemyMeshRenderers.Count != 0) {
+                foreach (Renderer r in enemyMeshRenderers)
+                {
+                    r.enabled = false;
+                }
+            }
             if (enemyController) enemyController.enabled = false;
             //if (agent) agent.enabled = false;
         }
@@ -178,7 +184,13 @@ namespace ShadowMaze.EnemyCharactor
             astop = false;
             isAttack = false;
 
-            if (enemyMeshRenderer) enemyMeshRenderer.enabled = true;
+            if (enemyMeshRenderers.Count != 0)
+            {
+                foreach (Renderer r in enemyMeshRenderers)
+                {
+                    r.enabled = true;
+                }
+            }
             if (enemyController) enemyController.enabled = true;
             if (agent) agent.enabled = true;
         }
