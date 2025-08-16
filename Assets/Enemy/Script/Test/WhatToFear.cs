@@ -29,7 +29,7 @@ public class WhatToFear : MonoBehaviour
         {
             bool n = PlayerController.Instance.isFearPLayer(_name);
             if (n) {
-                PlayerController.Instance.BackStep(n);
+                //PlayerController.Instance.BackStep(n);
                 PlayerController.Instance.ShakeCamera(1f, 0.1f);
             }
         }

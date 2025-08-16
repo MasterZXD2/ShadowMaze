@@ -1,4 +1,5 @@
 using ShadowMaze.EnemyCharactor;
+using ShadowMaze.MyCharacterController;
 using UnityEngine;
 using UnityEngine.Splines;
 
@@ -21,6 +22,8 @@ public class StraightEnemyAI : TransitionEnemyAI
     {
         if (walkto && togo)
         {
+            OnFlashLight();
+
             enemyState.MovementSet(EnemyMovementState.Walking);
             isMovement = true;
             agent.SetDestination(togo.position);
@@ -35,7 +38,53 @@ public class StraightEnemyAI : TransitionEnemyAI
         }
         else
         {
-            base.Update();
+            if (!_player || isJump || isD) return;
+            PlayerCheck();
+            if (enemyModel)
+            {
+                enemyModel.transform.position = transform.position + _offset;
+                enemyModel.transform.rotation = transform.rotation;
+            }
+            if (astop)
+            {
+                agent.SetDestination(transform.position);
+                return;
+            }
+            OnFlashLight();
+
+            float PH = PlayerController.Instance._characterController.height / 2f;
+            Vector3 _tarVec = _player.position;
+            _tarVec.y += PH;
+
+            Move(PH);
+            //base.Update();
         }
+        isCurrentlyHitByFlashlight = false;
+    }
+
+    protected override void NormalMove(float PH)
+    {
+        if (astop) return;
+
+        _lastPlayerPosition = _player.position;
+        _lastPlayerPosition.y += PH;
+
+        float dist = Vector3.Distance(transform.position, _player.position);
+        if (dist <= attackRange)
+        {
+            AttackPlayer();
+        }
+        else
+        {
+            ChasePlayer();
+        }
+
+        if (!isAttacking)
+        {
+            if (transform.position == _lastGTPosition) _sameGTPositionTimer += Time.deltaTime;
+            else _sameGTPositionTimer = 0f;
+        }
+
+        _lastGTPosition = transform.position;
     }
 }

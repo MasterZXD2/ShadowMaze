@@ -372,6 +372,15 @@ namespace ShadowMaze.MyCharacterController
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""End"",
+                    ""type"": ""Button"",
+                    ""id"": ""446c99df-fbdb-4882-b3cb-b69aec8835fe"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -506,6 +515,17 @@ namespace ShadowMaze.MyCharacterController
                     ""action"": ""Five"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9d33c439-ce36-404c-bbbc-414ab226e83d"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""End"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -534,6 +554,7 @@ namespace ShadowMaze.MyCharacterController
             m_PlayerKeyBoardMap_Three = m_PlayerKeyBoardMap.FindAction("Three", throwIfNotFound: true);
             m_PlayerKeyBoardMap_Four = m_PlayerKeyBoardMap.FindAction("Four", throwIfNotFound: true);
             m_PlayerKeyBoardMap_Five = m_PlayerKeyBoardMap.FindAction("Five", throwIfNotFound: true);
+            m_PlayerKeyBoardMap_End = m_PlayerKeyBoardMap.FindAction("End", throwIfNotFound: true);
         }
 
         ~@PlayerControls()
@@ -778,6 +799,7 @@ namespace ShadowMaze.MyCharacterController
         private readonly InputAction m_PlayerKeyBoardMap_Three;
         private readonly InputAction m_PlayerKeyBoardMap_Four;
         private readonly InputAction m_PlayerKeyBoardMap_Five;
+        private readonly InputAction m_PlayerKeyBoardMap_End;
         /// <summary>
         /// Provides access to input actions defined in input action map "PlayerKeyBoardMap".
         /// </summary>
@@ -837,6 +859,10 @@ namespace ShadowMaze.MyCharacterController
             /// Provides access to the underlying input action "PlayerKeyBoardMap/Five".
             /// </summary>
             public InputAction @Five => m_Wrapper.m_PlayerKeyBoardMap_Five;
+            /// <summary>
+            /// Provides access to the underlying input action "PlayerKeyBoardMap/End".
+            /// </summary>
+            public InputAction @End => m_Wrapper.m_PlayerKeyBoardMap_End;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -899,6 +925,9 @@ namespace ShadowMaze.MyCharacterController
                 @Five.started += instance.OnFive;
                 @Five.performed += instance.OnFive;
                 @Five.canceled += instance.OnFive;
+                @End.started += instance.OnEnd;
+                @End.performed += instance.OnEnd;
+                @End.canceled += instance.OnEnd;
             }
 
             /// <summary>
@@ -946,6 +975,9 @@ namespace ShadowMaze.MyCharacterController
                 @Five.started -= instance.OnFive;
                 @Five.performed -= instance.OnFive;
                 @Five.canceled -= instance.OnFive;
+                @End.started -= instance.OnEnd;
+                @End.performed -= instance.OnEnd;
+                @End.canceled -= instance.OnEnd;
             }
 
             /// <summary>
@@ -1120,6 +1152,13 @@ namespace ShadowMaze.MyCharacterController
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnFive(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "End" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnEnd(InputAction.CallbackContext context);
         }
     }
 }

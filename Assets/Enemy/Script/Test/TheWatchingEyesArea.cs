@@ -68,6 +68,11 @@ public class TheWatchingEyesArea : Singleton<TheWatchingEyesArea>
         }
     }
 
+    public void FB()
+    {
+        boss.Health = 0;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         GameObject go = other.gameObject;

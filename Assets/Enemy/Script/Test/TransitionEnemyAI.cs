@@ -20,7 +20,7 @@ namespace ShadowMaze.EnemyCharactor
 
         private GameObject currentCubeFormInstance; // ตัวแปรเก็บ Instance ของกล่องที่ถูกสร้างขึ้นมา
         private float cubeFormTimer = 0f; // นับเวลาที่อยู่ในร่างกล่อง (เพื่อกลับร่างเดิม)
-        private bool isD = false;
+        protected bool isD = false;
         #endregion
 
         #region Normal Function

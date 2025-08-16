@@ -33,27 +33,13 @@ namespace ShadowMaze.InteractSystem
                     {
                         if (GO.TryGetComponent<SimpleEnemyAi>(out SimpleEnemyAi sei))
                         {
-                            if (GO.TryGetComponent<ShadowEnemyAI>(out ShadowEnemyAI enemy))
-                            {
-                                enemy.HitByFlashlight(true);
-                            }
-                            else
-                            {
-                                sei.HitByFlashlight();
-                            }
+                            sei.HitByFlashlight(true);
                         }
                         else if (GO.transform.parent.CompareTag("Enemy"))
                         {
                             if (GO.transform.parent.TryGetComponent<SimpleEnemyAi>(out SimpleEnemyAi psei))
                             {
-                                if (GO.transform.parent.TryGetComponent<ShadowEnemyAI>(out ShadowEnemyAI enem))
-                                {
-                                    enem.HitByFlashlight(true);
-                                }
-                                else
-                                {
-                                    psei.HitByFlashlight();
-                                }
+                                psei.HitByFlashlight(true);
                             }
                         }
 

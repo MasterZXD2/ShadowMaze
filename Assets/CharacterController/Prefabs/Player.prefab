@@ -800,6 +800,7 @@ MonoBehaviour:
   _playerUI: {fileID: 1159779941681302058}
   _playerGameObject: {fileID: 1525177196660922574}
   _playerInteract: {fileID: 5599670264407384861}
+  _playerAnimation: {fileID: 1147221798056302444}
   FirstCam: {fileID: 4593611722645905123}
   ThirdCam: {fileID: 2558328244929255874}
   Drag: 15

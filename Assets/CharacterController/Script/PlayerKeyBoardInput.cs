@@ -108,6 +108,11 @@ namespace ShadowMaze.MyCharacterController
         {
             if (context.started) _plrController.TelTo(par.GetComponentsInChildren<Transform>()[5]);
         }
+
+        public void OnEnd(InputAction.CallbackContext context)
+        {
+            if (context.started) TheWatchingEyesArea.Instance.FB();
+        }
     }
 
 }

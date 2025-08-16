@@ -46,6 +46,7 @@ namespace ShadowMaze.MyCharacterController
         public PlayerUI _playerUI;
         [SerializeField] private GameObject _playerGameObject;
         public PlayerInteract _playerInteract;
+        [SerializeField] PlayerAnimation _playerAnimation;
 
         [Space(10)]
         [Header("Camera Obj")]
@@ -677,6 +678,7 @@ namespace ShadowMaze.MyCharacterController
             if (!b) _playerUI.OnEsc();
             astop = _playerUI._esc;
             StopMovement();
+            _playerAnimation.Toggle(astop);
             _playerLight.rToggle(astop);
             EnemyManager.Instance.Toggle(astop);
             Cursor.lockState = CursorLockMode.None;
@@ -687,6 +689,7 @@ namespace ShadowMaze.MyCharacterController
         {
             cutScene = b; 
             _playerLight.rToggle(b);
+            _playerAnimation.Toggle(b);
             EnemyManager.Instance.Toggle(b);
             StopMovement();
 

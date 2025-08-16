@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d8ef097eb20765459c0c1d27b12ff19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _name: 
+  _name: Bear
   fearRange: 3
   agent: {fileID: 6883208276119547349}
   enemyState: {fileID: 8838057924885865050}
@@ -157,7 +157,7 @@ MonoBehaviour:
   MaxHealth: 100
   attackRange: 1.8
   AttackCD: 0.5
-  AttackDamage: 10
+  AttackDamage: 1000
   walkPointRange: 7
   EnemyModelRotationSpeed: 10
   Gravity: 10
@@ -184,8 +184,8 @@ MonoBehaviour:
   - {fileID: 3174517053712190418}
   - {fileID: 8220002990127430405}
   - {fileID: 5555709727339577028}
-  cubeFormDuration: 3
-  cubeFormPrefab: {fileID: 8032926682005648466, guid: 82ec5834e3b8a5043b559e1de8583cbd, type: 3}
+  cubeFormDuration: 1000
+  cubeFormPrefab: {fileID: 5018795032346594545, guid: 867ae3d00ed14e44fb0fe1e2c8470c6f, type: 3}
   sceOffset: {x: 1, y: 1, z: 1}
   togo: {fileID: 0}
 --- !u!143 &7131128427032891083

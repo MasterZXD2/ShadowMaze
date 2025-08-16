@@ -19,7 +19,7 @@ namespace ShadowMaze.EnemyCharactor
         [Header("Enemy Components")]
         [SerializeField] protected NavMeshAgent agent;
         [SerializeField] protected EnemyState enemyState;
-        [SerializeField] private GameObject enemyModel;
+        [SerializeField] protected GameObject enemyModel;
 
         [Space(10)]
         [Header("Stats")]
@@ -104,7 +104,7 @@ namespace ShadowMaze.EnemyCharactor
         protected Vector3 _lastGTPosition;
         protected bool isLPP = false;
         private bool isPH = false;
-        private Vector3 _offset = Vector3.zero;
+        protected Vector3 _offset = Vector3.zero;
 
         protected bool InMemeoryFragmentArea = false;
         protected bool astop = false;
@@ -153,6 +153,7 @@ namespace ShadowMaze.EnemyCharactor
                 agent.SetDestination(transform.position);
                 return;
             }
+            OnFlashLight();
 
             if (!stun)
             {
@@ -197,7 +198,6 @@ namespace ShadowMaze.EnemyCharactor
 
                 Move(PH);
             }
-            OnFlashLight();
 
             isCurrentlyHitByFlashlight = false;
         }
@@ -277,14 +277,14 @@ namespace ShadowMaze.EnemyCharactor
                 else
                 {
                     Patroling();
-                    flashlightHitTimer = 0f;
+                    //flashlightHitTimer = 0f;
                     //return;
                 }
             }
             else
             {
                 Patroling();
-                flashlightHitTimer = 0f;
+                //flashlightHitTimer = 0f;
                 //return;
             }
 

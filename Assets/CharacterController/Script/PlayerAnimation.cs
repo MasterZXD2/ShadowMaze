@@ -14,6 +14,7 @@ namespace ShadowMaze.MyCharacterController
         private int[] actionHashes;
 
         private static int isDie = Animator.StringToHash("IsDie");
+        private bool astop = false;
 
         private void Awake()
         {
@@ -22,6 +23,7 @@ namespace ShadowMaze.MyCharacterController
 
         private void Update()
         {
+            if (astop) return;
             UpdataAnimationState();
         }
 
@@ -45,6 +47,17 @@ namespace ShadowMaze.MyCharacterController
             }
             _animator.SetFloat("Speed", speed);
             
+        }
+
+        public void Toggle(bool b)
+        {
+            astop = b;
+            if (astop)
+            {
+                _animator.SetBool("IsRunning", false);
+                _animator.SetBool("IsWalking", false);
+                _animator.SetFloat("Speed", 0);
+            }
         }
 
         public void AttackEnd()
