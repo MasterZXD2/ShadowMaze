@@ -40,7 +40,7 @@ public class ShadowPuzzle : Puzzle
             }
         }
         float dist = (standPosition.position - PlayerController.Instance.transform.position).sqrMagnitude;
-        if (dist < .25f)
+        if (dist < .5f)
         {
             bool f = true;
             foreach (ShadowBlockObject s in shadowBlockObjects)

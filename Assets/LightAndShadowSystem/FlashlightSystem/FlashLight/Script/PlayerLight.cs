@@ -55,6 +55,7 @@ public class PlayerLight : MonoBehaviour
 
             foreach (GameObject GO in GetObjectsInFlashlightCone())
             {
+                Debug.Log(GO);
                 if (GO.CompareTag("Enemy"))
                 {
                     if (GO.TryGetComponent<SimpleEnemyAi>(out SimpleEnemyAi sei))
