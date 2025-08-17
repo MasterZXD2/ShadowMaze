@@ -21130,7 +21130,6 @@ GameObject:
   m_Component:
   - component: {fileID: 369643514}
   - component: {fileID: 369643513}
-  - component: {fileID: 369643512}
   - component: {fileID: 369643511}
   - component: {fileID: 369643510}
   m_Layer: 0
@@ -21206,14 +21205,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!81 &369643512
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 369643509}
-  m_Enabled: 1
 --- !u!20 &369643513
 Camera:
   m_ObjectHideFlags: 0
@@ -23105,7 +23096,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &426601277
 Transform:
   m_ObjectHideFlags: 0
@@ -46955,7 +46946,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1182968578
 Transform:
   m_ObjectHideFlags: 0
@@ -56975,6 +56966,22 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7532604922593751572, guid: d40a57e8d72f6e8498252c6baecefa42, type: 3}
+      propertyPath: m_Size.x
+      value: 9.17
+      objectReference: {fileID: 0}
+    - target: {fileID: 7532604922593751572, guid: d40a57e8d72f6e8498252c6baecefa42, type: 3}
+      propertyPath: m_Size.y
+      value: 2.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7532604922593751572, guid: d40a57e8d72f6e8498252c6baecefa42, type: 3}
+      propertyPath: m_Size.z
+      value: 11.94
+      objectReference: {fileID: 0}
+    - target: {fileID: 7532604922593751572, guid: d40a57e8d72f6e8498252c6baecefa42, type: 3}
+      propertyPath: m_Center.x
+      value: -1.86
+      objectReference: {fileID: 0}
+    - target: {fileID: 7532604922593751572, guid: d40a57e8d72f6e8498252c6baecefa42, type: 3}
       propertyPath: m_Center.z
       value: -4.67
       objectReference: {fileID: 0}
@@ -56984,7 +56991,7 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: 429abb7f1af997d41881f989116b02c4, type: 3}
     - target: {fileID: 8979624155144070054, guid: d40a57e8d72f6e8498252c6baecefa42, type: 3}
       propertyPath: MaxDistance
-      value: 10.5
+      value: 6.72
       objectReference: {fileID: 0}
     - target: {fileID: 8979624155144070054, guid: d40a57e8d72f6e8498252c6baecefa42, type: 3}
       propertyPath: m_audioClip
@@ -72758,7 +72765,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1751508283
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -25,7 +25,7 @@ public class Trigger3DSound : MonoBehaviour
             audioSource.Play();
         }
     }
-    private void OntriggerExit(Collider other)
+    private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
