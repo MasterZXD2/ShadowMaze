@@ -45,13 +45,14 @@ public class ShadowPuzzle : Puzzle
             bool f = true;
             foreach (ShadowBlockObject s in shadowBlockObjects)
             {
+                Debug.Log(s.getB());
                 if (!s.getB())
                 {
                     f = false;
                     break;
                 }
             }
-            isFinish = f;
+            if (shadowBlockObjects.Count != 0) isFinish = f;
         }
     }
 

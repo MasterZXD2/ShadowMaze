@@ -2,11 +2,13 @@ using ShadowMaze.EnemyCharactor;
 using ShadowMaze.MyCharacterController;
 using UnityEngine;
 using UnityEngine.Splines;
+using static UnityEngine.InputSystem.Controls.AxisControl;
 
 public class StraightEnemyAI : TransitionEnemyAI
 {
     [SerializeField] private Transform togo;
     private bool walkto = true;
+    private bool lamp = false;
 
     public void TP(Vector3 pos)
     {
@@ -62,6 +64,24 @@ public class StraightEnemyAI : TransitionEnemyAI
         isCurrentlyHitByFlashlight = false;
     }
 
+    protected override void OnFlashLight()
+    {
+        if (isCurrentlyHitByFlashlight && lamp)
+        {
+            flashlightHitTimer += Time.deltaTime;
+        }
+        else
+        {
+            flashlightHitTimer = 0f;
+        }
+
+        if (flashlightHitTimer >= flashlightStunDuration)
+        {
+            TransitionToCubeForm();
+            flashlightHitTimer = 0f;
+        }
+    }
+
     protected override void NormalMove(float PH)
     {
         if (astop) return;
@@ -86,5 +106,11 @@ public class StraightEnemyAI : TransitionEnemyAI
         }
 
         _lastGTPosition = transform.position;
+    }
+
+    public override void HitByFlashlight(bool b = false)
+    {
+        base.HitByFlashlight(b);
+        lamp = b;
     }
 }

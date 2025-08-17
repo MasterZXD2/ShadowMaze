@@ -124,7 +124,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -184,6 +184,7 @@ MonoBehaviour:
   - {fileID: 3174517053712190418}
   - {fileID: 8220002990127430405}
   - {fileID: 5555709727339577028}
+  particleSystemRenderers: []
   cubeFormDuration: 1000
   cubeFormPrefab: {fileID: 5018795032346594545, guid: 867ae3d00ed14e44fb0fe1e2c8470c6f, type: 3}
   sceOffset: {x: 1, y: 1, z: 1}

@@ -14,6 +14,7 @@ namespace ShadowMaze.EnemyCharactor
     {
         #region Class Veriables
         [SerializeField] private List<Renderer> enemyMeshRenderers; // MeshRenderer ของแคปซูล (ศัตรู)
+        [SerializeField] private List<ParticleSystem> particleSystemRenderers;
         [SerializeField] private float cubeFormDuration = 5f; // ระยะเวลาที่อยู่ในร่างกล่องก่อนกลับเป็นศัตรู (ถ้าไม่โดนไฟฉายส่อง)
         [SerializeField] private GameObject cubeFormPrefab; // Prefab ของกล่องที่จะใช้แปลงร่าง
         [SerializeField] private Vector3 sceOffset = Vector3.one;
@@ -86,7 +87,7 @@ namespace ShadowMaze.EnemyCharactor
         #endregion
 
         #region Transition Functions
-        private void TransitionToCubeForm()
+        protected void TransitionToCubeForm()
         {
             if (enemyState.CurrEnemyActionState == EnemyActionState.StunnedAsCube)
                 return;
@@ -96,10 +97,10 @@ namespace ShadowMaze.EnemyCharactor
             if (cubeFormPrefab != null)
             {
                 // สร้างกล่องที่ตำแหน่งและ Rotation ปัจจุบันของ EnemyAI (แคปซูล)
-                currentCubeFormInstance = Instantiate(cubeFormPrefab, transform.position, transform.rotation, transform);
-                Vector3 s = currentCubeFormInstance.transform.localScale;
-                for (int i = 0; i < 3; i++) s[i] *= sceOffset[i];
-                currentCubeFormInstance.transform.localScale = s;
+                currentCubeFormInstance = Instantiate(cubeFormPrefab, transform.position, new Quaternion(0,0,0,0));
+                //Vector3 s = currentCubeFormInstance.transform.localScale;
+                //for (int i = 0; i < 3; i++) s[i] *= sceOffset[i];
+                //currentCubeFormInstance.transform.localScale = s;
                 currentCubeFormInstance.tag = gameObject.tag;
                 currentCubeFormInstance.layer = gameObject.layer;
                 // *** ลบบรรทัดนี้: ไม่ให้ EnemyAI เป็น Parent ของกล่องอีกต่อไป ***
@@ -157,14 +158,22 @@ namespace ShadowMaze.EnemyCharactor
 
             astop = true;
 
+            if (enemyModel) GetComponent<Collider>().isTrigger = true;
             if (enemyMeshRenderers.Count != 0) {
                 foreach (Renderer r in enemyMeshRenderers)
                 {
                     r.enabled = false;
                 }
             }
+            if (particleSystemRenderers.Count != 0)
+            {
+                foreach (ParticleSystem p in particleSystemRenderers)
+                {
+                    p.Stop();
+                }
+            }
             if (enemyController) enemyController.enabled = false;
-            //if (agent) agent.enabled = false;
+            if (agent) agent.enabled = false;
         }
         private void DelayedRespawn() => StartCoroutine(respawn(spawnPoint));
 
@@ -184,11 +193,19 @@ namespace ShadowMaze.EnemyCharactor
             astop = false;
             isAttack = false;
 
+            if (enemyModel) GetComponent<Collider>().isTrigger = false;
             if (enemyMeshRenderers.Count != 0)
             {
                 foreach (Renderer r in enemyMeshRenderers)
                 {
                     r.enabled = true;
+                }
+            }
+            if (particleSystemRenderers.Count != 0)
+            {
+                foreach (ParticleSystem p in particleSystemRenderers)
+                {
+                    p.Play();
                 }
             }
             if (enemyController) enemyController.enabled = true;

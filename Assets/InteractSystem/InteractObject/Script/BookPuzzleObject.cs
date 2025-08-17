@@ -8,13 +8,13 @@ namespace ShadowMaze.InteractSystem
     {
         public string Name;
         [SerializeField] private Light light;
-        [SerializeField] private float MaxScrollDist = 2f;
-        [SerializeField] private float MinScrollDist = -.2f;
-        [SerializeField] private float Speed = 5f;
+        [SerializeField] protected float MaxScrollDist = 2f;
+        [SerializeField] protected float MinScrollDist = -.2f;
+        [SerializeField] protected float Speed = 5f;
 
         protected bool b;
-        private float _currrange;
-        private float _scrollDist;
+        protected float _currrange;
+        protected float _scrollDist;
 
         protected override void Start()
         {
