@@ -20703,7 +20703,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edf0272d201a1bb49a7a63ebbcb54141, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UI: {fileID: 2724836644241498865, guid: 9583650b2d952354e9e74d474754854a, type: 3}
+  UI: {fileID: 0}
   range: 3.5
   axis: 2
   _name: null
