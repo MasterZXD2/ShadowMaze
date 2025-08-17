@@ -1368,7 +1368,7 @@ MonoBehaviour:
   exUI: {fileID: 982883320}
   exBU: {fileID: 982883321}
   ST: {fileID: 231209801}
-  nextScene: SunScene
+  nextScene: SunSceneCopy
   InStartScene: 1
 --- !u!114 &2131234553
 MonoBehaviour:

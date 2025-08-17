@@ -11,12 +11,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/StartScene.unity
     guid: 43ab6a8bda533864d9673cd31a1c0068
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SunScene.unity
     guid: a1941e9b32e202b4bb5ebeb7a414da63
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/PatScene.unity
     guid: 2a9406a648bd025408049ebb6500ba73
+  - enabled: 1
+    path: Assets/Scenes/SunSceneCopy.unity
+    guid: 6b82f9e4a05d6ca4e87d21d14ee7946c
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
