@@ -19698,7 +19698,7 @@ Transform:
   m_GameObject: {fileID: 335789231}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -16.325, y: 8.980011, z: 87.56}
+  m_LocalPosition: {x: -16.325, y: 8.980011, z: 84}
   m_LocalScale: {x: 3.3893924, y: 0.16511, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -44766,6 +44766,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Door_02
       objectReference: {fileID: 0}
+    - target: {fileID: 4405256333685710, guid: 5cce324618b941cebfdab9b92ca611a7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4405256333685710, guid: 5cce324618b941cebfdab9b92ca611a7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4814636578431708, guid: 5cce324618b941cebfdab9b92ca611a7, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.1503
@@ -44816,6 +44824,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4814636578431708, guid: 5cce324618b941cebfdab9b92ca611a7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4894858656013200, guid: 5cce324618b941cebfdab9b92ca611a7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4894858656013200, guid: 5cce324618b941cebfdab9b92ca611a7, type: 3}
+      propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 65734165884140894, guid: 5cce324618b941cebfdab9b92ca611a7, type: 3}
@@ -64421,7 +64437,7 @@ PlayableDirector:
   m_Enabled: 1
   serializedVersion: 3
   m_PlayableAsset: {fileID: 11400000, guid: 24534e79e70300c499cfd9ae6cfdb722, type: 2}
-  m_InitialState: 1
+  m_InitialState: 0
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
@@ -88893,8 +88909,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 25.938293, y: 22.341614, z: 55.103638}
-  m_Center: {x: -1.1841125, y: 10.670807, z: 0.1887207}
+  m_Size: {x: 25.938293, y: 22.341614, z: 45.3}
+  m_Center: {x: -1.1841125, y: 10.670807, z: -4.88}
 --- !u!1 &2113527811
 GameObject:
   m_ObjectHideFlags: 0
