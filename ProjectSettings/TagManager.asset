@@ -14,6 +14,7 @@ TagManager:
   - CinemachineTarget
   - TPPOG
   - CrystalAnimation
+  - TMDoorBoss
   layers:
   - Default
   - TransparentFX
