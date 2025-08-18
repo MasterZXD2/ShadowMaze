@@ -381,6 +381,15 @@ namespace ShadowMaze.MyCharacterController
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DoorB"",
+                    ""type"": ""Button"",
+                    ""id"": ""6b637061-c069-4cef-840d-d2ccd9505c46"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -526,6 +535,17 @@ namespace ShadowMaze.MyCharacterController
                     ""action"": ""End"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1bf784a7-ce24-4f69-b7d5-745f0f4c8402"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DoorB"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -555,6 +575,7 @@ namespace ShadowMaze.MyCharacterController
             m_PlayerKeyBoardMap_Four = m_PlayerKeyBoardMap.FindAction("Four", throwIfNotFound: true);
             m_PlayerKeyBoardMap_Five = m_PlayerKeyBoardMap.FindAction("Five", throwIfNotFound: true);
             m_PlayerKeyBoardMap_End = m_PlayerKeyBoardMap.FindAction("End", throwIfNotFound: true);
+            m_PlayerKeyBoardMap_DoorB = m_PlayerKeyBoardMap.FindAction("DoorB", throwIfNotFound: true);
         }
 
         ~@PlayerControls()
@@ -800,6 +821,7 @@ namespace ShadowMaze.MyCharacterController
         private readonly InputAction m_PlayerKeyBoardMap_Four;
         private readonly InputAction m_PlayerKeyBoardMap_Five;
         private readonly InputAction m_PlayerKeyBoardMap_End;
+        private readonly InputAction m_PlayerKeyBoardMap_DoorB;
         /// <summary>
         /// Provides access to input actions defined in input action map "PlayerKeyBoardMap".
         /// </summary>
@@ -863,6 +885,10 @@ namespace ShadowMaze.MyCharacterController
             /// Provides access to the underlying input action "PlayerKeyBoardMap/End".
             /// </summary>
             public InputAction @End => m_Wrapper.m_PlayerKeyBoardMap_End;
+            /// <summary>
+            /// Provides access to the underlying input action "PlayerKeyBoardMap/DoorB".
+            /// </summary>
+            public InputAction @DoorB => m_Wrapper.m_PlayerKeyBoardMap_DoorB;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -928,6 +954,9 @@ namespace ShadowMaze.MyCharacterController
                 @End.started += instance.OnEnd;
                 @End.performed += instance.OnEnd;
                 @End.canceled += instance.OnEnd;
+                @DoorB.started += instance.OnDoorB;
+                @DoorB.performed += instance.OnDoorB;
+                @DoorB.canceled += instance.OnDoorB;
             }
 
             /// <summary>
@@ -978,6 +1007,9 @@ namespace ShadowMaze.MyCharacterController
                 @End.started -= instance.OnEnd;
                 @End.performed -= instance.OnEnd;
                 @End.canceled -= instance.OnEnd;
+                @DoorB.started -= instance.OnDoorB;
+                @DoorB.performed -= instance.OnDoorB;
+                @DoorB.canceled -= instance.OnDoorB;
             }
 
             /// <summary>
@@ -1159,6 +1191,13 @@ namespace ShadowMaze.MyCharacterController
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnEnd(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "DoorB" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnDoorB(InputAction.CallbackContext context);
         }
     }
 }

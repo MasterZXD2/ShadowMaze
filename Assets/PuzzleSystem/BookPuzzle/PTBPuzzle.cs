@@ -138,6 +138,11 @@ public class PTBPuzzle : Puzzle
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
 
         ImageUI.gameObject.SetActive(bookOpen);
         nextBU.gameObject.SetActive(bookOpen);

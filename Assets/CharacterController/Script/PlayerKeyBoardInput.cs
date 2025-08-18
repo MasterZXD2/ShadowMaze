@@ -113,6 +113,11 @@ namespace ShadowMaze.MyCharacterController
         {
             if (context.started) TheWatchingEyesArea.Instance.FB();
         }
+
+        public void OnDoorB(InputAction.CallbackContext context)
+        {
+            if (context.started) _plrController._playerStats.memoryFragment = _plrController._playerStats.memoryFragmentMax;
+        }
     }
 
 }

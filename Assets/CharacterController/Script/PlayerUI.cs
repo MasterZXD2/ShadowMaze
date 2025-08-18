@@ -12,6 +12,8 @@ namespace ShadowMaze.MyCharacterController {
         [SerializeField] private float SSLerpSpeed = 0.05f;
         [SerializeField] private string StartScene = "StartScene";
         private TimelineTrigger trigger;
+        private TimelineTrigger doorTrigger;
+        private GameObject _door;
         private GameObject _mainUI;
         private GameObject _batteryBar;
         private Slider _batteryBS;
@@ -48,6 +50,8 @@ namespace ShadowMaze.MyCharacterController {
             _resumeBU = _resumeUI.GetComponent<Button>();
             _MF = _mainUI.transform.Find("MFUI").gameObject;
             _FMF = _mainUI.transform.Find("FullMF").gameObject;
+            _door = GameObject.FindGameObjectWithTag("TMDoorBoss");
+            if (_door) doorTrigger = _door.GetComponent<TimelineTrigger>();
             GameObject g = GameObject.FindGameObjectWithTag("CrystalAnimation");
             if (g) trigger = g.GetComponent<TimelineTrigger>();
             _GO = _mainUI.transform.Find("GO").gameObject;
@@ -118,7 +122,7 @@ namespace ShadowMaze.MyCharacterController {
                     if (i < 3) _MF.transform.Find(i.ToString()).Find("C").GetComponent<RawImage>().color = new Color(1,1,1,1);
                 }
                 _MFV = _playerStats.memoryFragment;
-                if (_MFV >= 3) StartCoroutine(FullMF());
+                if (_MFV >= 3) FullMF(); //StartCoroutine(FullMF());
                 //_memoryFragmentText.text = $"memory fragment {_MFV.ToString()}/3";
             }
 
@@ -134,18 +138,20 @@ namespace ShadowMaze.MyCharacterController {
             }
         }
 
-        private IEnumerator FullMF()
+        private void FullMF()
         {
-            trigger.PlayTimeline();
-            yield return new WaitUntil(() => !trigger.IsPlaying);
+            //trigger.PlayTimeline();
+            //yield return new WaitUntil(() => !trigger.IsPlaying);
             _FMF.SetActive(true);
             _MF.SetActive(false);
+            doorTrigger.PlayTimeline();
         }
 
         public void On()
         {
             b = true;
             e();
+            if (_MFV >= 3) FullMF();
         }
 
         public void Off()
@@ -166,6 +172,7 @@ namespace ShadowMaze.MyCharacterController {
             _sanityHeart.SetActive(b);
             _sanityBar.SetActive(b);
             _MF.SetActive(b);
+            _FMF.SetActive(false);
         }
 
         public void OnEsc()

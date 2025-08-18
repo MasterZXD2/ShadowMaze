@@ -12,10 +12,10 @@ namespace ShadowMaze.InteractSystem
     }
     public class InteractObject : MonoBehaviour
     {
-        [SerializeField] private GameObject UI;
+        [SerializeField] protected GameObject UI;
         [SerializeField] protected float range = 2f;
         [field: SerializeField] private axisMirror axis = axisMirror.Z;
-        private GameObject currUI;
+        protected GameObject currUI;
         protected bool _playerIsInRange = false;
         public string _name = "null";
 
