@@ -15,6 +15,7 @@ TagManager:
   - TPPOG
   - CrystalAnimation
   - TMDoorBoss
+  - Boxs
   layers:
   - Default
   - TransparentFX

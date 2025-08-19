@@ -52,6 +52,7 @@ public class ShadowPuzzle : Puzzle
                     break;
                 }
             }
+            Debug.Log(shadowBlockObjects.Count);
             if (shadowBlockObjects.Count != 0) isFinish = f;
         }
     }
@@ -78,6 +79,7 @@ public class ShadowPuzzle : Puzzle
 
         foreach (var shape in _Shapes)
         {
+            Debug.Log(shape.name);
             box b = CheckShapeMatch(shape);
             if (!b.b)
             {
@@ -91,6 +93,7 @@ public class ShadowPuzzle : Puzzle
                 colliderInLights.Clear();
                 return false;
             }
+
             c.AddRange(b.colliders);
 
         }
@@ -98,7 +101,7 @@ public class ShadowPuzzle : Puzzle
         colliderInLights = c
             .OfType<BoxCollider>()   // กรองเฉพาะ BoxCollider (ถ้าต้องการ)
             .Distinct()
-            .ToList(); ;
+            .ToList();
         return true;
     }
 
@@ -119,9 +122,11 @@ public class ShadowPuzzle : Puzzle
                 for (int z = Mathf.FloorToInt(b.min.z); z < Mathf.CeilToInt(b.max.z); z++)
                 {
                     Vector3 worldPos = new Vector3(x + 0.5f, y + 0.5f, z + 0.5f);
+                    Debug.Log(worldPos);
+                    Debug.Log(new Vector3Int(x, y, z));
                     if (b.Contains(worldPos))
                     {
-                        expected3D.Add(new Vector3Int(x, y, z));
+                        expected3D.Add(new Vector3Int(x, y, z) * 100);
                     }
                 }
             }
@@ -136,7 +141,8 @@ public class ShadowPuzzle : Puzzle
         foreach (var col in _collidersInPuzzle)
         {
             if (col == shape) continue;
-            actual3D.Add(Vector3Int.FloorToInt(col.transform.position));
+            Debug.Log(Vector3Int.FloorToInt(col.transform.position * 100f));
+            actual3D.Add(Vector3Int.FloorToInt(col.transform.position * 100f));
         }
 
         return new box(expected3D.SetEquals(actual3D), _collidersInPuzzle);

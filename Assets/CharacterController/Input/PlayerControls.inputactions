@@ -302,6 +302,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "BoxB",
+                    "type": "Button",
+                    "id": "02b0f1fc-1eb3-4df7-9c30-f769334a4a80",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -456,6 +465,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "DoorB",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3362b18b-997e-4e27-9203-e2059237bc49",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BoxB",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -118,6 +118,16 @@ namespace ShadowMaze.MyCharacterController
         {
             if (context.started) _plrController._playerStats.memoryFragment = _plrController._playerStats.memoryFragmentMax;
         }
+
+        public void OnBoxB(InputAction.CallbackContext context)
+        {
+            if (!context.started) return;
+            GameObject bs = GameObject.FindGameObjectWithTag("Boxs");
+            foreach (Transform t in bs.GetComponentsInChildren<Transform>(true))
+            {
+                t.gameObject.SetActive(true);
+            }
+        }
     }
 
 }
