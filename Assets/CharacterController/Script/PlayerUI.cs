@@ -144,7 +144,6 @@ namespace ShadowMaze.MyCharacterController {
             //yield return new WaitUntil(() => !trigger.IsPlaying);
             _FMF.SetActive(true);
             _MF.SetActive(false);
-            doorTrigger.PlayTimeline();
         }
 
         public void On()
