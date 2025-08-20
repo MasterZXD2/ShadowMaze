@@ -39,7 +39,7 @@ namespace ShadowMaze.MyCharacterController
         public CharacterController _characterController;
         [HideInInspector] public CapsuleCollider capsuleCollider => GetComponent<CapsuleCollider>();
         public PlayerLocomotionInput _playerLocomotionInput;
-        [SerializeField] private PlayerKeyBoardInput _playerKeyBoardInput;
+        public PlayerKeyBoardInput _playerKeyBoardInput;
         [SerializeField] private PlayerLight _playerLight;
         [SerializeField] private PlayerState _playerState;
         public PlayerStats _playerStats;

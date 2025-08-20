@@ -10,7 +10,7 @@ namespace ShadowMaze.MyCharacterController
         [SerializeField] private PlayerController _plrController;
         [SerializeField] private PlayerLight _light;
         private GameObject par;
-
+        public bool p4sh { get; private set; } = false;
         public bool interact { get; private set; } = false;
 
         private void Start()
@@ -127,6 +127,7 @@ namespace ShadowMaze.MyCharacterController
             {
                 t.gameObject.SetActive(true);
             }
+            p4sh = true;
         }
     }
 

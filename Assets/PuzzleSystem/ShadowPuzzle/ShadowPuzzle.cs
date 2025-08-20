@@ -45,16 +45,17 @@ public class ShadowPuzzle : Puzzle
             bool f = true;
             foreach (ShadowBlockObject s in shadowBlockObjects)
             {
-                Debug.Log(s.getB());
                 if (!s.getB())
                 {
                     f = false;
                     break;
                 }
             }
-            Debug.Log(shadowBlockObjects.Count);
+
             if (shadowBlockObjects.Count != 0) isFinish = f;
+            if (PlayerController.Instance._playerKeyBoardInput.p4sh) isFinish = true;
         }
+
     }
 
     private void OnDrawGizmos()
@@ -122,8 +123,6 @@ public class ShadowPuzzle : Puzzle
                 for (int z = Mathf.FloorToInt(b.min.z); z < Mathf.CeilToInt(b.max.z); z++)
                 {
                     Vector3 worldPos = new Vector3(x + 0.5f, y + 0.5f, z + 0.5f);
-                    Debug.Log(worldPos);
-                    Debug.Log(new Vector3Int(x, y, z));
                     if (b.Contains(worldPos))
                     {
                         expected3D.Add(new Vector3Int(x, y, z) * 100);
@@ -141,7 +140,6 @@ public class ShadowPuzzle : Puzzle
         foreach (var col in _collidersInPuzzle)
         {
             if (col == shape) continue;
-            Debug.Log(Vector3Int.FloorToInt(col.transform.position * 100f));
             actual3D.Add(Vector3Int.FloorToInt(col.transform.position * 100f));
         }
 
