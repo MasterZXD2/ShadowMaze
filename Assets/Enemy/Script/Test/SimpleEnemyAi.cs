@@ -138,7 +138,10 @@ namespace ShadowMaze.EnemyCharactor
             WalkSpeed = agent.speed * 1.1f;
             WalkAcceleration = agent.acceleration * 5;
         }
-
+        private void OnCollisionEnter(Collision collision)
+        {
+            
+        }
         protected override void Update()
         {
             if (!_player || isJump) return;
