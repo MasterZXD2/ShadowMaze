@@ -69,6 +69,13 @@ public class PlayerLight : MonoBehaviour
                         }
                     }
 
+
+                    if (GO.TryGetComponent<LightReaction>(out LightReaction reac))
+                        reac.ReportHit(EnemyLightSource.Flashlight);
+                    else if (GO.transform.parent.CompareTag("Enemy")
+                        && GO.transform.parent.TryGetComponent<LightReaction>(out LightReaction _reac))
+                        _reac.ReportHit(EnemyLightSource.Flashlight);
+
                     if (GO.TryGetComponent<TheWatchingEyesAI>(out TheWatchingEyesAI twe))
                     {
                         twe.HitByFlashlight();

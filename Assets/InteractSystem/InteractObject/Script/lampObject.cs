@@ -43,6 +43,13 @@ namespace ShadowMaze.InteractSystem
                             }
                         }
 
+                        if (GO.TryGetComponent<LightReaction>(out LightReaction reac))
+                            reac.ReportHit(EnemyLightSource.Lamp);
+                        else if (GO.transform.parent.CompareTag("Enemy")
+                            && GO.transform.parent.TryGetComponent<LightReaction>(out LightReaction _reac))
+                            _reac.ReportHit(EnemyLightSource.Lamp);
+
+
                         if (GO.TryGetComponent<TheWatchingEyesAI>(out TheWatchingEyesAI twe))
                         {
                             twe.HitByFlashlight();

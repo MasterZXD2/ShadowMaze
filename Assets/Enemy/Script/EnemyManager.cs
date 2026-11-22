@@ -15,6 +15,9 @@ public class EnemyManager : Singleton<EnemyManager>
             SimpleEnemyAi SE = GO.GetComponent<SimpleEnemyAi>();
             if (SE != null)
                 SE.pause();
+            EnemyController EC = GO.GetComponent<EnemyController>();
+            if (EC != null)
+                EC.Pause();
         }
     }
 
@@ -40,6 +43,9 @@ public class EnemyManager : Singleton<EnemyManager>
                 SimpleEnemyAi SE = enemy.GetComponent<SimpleEnemyAi>();
                 if (SE != null)
                     SE.pause();
+                EnemyController EC = enemy.GetComponent<EnemyController>();
+                if (EC != null)
+                    EC.Pause();
             }
         }
     }
@@ -54,6 +60,9 @@ public class EnemyManager : Singleton<EnemyManager>
                 SimpleEnemyAi SE = enemy.GetComponent<SimpleEnemyAi>();
                 if (SE != null)
                     SE.resume();
+                EnemyController EC = enemy.GetComponent<EnemyController>();
+                if (EC != null)
+                    EC.Resume();
             }
         }
 
