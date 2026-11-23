@@ -12,6 +12,13 @@ public abstract class LightReaction : MonoBehaviour
 
     public void ReportHit(EnemyLightSource source) => hits |= source;
 
+    public static LightReaction FindReceiver(GameObject target)
+    {
+        var cube = target.GetComponentInParent<EnemyCubeOwner>();
+        if (cube) return cube.Owner;
+        return target.GetComponentInParent<LightReaction>();
+    }
+
     protected void LateUpdate()
     {
         React(hits, Time.deltaTime);

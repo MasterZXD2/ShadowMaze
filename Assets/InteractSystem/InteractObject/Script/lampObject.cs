@@ -35,7 +35,7 @@ namespace ShadowMaze.InteractSystem
                         {
                             sei.HitByFlashlight(true);
                         }
-                        else if (GO.transform.parent.CompareTag("Enemy"))
+                        else if (GO.transform.parent && GO.transform.parent.CompareTag("Enemy"))
                         {
                             if (GO.transform.parent.TryGetComponent<SimpleEnemyAi>(out SimpleEnemyAi psei))
                             {
@@ -43,11 +43,8 @@ namespace ShadowMaze.InteractSystem
                             }
                         }
 
-                        if (GO.TryGetComponent<LightReaction>(out LightReaction reac))
-                            reac.ReportHit(EnemyLightSource.Lamp);
-                        else if (GO.transform.parent.CompareTag("Enemy")
-                            && GO.transform.parent.TryGetComponent<LightReaction>(out LightReaction _reac))
-                            _reac.ReportHit(EnemyLightSource.Lamp);
+                        var receiver = LightReaction.FindReceiver(GO);
+                        if (receiver) receiver.ReportHit(EnemyLightSource.Lamp);
 
 
                         if (GO.TryGetComponent<TheWatchingEyesAI>(out TheWatchingEyesAI twe))

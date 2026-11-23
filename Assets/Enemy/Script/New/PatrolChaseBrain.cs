@@ -7,7 +7,7 @@ public class PatrolChaseBrain : EnemyBrain
     public enum Mode { Patrol, Chase, Investigate, IdleLookAround, ActiveSearch }
     public Mode CurrentMode { get; private set; } = Mode.Patrol;
 
-    [SerializeField] private EnemyPresentation presentation;
+    [SerializeField] protected EnemyPresentation presentation;
     [SerializeField] private float minSearchDuration = 1f;
     [SerializeField] private float maxSearchDuration = 3f;
     [SerializeField] private float walkPointRange = 12f;
@@ -17,15 +17,35 @@ public class PatrolChaseBrain : EnemyBrain
     public bool hasLastPlayerPosition { get; protected set; } = false;
     
     private Vector3 goToPosition;
-    private bool hasPatrolDestination;
+    protected bool hasPatrolDestination;
     private float searchTimer = 0f;
     private float searchDuration = 0f;
     private float sameGoToPositionTimer = 0f;
-    private bool isBlind = false;
+    protected bool isBlind = false;
+    private bool hasJumpedSinceCompletePath;
+    private bool hasLastJumpTarget;
+    private Vector3 lastJumpTarget;
 
     private void Start()
     {
         combat.attackSucceeded.AddListener(enemy.Die);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, walkPointRange);
+
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(transform.position, perception.AwarenessRange);
+        Gizmos.DrawWireSphere(lastPlayerPosition, perception.AwarenessRange);
+
+        if (hasLastPlayerPosition)
+        {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawSphere(lastPlayerPosition, 0.2f);
+            Gizmos.DrawLine(transform.position, lastPlayerPosition);
+        }
     }
 
     protected override void NormalMove()
@@ -54,29 +74,37 @@ public class PatrolChaseBrain : EnemyBrain
             CurrentMode = Mode.Investigate;
         }
 
-        // A partial path must not reveal where an unseen player moved.
-        if (motor.HasIncompletePath && (hasLastPlayerPosition || hasPatrolDestination)
+        if (motor.HasCompletePath)
+            hasJumpedSinceCompletePath = false;
+
+        // Try one jump per partial path; wait until navigation finds a complete route before retrying.
+        if (!hasJumpedSinceCompletePath && motor.HasIncompletePath && (hasLastPlayerPosition || hasPatrolDestination)
             && TryStartJump(hasLastPlayerPosition ? lastPlayerPosition : goToPosition))
+        {
             return;
+        }
 
         if (sameGoToPositionTimer > 1.2f && isMovement)
         {
             Vector3 point;
-            if (GetGroundAtAngle(transform.position + Vector3.up * perception.EyeHeightOffset, out point))
+            if (!hasJumpedSinceCompletePath)
             {
-                if (TryStartJump(point))
-                    return;
-            }
-            else
-            {
-                if (isBlind)
-                    return;
+                if (GetGroundAtAngle(transform.position + Vector3.up * perception.EyeHeightOffset, out point))
+                {
+                    if (TryStartJump(point))
+                        return;
+                }
+                else
+                {
+                    if (isBlind)
+                        return;
 
-                sameGoToPositionTimer = 0f;
-                hasPatrolDestination = false;
-                isBlind = true;
-                Invoke(nameof(UnBlind), 2f);
-                return;
+                    sameGoToPositionTimer = 0f;
+                    hasPatrolDestination = false;
+                    isBlind = true;
+                    Invoke(nameof(UnBlind), 2f);
+                    return;
+                }
             }
         }
 
@@ -130,7 +158,9 @@ public class PatrolChaseBrain : EnemyBrain
         }
 
         Vector3 destination = investigating ? lastPlayerPosition : goToPosition;
-        if ((transform.position - destination).sqrMagnitude < 1f)
+        Vector3 toDestination = transform.position - destination;
+        toDestination.y = 0f;
+        if (toDestination.sqrMagnitude < 1f)
         {
             StartSearch(investigating ? Mode.ActiveSearch : Mode.IdleLookAround);
             return;
@@ -200,11 +230,15 @@ public class PatrolChaseBrain : EnemyBrain
 
     private bool TryStartJump(Vector3 worldTarget)
     {
+        if (hasLastJumpTarget && (worldTarget - lastJumpTarget).sqrMagnitude < 1f)
+            return false;
         if (!motor.TryJumpTo(worldTarget, stats))
             return false;
 
+        lastJumpTarget = worldTarget;
+        hasLastJumpTarget = true;
+        hasJumpedSinceCompletePath = true;
         sameGoToPositionTimer = 0f;
-        hasPatrolDestination = false;
         isMovement = false;
         return true;
     }

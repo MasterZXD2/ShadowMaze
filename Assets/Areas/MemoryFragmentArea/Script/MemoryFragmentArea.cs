@@ -14,9 +14,13 @@ namespace ShadowMaze.Area
             {
                 if (GO.CompareTag("Enemy"))
                 {
-                    if (GO.transform.parent.TryGetComponent<SimpleEnemyAi>(out SimpleEnemyAi sei))
+                    if (GO.transform.parent && GO.transform.parent.TryGetComponent<SimpleEnemyAi>(out SimpleEnemyAi sei))
                     {
                         sei.InArea("MFA");
+                    }
+                    if (LightReaction.FindReceiver(GO) is CubeOnLight col)
+                    {
+                        col.InArea("MFA");
                     }
                 }
             }
@@ -29,9 +33,13 @@ namespace ShadowMaze.Area
             {
                 if (GO.CompareTag("Enemy"))
                 {
-                    if (GO.transform.parent.TryGetComponent<SimpleEnemyAi>(out SimpleEnemyAi sei))
+                    if (GO.transform.parent && GO.transform.parent.TryGetComponent<SimpleEnemyAi>(out SimpleEnemyAi sei))
                     {
                         sei.OutArea();
+                    }
+                    if (LightReaction.FindReceiver(GO) is CubeOnLight col)
+                    {
+                        col.OutArea();
                     }
                 }
             }

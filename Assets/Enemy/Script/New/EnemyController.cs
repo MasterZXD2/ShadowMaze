@@ -45,5 +45,6 @@ public class EnemyController : MonoBehaviour
         IsStop = false;
         brain.Resume();
     }
+
     #endregion
 }

@@ -61,7 +61,7 @@ public class PlayerLight : MonoBehaviour
                     {
                         sei.HitByFlashlight();
                     }
-                    else if (GO.transform.parent.CompareTag("Enemy"))
+                    else if (GO.transform.parent && GO.transform.parent.CompareTag("Enemy"))
                     {
                         if (GO.transform.parent.TryGetComponent<SimpleEnemyAi>(out SimpleEnemyAi psei))
                         {
@@ -70,11 +70,8 @@ public class PlayerLight : MonoBehaviour
                     }
 
 
-                    if (GO.TryGetComponent<LightReaction>(out LightReaction reac))
-                        reac.ReportHit(EnemyLightSource.Flashlight);
-                    else if (GO.transform.parent.CompareTag("Enemy")
-                        && GO.transform.parent.TryGetComponent<LightReaction>(out LightReaction _reac))
-                        _reac.ReportHit(EnemyLightSource.Flashlight);
+                    var receiver = LightReaction.FindReceiver(GO);
+                    if (receiver) receiver.ReportHit(EnemyLightSource.Flashlight);
 
                     if (GO.TryGetComponent<TheWatchingEyesAI>(out TheWatchingEyesAI twe))
                     {

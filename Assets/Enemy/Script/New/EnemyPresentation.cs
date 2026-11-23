@@ -30,6 +30,8 @@ public class EnemyPresentation : MonoBehaviour
         }
     }
 
+    public Collider GetModelCollider() { return enemyModel.GetComponent<Collider>(); }
+
     public void FollowRotate(Vector3 dir)
     {
         transform.rotation = Quaternion.Slerp(

@@ -110,8 +110,8 @@ namespace ShadowMaze.EnemyCharactor
         protected bool astop = false;
         protected bool stun = false;
 
-        protected bool isCurrentlyHitByFlashlight = false; // สถานะปัจจุบันว่ากำลังโดนไฟฉายส่องหรือไม่
-        protected float flashlightHitTimer = 0f; // นับเวลาที่โดนไฟฉายส่อง (เพื่อเปลี่ยนเป็นกล่อง)
+        protected bool isCurrentlyHitByFlashlight = false;
+        protected float flashlightHitTimer = 0f;
 
         protected EnemyMovementState _lastMovementState = EnemyMovementState.Falling;
         #endregion

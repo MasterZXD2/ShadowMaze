@@ -22,6 +22,8 @@ public class EnemyMotor : MonoBehaviour
     private bool CanNavigate => !IsStop && !IsJumping && agent && agent.isActiveAndEnabled && agent.isOnNavMesh;
     public bool HasIncompletePath => CanNavigate && !agent.pathPending && agent.hasPath
         && agent.pathStatus != NavMeshPathStatus.PathComplete;
+    public bool HasCompletePath => CanNavigate && !agent.pathPending && agent.hasPath
+        && agent.pathStatus == NavMeshPathStatus.PathComplete;
 
     private Vector3 takeoffPosition, jumpDirection;
     private float jumpDistance, elapsed, landingDeadline;
@@ -32,6 +34,22 @@ public class EnemyMotor : MonoBehaviour
         if (!agent) agent = GetComponent<NavMeshAgent>();
         if (!characterController) characterController = GetComponent<CharacterController>();
         ApplyMode();
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (CanNavigate)
+        {
+            Gizmos.color = Color.black;
+            var agentPath = agent.path;
+            Vector3 prevConrner = transform.position;
+            foreach (var c in agentPath.corners)
+            {
+                Gizmos.DrawLine(prevConrner, c);
+                Gizmos.DrawSphere(c, 0.1f);
+                prevConrner = c;
+            }
+        }
     }
 
     private void ApplyMode()
@@ -130,6 +148,8 @@ public class EnemyMotor : MonoBehaviour
     }
 
     public bool IsGrounded() => characterController && characterController.enabled && characterController.isGrounded;
+
+    public float GetColliderHeight() { return characterController ? characterController.height : .5f; }
 
     public void Pause()
     {

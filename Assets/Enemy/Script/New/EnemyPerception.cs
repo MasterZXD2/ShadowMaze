@@ -15,6 +15,7 @@ public class EnemyPerception : MonoBehaviour
     public LayerMask GroundLayers => groundLayers;
     public float EyeHeightOffset => eyeHeightOffset;
     public float FearRange => fearRange;
+    public float AwarenessRange => awarenessRange;
 
     public bool isCanSeePlayer { get; private set; }
     public bool isPlayerInSightRange { get; private set; }
@@ -40,6 +41,19 @@ public class EnemyPerception : MonoBehaviour
         UpdatePlayerInFearRange(dist);
 
         UpdatePlayerInSightDuringSearch(player, dist);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, sightRange);
+
+        Gizmos.color = Color.blue;
+        Vector3 rayOrigin = transform.position + Vector3.up * eyeHeightOffset;
+        Gizmos.DrawRay(rayOrigin, transform.forward);
     }
     #endregion
 

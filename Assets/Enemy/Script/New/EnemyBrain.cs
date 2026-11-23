@@ -1,6 +1,7 @@
 using ShadowMaze.EnemyCharactor;
 using ShadowMaze.MyCharacterController;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class EnemyBrain : MonoBehaviour
 {
